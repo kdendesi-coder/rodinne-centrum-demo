@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Edit2, Mail, Phone, MapPin } from "lucide-react";
 import EditModal from "./EditModal";
+import { useAuth } from "@/contexts/AuthContext"; // Add this import
 
 const ContactSection = () => {
   const [isEditingEmail, setIsEditingEmail] = useState(false);
@@ -17,6 +18,8 @@ const ContactSection = () => {
   const [introText, setIntroText] = useState(
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
   );
+    // Add this to check authentication
+  const { isAuthenticated, role } = useAuth();
 
   return (
     <section id="contact" className="py-20 px-4">
@@ -25,14 +28,18 @@ const ContactSection = () => {
         
         <div className="relative group/intro mb-12">
           <p className="text-muted-foreground">{introText}</p>
-          <Button
-            size="icon"
-            variant="secondary"
-            className="absolute top-0 right-0 opacity-0 group-hover/intro:opacity-100 transition-opacity h-7 w-7"
-            onClick={() => setIsEditingIntro(true)}
-          >
-            <Edit2 className="h-3 w-3" />
-          </Button>
+
+          {/* Show edit button only for Admin users */}
+          {isAuthenticated && role === "Admin" && (
+            <Button
+              size="icon"
+              variant="secondary"
+              className="absolute top-0 right-0 opacity-0 group-hover/intro:opacity-100 transition-opacity h-7 w-7"
+              onClick={() => setIsEditingIntro(true)}
+            >
+              <Edit2 className="h-3 w-3" />
+            </Button>
+          )}
         </div>
 
         <div className="grid md:grid-cols-2 gap-12">
@@ -48,14 +55,18 @@ const ContactSection = () => {
                   <p className="text-muted-foreground whitespace-pre-line">{email}</p>
                 </div>
               </div>
-              <Button
-                size="icon"
-                variant="secondary"
-                className="absolute top-0 right-0 opacity-0 group-hover/email:opacity-100 transition-opacity h-7 w-7"
-                onClick={() => setIsEditingEmail(true)}
-              >
-                <Edit2 className="h-3 w-3" />
-              </Button>
+
+              {/* Show edit button only for Admin users */}
+              {isAuthenticated && role === "Admin" && (
+                <Button
+                  size="icon"
+                  variant="secondary"
+                  className="absolute top-0 right-0 opacity-0 group-hover/email:opacity-100 transition-opacity h-7 w-7"
+                  onClick={() => setIsEditingEmail(true)}
+                >
+                  <Edit2 className="h-3 w-3" />
+                </Button>
+              )}
             </div>
 
             <div className="relative group/phone">
@@ -68,14 +79,18 @@ const ContactSection = () => {
                   <p className="text-muted-foreground">{phone}</p>
                 </div>
               </div>
-              <Button
-                size="icon"
-                variant="secondary"
-                className="absolute top-0 right-0 opacity-0 group-hover/phone:opacity-100 transition-opacity h-7 w-7"
-                onClick={() => setIsEditingPhone(true)}
-              >
-                <Edit2 className="h-3 w-3" />
-              </Button>
+
+              {/* Show edit button only for Admin users */}
+              {isAuthenticated && role === "Admin" && (
+                <Button
+                  size="icon"
+                  variant="secondary"
+                  className="absolute top-0 right-0 opacity-0 group-hover/phone:opacity-100 transition-opacity h-7 w-7"
+                  onClick={() => setIsEditingPhone(true)}
+                >
+                  <Edit2 className="h-3 w-3" />
+                </Button>
+              )}
             </div>
 
             <div className="relative group/address">
@@ -88,14 +103,18 @@ const ContactSection = () => {
                   <p className="text-muted-foreground whitespace-pre-line">{address}</p>
                 </div>
               </div>
-              <Button
-                size="icon"
-                variant="secondary"
-                className="absolute top-0 right-0 opacity-0 group-hover/address:opacity-100 transition-opacity h-7 w-7"
-                onClick={() => setIsEditingAddress(true)}
-              >
-                <Edit2 className="h-3 w-3" />
-              </Button>
+
+              {/* Show edit button only for Admin users */}
+              {isAuthenticated && role === "Admin" && (
+                <Button
+                  size="icon"
+                  variant="secondary"
+                  className="absolute top-0 right-0 opacity-0 group-hover/address:opacity-100 transition-opacity h-7 w-7"
+                  onClick={() => setIsEditingAddress(true)}
+                >
+                  <Edit2 className="h-3 w-3" />
+                </Button>
+              )}
             </div>
           </div>
 
@@ -106,6 +125,9 @@ const ContactSection = () => {
             ) : (
               <MapPin className="w-24 h-24 text-muted-foreground" />
             )}
+
+            {/* Show edit button only for Admin users */}
+            {isAuthenticated && role === "Admin" && (
             <Button
               size="icon"
               variant="secondary"
@@ -114,6 +136,8 @@ const ContactSection = () => {
             >
               <Edit2 className="h-4 w-4" />
             </Button>
+            )}
+
           </div>
         </div>
       </div>

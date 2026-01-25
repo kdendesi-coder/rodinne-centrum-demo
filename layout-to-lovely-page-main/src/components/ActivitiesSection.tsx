@@ -5,6 +5,7 @@ import { Edit2, ChevronDown, Plus } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import EditModal from "./EditModal";
 import AddActivityModal from "./AddActivityModal";
+import { useAuth } from "@/contexts/AuthContext"; // Add this import
 
 interface Activity {
   id: string;
@@ -57,6 +58,9 @@ const ActivitiesSection = () => {
     setActivities((prev) => [...prev, { id, title, content }]);
   };
 
+  // Add this to check authentication
+  const { isAuthenticated, role } = useAuth();
+
   return (
     <section id="activities" className="py-20 px-4 bg-muted/30">
       <div className="container mx-auto max-w-6xl">
@@ -84,28 +88,34 @@ const ActivitiesSection = () => {
                 </svg>
               </div>
             )}
-            <Button
-              size="icon"
-              variant="secondary"
-              className="edit-button"
-              onClick={() => setIsEditingImage(true)}
-            >
-              <Edit2 className="h-4 w-4" />
-            </Button>
+            {/* Show edit button only for Admin users */}
+              {isAuthenticated && role === "Admin" && (
+              <Button
+                size="icon"
+                variant="secondary"
+                className="edit-button"
+                onClick={() => setIsEditingImage(true)}
+              >
+                <Edit2 className="h-4 w-4" />
+              </Button>
+            )}
           </div>
 
           {/* Right side - Content */}
           <div className="space-y-6">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-semibold">Naše aktivity</h3>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => setIsAddingActivity(true)}
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                Pridať aktivitu
-              </Button>
+              {/* Show edit button only for Admin users */}
+              {isAuthenticated && role === "Admin" && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => setIsAddingActivity(true)}
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Pridať aktivitu
+                </Button>
+              )}
             </div>
 
             {/* Collapsible sections with connecting line */}
@@ -148,17 +158,21 @@ const ActivitiesSection = () => {
                           >
                             Čítať viac
                           </Button>
-                          <Button
-                            size="icon"
-                            variant="secondary"
-                            className="absolute top-2 right-2 opacity-0 group-hover/content:opacity-100 transition-opacity h-7 w-7"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setEditingActivity(activity.id);
-                            }}
-                          >
-                            <Edit2 className="h-3 w-3" />
-                          </Button>
+                          
+                          {/* Show edit button only for Admin users */}
+                          {isAuthenticated && role === "Admin" && (
+                            <Button
+                              size="icon"
+                              variant="secondary"
+                              className="absolute top-2 right-2 opacity-0 group-hover/content:opacity-100 transition-opacity h-7 w-7"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setEditingActivity(activity.id);
+                              }}
+                            >
+                              <Edit2 className="h-3 w-3" />
+                            </Button>
+                          )}
                         </div>
                       </CollapsibleContent>
                     </div>

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Plus, Trash2, Edit2 } from "lucide-react";
 import EditModal from "./EditModal";
+import { useAuth } from "@/contexts/AuthContext"; // Add this import
 
 const GallerySection = () => {
   const [images, setImages] = useState(["", "", ""]);
@@ -50,6 +51,9 @@ const GallerySection = () => {
     setCurrentImageIndex((prev) => (prev + 1) % images.length);
   };
 
+    // Add this to check authentication
+  const { isAuthenticated, role } = useAuth();
+
   return (
     <section id="gallery" className="py-20 px-4">
       <div className="container mx-auto max-w-6xl">
@@ -59,14 +63,19 @@ const GallerySection = () => {
         
         <div className="relative group mb-12">
           <p className="text-muted-foreground">{introText}</p>
-          <Button
-            size="icon"
-            variant="secondary"
-            className="absolute top-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity h-7 w-7"
-            onClick={() => setIsEditingIntro(true)}
-          >
-            <Edit2 className="h-3 w-3" />
-          </Button>
+
+          {/* Show edit button only for Admin users */}
+          {isAuthenticated && role === "Admin" && (
+            <Button
+              size="icon"
+              variant="secondary"
+              className="absolute top-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity h-7 w-7"
+              onClick={() => setIsEditingIntro(true)}
+            >
+              <Edit2 className="h-3 w-3" />
+            </Button>
+          )}
+
         </div>
 
         {/* Big preview image with arrow buttons */}
@@ -146,28 +155,37 @@ const GallerySection = () => {
                 </svg>
               )}
               <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                <Button
-                  size="icon"
-                  variant="secondary"
-                  className="h-8 w-8"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setEditingIndex(index);
-                  }}
-                >
-                  <Edit2 className="h-4 w-4" />
-                </Button>
-                <Button
-                  size="icon"
-                  variant="destructive"
-                  className="h-8 w-8"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDeleteImage(index);
-                  }}
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
+                
+                {/* Show edit button only for Admin users */}
+                {isAuthenticated && role === "Admin" && (
+                  <Button
+                    size="icon"
+                    variant="secondary"
+                    className="h-8 w-8"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setEditingIndex(index);
+                    }}
+                  >
+                    <Edit2 className="h-4 w-4" />
+                  </Button>
+                )}
+
+                {/* Show edit button only for Admin users */}
+                {isAuthenticated && role === "Admin" && (
+                  <Button
+                    size="icon"
+                    variant="destructive"
+                    className="h-8 w-8"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeleteImage(index);
+                    }}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                )}
+
               </div>
             </div>
           ))}
@@ -175,13 +193,18 @@ const GallerySection = () => {
 
         {/* Add image button */}
         <div className="flex justify-center">
-          <Button
-            onClick={() => setIsAddingImage(true)}
-            className="flex items-center gap-2"
-          >
-            <Plus className="h-4 w-4" />
-            Pridať obrázok
-          </Button>
+
+          {/* Show edit button only for Admin users */}
+          {isAuthenticated && role === "Admin" && (
+            <Button
+              onClick={() => setIsAddingImage(true)}
+              className="flex items-center gap-2"
+            >
+              <Plus className="h-4 w-4" />
+              Pridať obrázok
+            </Button>
+          )}
+          
         </div>
       </div>
 

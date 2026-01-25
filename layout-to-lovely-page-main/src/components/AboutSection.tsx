@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Edit2 } from "lucide-react";
 import EditModal from "./EditModal";
 import { useParagraph } from "@/hooks/useParagraph";
+import { useAuth } from "@/contexts/AuthContext"; // Add this import
 
 const AboutSection = () => {
   const [isEditingText, setIsEditingText] = useState(false);
@@ -11,6 +12,9 @@ const AboutSection = () => {
 
   // Use the custom hook - just one line!
   const { text, isLoading, error, setText } = useParagraph('about');
+
+  // Add this to check authentication
+  const { isAuthenticated, role } = useAuth();
 
   return (
     <section id="about" className="py-20 px-4">
@@ -26,14 +30,18 @@ const AboutSection = () => {
             ) : (
             <p className="text-muted-foreground leading-relaxed">{text}</p>
             )}
-            <Button
-              size="icon"
-              variant="secondary"
-              className="edit-button"
-              onClick={() => setIsEditingText(true)}
-            >
-              <Edit2 className="h-4 w-4" />
-            </Button>
+
+            {/* Show edit button only for Admin users */}
+            {isAuthenticated && role === "Admin" && (
+              <Button
+                size="icon"
+                variant="secondary"
+                className="edit-button"
+                onClick={() => setIsEditingText(true)}
+              >
+                <Edit2 className="h-4 w-4" />
+              </Button>
+            )}
           </div>
 
           <div className="relative group bg-muted rounded-lg overflow-hidden aspect-video flex items-center justify-center">
@@ -56,14 +64,19 @@ const AboutSection = () => {
                 </svg>
               </div>
             )}
-            <Button
-              size="icon"
-              variant="secondary"
-              className="edit-button"
-              onClick={() => setIsEditingImage(true)}
-            >
-              <Edit2 className="h-4 w-4" />
-            </Button>
+
+            {/* Show edit button only for Admin users */}
+            {isAuthenticated && role === "Admin" && (
+              <Button
+                size="icon"
+                variant="secondary"
+                className="edit-button"
+                onClick={() => setIsEditingImage(true)}
+              >
+                <Edit2 className="h-4 w-4" />
+              </Button>
+             )}
+
           </div>
         </div>
       </div>

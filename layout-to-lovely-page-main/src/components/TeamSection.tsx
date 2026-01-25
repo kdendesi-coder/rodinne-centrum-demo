@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Edit2 } from "lucide-react";
 import EditModal from "./EditModal";
+import { useAuth } from "@/contexts/AuthContext"; // Add this import
+
 
 interface TeamMember {
   name: string;
@@ -31,6 +33,9 @@ const TeamSection = () => {
     setMembers(newMembers);
   };
 
+  // Add this to check authentication
+  const { isAuthenticated, role } = useAuth();
+
   return (
     <section id="team" className="py-20 px-4 bg-muted/30">
       <div className="container mx-auto max-w-6xl">
@@ -38,14 +43,18 @@ const TeamSection = () => {
         
         <div className="relative group/intro mb-12">
           <p className="text-muted-foreground">{introText}</p>
-          <Button
-            size="icon"
-            variant="secondary"
-            className="absolute top-0 right-0 opacity-0 group-hover/intro:opacity-100 transition-opacity h-7 w-7"
-            onClick={() => setIsEditingIntro(true)}
-          >
-            <Edit2 className="h-3 w-3" />
-          </Button>
+
+          {/* Show edit button only for Admin users */}
+          {isAuthenticated && role === "Admin" && (
+            <Button
+              size="icon"
+              variant="secondary"
+              className="absolute top-0 right-0 opacity-0 group-hover/intro:opacity-100 transition-opacity h-7 w-7"
+              onClick={() => setIsEditingIntro(true)}
+            >
+              <Edit2 className="h-3 w-3" />
+            </Button>
+          )}
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -71,47 +80,60 @@ const TeamSection = () => {
                     </svg>
                   )}
                 </div>
-                <Button
-                  size="icon"
-                  variant="secondary"
-                  className="absolute top-0 right-0 opacity-0 group-hover/member:opacity-100 transition-opacity h-7 w-7"
-                  onClick={() => {
-                    setEditingMember(index);
-                    setEditingField("image");
-                  }}
-                >
-                  <Edit2 className="h-3 w-3" />
-                </Button>
+
+                {/* Show edit button only for Admin users */}
+                {isAuthenticated && role === "Admin" && (
+                  <Button
+                    size="icon"
+                    variant="secondary"
+                    className="absolute top-0 right-0 opacity-0 group-hover/member:opacity-100 transition-opacity h-7 w-7"
+                    onClick={() => {
+                      setEditingMember(index);
+                      setEditingField("image");
+                    }}
+                  >
+                    <Edit2 className="h-3 w-3" />
+                  </Button>
+                )}
               </div>
 
               <div className="relative group/name inline-block mb-2">
                 <h3 className="font-semibold">{member.name}</h3>
-                <Button
-                  size="icon"
-                  variant="secondary"
-                  className="absolute -top-1 -right-8 opacity-0 group-hover/name:opacity-100 transition-opacity h-6 w-6"
-                  onClick={() => {
-                    setEditingMember(index);
-                    setEditingField("name");
-                  }}
-                >
-                  <Edit2 className="h-3 w-3" />
-                </Button>
+
+                {/* Show edit button only for Admin users */}
+                {isAuthenticated && role === "Admin" && (
+                  <Button
+                    size="icon"
+                    variant="secondary"
+                    className="absolute -top-1 -right-8 opacity-0 group-hover/name:opacity-100 transition-opacity h-6 w-6"
+                    onClick={() => {
+                      setEditingMember(index);
+                      setEditingField("name");
+                    }}
+                  >
+                    <Edit2 className="h-3 w-3" />
+                  </Button>
+                )}
               </div>
 
               <div className="relative group/role inline-block">
                 <p className="text-sm text-muted-foreground">{member.role}</p>
-                <Button
-                  size="icon"
-                  variant="secondary"
-                  className="absolute -top-1 -right-8 opacity-0 group-hover/role:opacity-100 transition-opacity h-6 w-6"
-                  onClick={() => {
-                    setEditingMember(index);
-                    setEditingField("role");
-                  }}
-                >
-                  <Edit2 className="h-3 w-3" />
-                </Button>
+
+                {/* Show edit button only for Admin users */}
+                {isAuthenticated && role === "Admin" && (
+                  <Button
+                    size="icon"
+                    variant="secondary"
+                    className="absolute -top-1 -right-8 opacity-0 group-hover/role:opacity-100 transition-opacity h-6 w-6"
+                    onClick={() => {
+                      setEditingMember(index);
+                      setEditingField("role");
+                    }}
+                  >
+                    <Edit2 className="h-3 w-3" />
+                  </Button>
+                )}
+                
               </div>
             </div>
           ))}
