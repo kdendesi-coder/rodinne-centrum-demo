@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Edit2, ChevronDown, Plus } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -12,6 +13,7 @@ interface Activity {
 }
 
 const ActivitiesSection = () => {
+  const navigate = useNavigate();
   const [activities, setActivities] = useState<Activity[]>([
     {
       id: "herna",
@@ -133,9 +135,19 @@ const ActivitiesSection = () => {
                       
                       <CollapsibleContent className="data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up overflow-hidden">
                         <div className="relative group/content p-4 pt-2">
-                          <p className="text-sm text-muted-foreground leading-relaxed">
+                          <p className="text-sm text-muted-foreground leading-relaxed mb-3">
                             {activity.content}
                           </p>
+                          <Button
+                            variant="link"
+                            className="p-0 h-auto text-primary"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              navigate(`/aktivita/${activity.id}`);
+                            }}
+                          >
+                            Čítať viac
+                          </Button>
                           <Button
                             size="icon"
                             variant="secondary"

@@ -1,25 +1,11 @@
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
-import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { isAuthenticated, username, logout } = useAuth();
-  const navigate = useNavigate();
-
-  //pridane ---------------------------
-  // // Add this useEffect to force state synchronization
-  // const [forceUpdate, setForceUpdate] = useState(0);
-  
-  // useEffect(() => {
-  //   console.log('Auth state changed in Navigation:', { isAuthenticated, username });
-  //   // This will force a re-render when auth state changes
-  //   setForceUpdate(prev => prev + 1);
-  // }, [isAuthenticated, username]);
-  //pridane ---------------------------
+  const { isAuthenticated, username } = useAuth();
 
   const navLinks = [
     { label: "O firme", href: "#about" },
@@ -28,15 +14,6 @@ const Navigation = () => {
     { label: "Galéria", href: "#gallery" },
     { label: "Kontakt", href: "#contact" },
   ];
-
-  const handleAuthClick = () => {
-    if (isAuthenticated) {
-      logout();
-      navigate("/");
-    } else {
-      navigate("/login");
-    }
-  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
@@ -64,9 +41,6 @@ const Navigation = () => {
                 {link.label}
               </a>
             ))}
-            <Button variant="default" size="sm" onClick={handleAuthClick}>
-              {isAuthenticated ? "Odhlásiť sa" : "Prihlásiť sa"}
-            </Button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -93,17 +67,6 @@ const Navigation = () => {
                 {link.label}
               </a>
             ))}
-            <Button 
-              variant="default" 
-              size="sm" 
-              className="mt-2 w-full"
-              onClick={() => {
-                handleAuthClick();
-                setIsOpen(false);
-              }}
-            >
-              {isAuthenticated ? "Odhlásiť sa" : "Prihlásiť sa"}
-            </Button>
           </div>
         )}
       </div>

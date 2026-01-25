@@ -1,6 +1,11 @@
 import { Facebook, Instagram, Mail, Phone } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Footer = () => {
+  const { isAuthenticated, logout } = useAuth();
+  const navigate = useNavigate();
+
   const navLinks = [
     { label: "O firme", href: "#about" },
     { label: "Ľudia", href: "#team" },
@@ -14,6 +19,15 @@ const Footer = () => {
     { label: "Podmienky", href: "#" },
     { label: "GDPR", href: "#" },
   ];
+
+  const handleAuthClick = () => {
+    if (isAuthenticated) {
+      logout();
+      navigate("/");
+    } else {
+      navigate("/login");
+    }
+  };
 
   return (
     <footer className="bg-foreground text-background py-12 px-4">
@@ -34,6 +48,12 @@ const Footer = () => {
                   {link.label}
                 </a>
               ))}
+              <button
+                onClick={handleAuthClick}
+                className="text-sm hover:text-primary transition-colors"
+              >
+                {isAuthenticated ? "Odhlásiť sa" : "Vstup pre administrátora"}
+              </button>
             </nav>
           </div>
 
