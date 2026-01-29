@@ -20,9 +20,13 @@ const Navigation = () => {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <a href="#" className="text-2xl font-bold text-foreground">
-              Logo
-            </a>
+            <a href="#" className="flex items-center">
+            <img 
+              src="/logosirotar2BG.png" 
+              alt="Company Logo" 
+              className="h-8 md:h-10 w-auto object-contain" 
+            />
+          </a>
             {isAuthenticated && username && (
               <span className="text-sm font-medium text-muted-foreground">
                 {username}

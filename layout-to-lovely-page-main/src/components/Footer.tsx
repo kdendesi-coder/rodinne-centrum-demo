@@ -35,8 +35,12 @@ const Footer = () => {
         <div className="grid md:grid-cols-2 gap-8 mb-8">
           {/* Left side - Logo and Navigation */}
           <div>
-            <a href="#" className="text-2xl font-bold mb-6 inline-block">
-              Logo
+            <a href="#" className="flex items-center">
+              <img 
+                src="/logosirotar2BG.png" 
+                alt="Company Logo" 
+                className="h-16 md:h-20 w-auto object-contain" 
+              />
             </a>
             <nav className="flex flex-wrap gap-6">
               {navLinks.map((link) => (

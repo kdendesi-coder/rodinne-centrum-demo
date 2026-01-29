@@ -19,17 +19,17 @@ const ActivitiesSection = () => {
     {
       id: "herna",
       title: "Herňa",
-      content: "Herňa je určená deťom od 0 do 6 rokov. Je to priestor, kde sa môžu deti hrať a učiť sa nové veci.",
+      content: "Herňa je otvorená pre mamičky a deti každú stredu (okrem prázdnin a sviatkov) od 9:00 h do 12:00 h, program (detská aktivita alebo prednáška) začína o 10:00 h spoločnou modlitbou. Počas programu je k dispozícii spovedná služba a knižnica. ",
     },
     {
       id: "atrium",
       title: "Átrium",
-      content: "Átrium je multifunkčný priestor určený pre rôzne aktivity a podujatia.",
+      content: "Átrium je miesto, kde sa deti zoznamujú so základnými pravdami viery cez koncept Katechéz Dobrého pastiera, ktorý je postavený na pedagogických princípoch Márie Montessori a teologických znalostiach Sofie Cavalleti. Deti sú privádzané k modlitbe a poznávaniu Boha, učia sa rozumieť bohatstvu liturgie a poznať Sväté písmo spôsobom pre nich vhodným. ",
     },
     {
       id: "klubik",
       title: "Klubík",
-      content: "Klubík je priestor pre mladých a aktivít pre teenagerov a mladých dospelých.",
+      content: "Klub detí je priestor, kde sa stretávajú deti a v malej skupine s podporou sprievodcov majú možnosť objavovať, učiť sa a rásť v bezpečnom prostredí.",
     },
   ]);
 
@@ -37,7 +37,7 @@ const ActivitiesSection = () => {
   const [editingActivity, setEditingActivity] = useState<string | null>(null);
   const [isEditingImage, setIsEditingImage] = useState(false);
   const [isAddingActivity, setIsAddingActivity] = useState(false);
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState("logosirotarPaint.png");
 
   const toggleItem = (id: string) => {
     setOpenItems((prev) =>
@@ -68,7 +68,7 @@ const ActivitiesSection = () => {
 
         <div className="grid md:grid-cols-2 gap-12">
           {/* Left side - Image */}
-          <div className="relative group bg-muted rounded-lg overflow-hidden aspect-square flex items-center justify-center">
+          <div className="relative group bg-transparent rounded-lg overflow-hidden aspect-square flex items-center justify-center">
             {image ? (
               <img src={image} alt="Activities" className="w-full h-full object-cover" />
             ) : (

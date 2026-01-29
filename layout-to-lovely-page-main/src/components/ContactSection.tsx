@@ -11,12 +11,12 @@ const ContactSection = () => {
   const [isEditingMap, setIsEditingMap] = useState(false);
   const [isEditingIntro, setIsEditingIntro] = useState(false);
   
-  const [email, setEmail] = useState("Lorem ipsum dolor sit amet\nLorem ipsum");
+  const [email, setEmail] = useState("info@rcsirotar.sk");
   const [phone, setPhone] = useState("+421 123 456 789");
-  const [address, setAddress] = useState("Lorem ipsum dolor sit amet\nLorem ipsum");
-  const [mapImage, setMapImage] = useState("");
+  const [address, setAddress] = useState("o.z. PAX ET BONUM \n (IČO: 30797578; DIČ: 2022364784),\n Jezuitská 6, 010 01 Žilina \n(v priestoroch Fidélia)");
+  const [mapImage, setMapImage] = useState("mapaGoogle.png");
   const [introText, setIntroText] = useState(
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+    "V prípade záujmu, či akýchkoľvek otázok nás neváhajte kontaktovať. :)"
   );
     // Add this to check authentication
   const { isAuthenticated, role } = useAuth();
@@ -24,7 +24,7 @@ const ContactSection = () => {
   return (
     <section id="contact" className="py-20 px-4">
       <div className="container mx-auto max-w-6xl">
-        <h2 className="text-3xl md:text-4xl font-bold mb-4">Contact us</h2>
+        <h2 className="text-3xl md:text-4xl font-bold mb-4">Kontaktuje nás</h2>
         
         <div className="relative group/intro mb-12">
           <p className="text-muted-foreground">{introText}</p>
@@ -75,7 +75,7 @@ const ContactSection = () => {
                   <Phone className="w-6 h-6 text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-semibold mb-2">Phone</h3>
+                  <h3 className="font-semibold mb-2">Telefón</h3>
                   <p className="text-muted-foreground">{phone}</p>
                 </div>
               </div>

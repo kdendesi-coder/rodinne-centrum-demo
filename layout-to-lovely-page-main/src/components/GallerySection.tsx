@@ -5,14 +5,14 @@ import EditModal from "./EditModal";
 import { useAuth } from "@/contexts/AuthContext"; // Add this import
 
 const GallerySection = () => {
-  const [images, setImages] = useState(["", "", ""]);
+  const [images, setImages] = useState(["01_gallery.jpg", "02_gallery.jpg", "03_gallery.jpg", "04_gallery.jpg", "05_gallery.jpg", "06_gallery.jpg", "07_gallery.jpg", "08_gallery.jpg", "09_gallery.jpg"]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [isEditingIntro, setIsEditingIntro] = useState(false);
   const [isAddingImage, setIsAddingImage] = useState(false);
   
   const [introText, setIntroText] = useState(
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor."
+    "Zachytili sme okamihy radosti, spoločného rastu a priestor, v ktorom sa stretávame. \n Prezrite si fotografie z našich aktivít v herni a Átriu, ktoré hovoria o živote nášho centra. \n Každý obraz je príbehom našej komunity."
   );
 
   // Auto-cycle through images every 4 seconds
@@ -58,7 +58,7 @@ const GallerySection = () => {
     <section id="gallery" className="py-20 px-4">
       <div className="container mx-auto max-w-6xl">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-3xl md:text-4xl font-bold">Image Gallery</h2>
+          <h2 className="text-3xl md:text-4xl font-bold">Galéria</h2>
         </div>
         
         <div className="relative group mb-12">

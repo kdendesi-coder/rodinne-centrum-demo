@@ -8,8 +8,8 @@ const HeroSection = () => {
   const [isEditingImage, setIsEditingImage] = useState(false);
   
   const title = "Rodinné centrum Sirotár";
-  const subtitle = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
-  const [backgroundImage, setBackgroundImage] = useState("https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1200&auto=format&fit=crop");
+  const subtitle = "Rodinné centrum Sirotár chce rodinám ponúkať komunitu, rast a duchovné zázemie";
+  const [backgroundImage, setBackgroundImage] = useState("ContainerLargeEdit2.jpg");
   // Add this to check authentication
   const { isAuthenticated, role } = useAuth();
 
@@ -19,7 +19,7 @@ const HeroSection = () => {
         className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: `url(${backgroundImage})` }}
       />
-      <div className="absolute inset-0 bg-foreground/60" />
+      <div className="absolute inset-0 bg-foreground/20" />
       
       {/* Show edit button only for Admin users */}
       {isAuthenticated && role === "Admin" && (

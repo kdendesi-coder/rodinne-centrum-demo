@@ -13,10 +13,10 @@ interface TeamMember {
 
 const TeamSection = () => {
   const [members, setMembers] = useState<TeamMember[]>([
-    { name: "Meno a Priezvisko", role: "Lorem ipsum dolor sit amet", image: "" },
-    { name: "Meno a Priezvisko", role: "Lorem ipsum dolor sit amet", image: "" },
-    { name: "Meno a Priezvisko", role: "Lorem ipsum dolor sit amet", image: "" },
-    { name: "Meno a Priezvisko", role: "Lorem ipsum dolor sit amet", image: "" },
+    { name: "Miroslav Uhrina  ", role: "Koordinátor Rodinného centra", image: "Miroslav-Uhrina.jpg" },
+    { name: "Katarína Sopková", role: "Zodpovedná za herňu", image: "Katarína-Sopková.jpg" },
+    { name: "Mária Sroková  ", role: "Zodpovedná za Átrium", image: "Mária-Sroková.jpg" },
+    { name: "Magdaléna Uhrinová Brezániová", role: "Dobrovoľníčka v herni", image: "Magdaléna-Uhrinová-Brezániová.jpg" },
   ]);
 
   const [editingMember, setEditingMember] = useState<number | null>(null);
@@ -24,7 +24,7 @@ const TeamSection = () => {
   const [isEditingIntro, setIsEditingIntro] = useState(false);
   
   const [introText, setIntroText] = useState(
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+    "Náš tím tvoria nadšení ľudia, ktorí láskou a odbornosťou pripravujú každú aktivitu."
   );
 
   const handleSaveMember = (index: number, field: "name" | "role" | "image", value: string) => {
@@ -39,7 +39,7 @@ const TeamSection = () => {
   return (
     <section id="team" className="py-20 px-4 bg-muted/30">
       <div className="container mx-auto max-w-6xl">
-        <h2 className="text-3xl md:text-4xl font-bold mb-4">Our team</h2>
+        <h2 className="text-3xl md:text-4xl font-bold mb-4">Náš tím :)</h2>
         
         <div className="relative group/intro mb-12">
           <p className="text-muted-foreground">{introText}</p>
@@ -97,7 +97,7 @@ const TeamSection = () => {
                 )}
               </div>
 
-              <div className="relative group/name inline-block mb-2">
+              <div className="relative group/name block mb-2">
                 <h3 className="font-semibold">{member.name}</h3>
 
                 {/* Show edit button only for Admin users */}
@@ -116,7 +116,7 @@ const TeamSection = () => {
                 )}
               </div>
 
-              <div className="relative group/role inline-block">
+              <div className="relative group/role block">
                 <p className="text-sm text-muted-foreground">{member.role}</p>
 
                 {/* Show edit button only for Admin users */}

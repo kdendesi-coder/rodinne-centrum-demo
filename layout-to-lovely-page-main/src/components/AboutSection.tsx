@@ -3,18 +3,17 @@ import { Button } from "@/components/ui/button";
 import { Edit2 } from "lucide-react";
 import EditModal from "./EditModal";
 import { useParagraph } from "@/hooks/useParagraph";
-import { useAuth } from "@/contexts/AuthContext"; // Add this import
+import { useAuth } from "@/contexts/AuthContext"; 
 
 const AboutSection = () => {
   const [isEditingText, setIsEditingText] = useState(false);
   const [isEditingImage, setIsEditingImage] = useState(false);
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState("https://rcsirotar.sk/wp-content/uploads/2019/05/01_IMGP3994.jpg");
 
-  // Use the custom hook - just one line!
   const { text, isLoading, error, setText } = useParagraph('about');
 
-  // Add this to check authentication
   const { isAuthenticated, role } = useAuth();
+  
 
   return (
     <section id="about" className="py-20 px-4">
@@ -88,7 +87,7 @@ const AboutSection = () => {
         type="text"
         initialValue={text}
         onSave={setText}
-        backendId="about" // Pass the paragraph ID here!
+        backendId="about" // Pass the paragraph ID
       />
       <EditModal
         isOpen={isEditingImage}
