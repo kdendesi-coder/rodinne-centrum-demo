@@ -58,7 +58,7 @@ const EditModal = ({
 
       setIsLoading(true);
       try {
-        const response = await fetch(`http://localhost:5058/text/${backendId}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/text/${backendId}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",

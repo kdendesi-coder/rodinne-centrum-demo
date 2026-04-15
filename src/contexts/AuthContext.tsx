@@ -55,7 +55,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = async (username: string, password: string) => {
     console.log(" Login function called with username:", username);
 
-    const response = await fetch("http://localhost:5058/signin", {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/signin`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
