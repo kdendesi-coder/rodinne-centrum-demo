@@ -22,7 +22,6 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/login" element={<Login />} />
             <Route path="/aktivita/:activityId" element={<ActivityDetail />} />
-            <Route path="/aktivita/:herna" element={<ActivityDetail />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
