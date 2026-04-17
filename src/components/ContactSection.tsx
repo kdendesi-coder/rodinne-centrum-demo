@@ -42,7 +42,7 @@ const ContactSection = () => {
           )}
         </div>
 
-        <div className="grid md:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-[0.9fr_1.9fr] gap-8 items-start">
           {/* Contact Info */}
           <div className="space-y-8">
             <div className="relative group/email">
