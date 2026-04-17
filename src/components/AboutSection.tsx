@@ -119,7 +119,7 @@ const AboutSection = () => {
         title="Edit About Text"
         type="text"
         initialValue={text}
-        onSave={setText}
+        onSave={(value) => typeof value === 'string' ? setText(value) : undefined}
         backendId="about" // Pass the paragraph ID
       />
       <EditModal
