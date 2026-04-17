@@ -162,7 +162,7 @@ const ContactSection = () => {
           </div>
 
           {/* Map */}
-          <div className="relative group bg-muted rounded-lg overflow-hidden aspect-square flex items-center justify-center">
+          <div className="relative group bg-muted rounded-lg overflow-hidden h-[280px] md:h-[380px] lg:h-[420px] flex items-center justify-center">
             {mapImage ? (
               <img src={mapImage} alt="Map" className="w-full h-full object-cover" />
             ) : (
