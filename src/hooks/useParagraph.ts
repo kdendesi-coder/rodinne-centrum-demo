@@ -17,7 +17,7 @@ export const useParagraph = (paragraphId: string) => {
         setIsLoading(true);
         setError(null);
         // Tu je zmena URL pre požiadavku na backend na Railway alebo Vercel
-        const response = await fetch(`https://rodinne-centrum-backend-production.up.railway.app/api/text/${paragraphId}`);
+        const response = await fetch(`https://rodinne-centrum-backend-production.up.railway.app/text/${paragraphId}`);
         
         if (!response.ok) {
           if (response.status === 404) {
