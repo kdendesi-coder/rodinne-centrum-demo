@@ -42,7 +42,7 @@ const ContactSection = () => {
           )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-[0.9fr_1.9fr] gap-8 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-[0.75fr_2.05fr] gap-8 items-start">
           {/* Contact Info */}
           <div className="space-y-8">
             <div className="relative group/email">
@@ -162,7 +162,7 @@ const ContactSection = () => {
           </div>
 
           {/* Map */}
-          <div className="relative group bg-muted rounded-3xl overflow-hidden h-[420px] md:h-[430px] flex items-center justify-center">
+          <div className="relative group bg-muted rounded-3xl overflow-hidden h-[260px] md:h-[340px] flex items-center justify-center">
             {mapImage ? (
               <img src={mapImage} alt="Map" className="w-full h-full object-cover" />
             ) : (
