@@ -149,7 +149,7 @@ const ActivitiesSection = () => {
 
   const handleAddActivity = (title: string, content: string) => {
     const id = title.toLowerCase().replace(/\s+/g, '-');
-    setActivities((prev) => [...prev, { id, title, content, icon: "/icons/herna.png", }]);
+    setActivities((prev) => [...prev, { id, title, content, icon: "/herna.jpg", }]);
   };
 
   // Aktivity pre deti
