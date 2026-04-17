@@ -16,7 +16,7 @@ export const useParagraph = (paragraphId: string) => {
       try {
         setIsLoading(true);
         setError(null);
-        const response = await fetch(`http://https://rodinne-centrum-backend-production.up.railway.app/${paragraphId}`);
+        const response = await fetch(`https://rodinne-centrum-backend-production.up.railway.app/text/${paragraphId}`);
         
         if (!response.ok) {
           if (response.status === 404) {
