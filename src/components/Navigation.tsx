@@ -8,17 +8,17 @@ const Navigation = () => {
   const { isAuthenticated, username } = useAuth();
 
   const navLinks = [
-    { label: "O firme", href: "#about" },
-    { label: "Ľudia", href: "#team" },
-    { label: "Aktivity", href: "#activities",
+    { label: "O firme", href: "/#about" },
+    { label: "Ľudia", href: "/#team" },
+    { label: "Aktivity", href: "/#activities",
       dropdown: [
-        { label: "Herňa", href: "https://rodinne-centrum-demo.vercel.app/aktivita/herna"},
-        { label: "Átrium", href: "https://rodinne-centrum-demo.vercel.app/aktivita/atrium"},
-        { label: "Klubík", href: "https://rodinne-centrum-demo.vercel.app/aktivita/klubik"},
+        { label: "Herňa", href: "/aktivita/herna"},
+        { label: "Átrium", href: "/aktivita/atrium"},
+        { label: "Klubík", href: "/aktivita/klubik"},
       ]
      },
-    { label: "Galéria", href: "#gallery" },
-    { label: "Kontakt", href: "#contact" },
+    { label: "Galéria", href: "/#gallery" },
+    { label: "Kontakt", href: "/#contact" },
   ];
 
   return (
@@ -33,7 +33,7 @@ const Navigation = () => {
 
             {/* Logo + username */}
             <div className="flex items-center gap-4">
-              <a href="#" className="flex items-center">
+              <a href="/" className="flex items-center">
                 <img
                   src="/logosirotar2BG.png"
                   alt="Company Logo"
