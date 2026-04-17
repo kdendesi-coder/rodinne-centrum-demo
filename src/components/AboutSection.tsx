@@ -16,11 +16,8 @@ const AboutSection = () => {
 
 Cieľom je vytvoriť priestor pre lepšie prežívanie materstva, osobný aj duchovný rozvoj a sebarealizáciu mamičiek. Rovnako aj vytvoriť priestor pre zdravú socializáciu ich ratolestí.`;
 
-  const { text, isLoading, error, setText } = useParagraph("about");
+  const { setText } = useParagraph("about");
   const { isAuthenticated, role } = useAuth();
-
-  const displayedText =
-    text && text.trim().length > 50 ? text : fallbackText;
 
   return (
     <section id="about" className="py-20 px-4">
@@ -30,19 +27,9 @@ Cieľom je vytvoriť priestor pre lepšie prežívanie materstva, osobný aj duc
         <div className="grid md:grid-cols-2 gap-16 items-center">
           <div className="relative group">
             <div className="text-lg leading-[1.8]">
-              {isLoading ? (
-                <p className="text-muted-foreground whitespace-pre-line">
-                  {fallbackText}
-                </p>
-              ) : error ? (
-                <p className="text-muted-foreground whitespace-pre-line">
-                  {fallbackText}
-                </p>
-              ) : (
-                <p className="text-muted-foreground whitespace-pre-line">
-                  {displayedText}
-                </p>
-              )}
+              <p className="text-muted-foreground whitespace-pre-line leading-relaxed">
+                {fallbackText}
+              </p>
             </div>
 
             {isAuthenticated && role === "Admin" && (
@@ -125,8 +112,10 @@ Cieľom je vytvoriť priestor pre lepšie prežívanie materstva, osobný aj duc
         onClose={() => setIsEditingText(false)}
         title="Edit About Text"
         type="text"
-        initialValue={displayedText}
-        onSave={(value) => typeof value === "string" ? setText(value) : undefined}
+        initialValue={fallbackText}
+        onSave={(value) =>
+          typeof value === "string" ? setText(value) : undefined
+        }
         backendId="about"
       />
 
