@@ -22,7 +22,7 @@ const Navigation = () => {
   ];
 
   return (
-    <nav className="fixed top-9 w-full z-50 justify-center px-4">
+    <nav className="fixed top-2 w-full z-50 justify-center px-4">
       <div className="w-full max-w-9xl mx-auto bg-[#DEE2D2]
                       rounded-2xl
                       shadow-md
