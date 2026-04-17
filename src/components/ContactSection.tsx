@@ -47,7 +47,7 @@ const ContactSection = () => {
           <div className="space-y-8">
             <div className="relative group/email">
 
-              <div className="bg-[#F4E9E2] rounded-3xl p-6">
+              <div className="bg-[#F4E9E2] rounded-3xl p-5 min-h-[150px]">
                 <div className="flex flex-col gap-4">
 
                   {/* Ikona */}
@@ -85,7 +85,7 @@ const ContactSection = () => {
 
             <div className="relative group/phone">
 
-              <div className="bg-[#F4E9E2] rounded-3xl p-6">
+              <div className="bg-[#F4E9E2] rounded-3xl p-5 min-h-[150px]">
                 <div className="flex flex-col gap-4">
 
                   {/* Ikona */}
@@ -124,7 +124,7 @@ const ContactSection = () => {
 
             <div className="relative group/address">
              
-              <div className="bg-[#F4E9E2] rounded-3xl p-6">
+              <div className="bg-[#F4E9E2] rounded-3xl p-5 min-h-[150px]">
                 <div className="flex flex-col gap-4">
 
                   {/* Ikona */}
@@ -162,7 +162,7 @@ const ContactSection = () => {
           </div>
 
           {/* Map */}
-          <div className="relative group bg-muted rounded-lg overflow-hidden h-[280px] md:h-[380px] lg:h-[420px] flex items-center justify-center">
+          <div className="relative group bg-muted rounded-3xl overflow-hidden h-[320px] md:h-[430px] flex items-center justify-center">
             {mapImage ? (
               <img src={mapImage} alt="Map" className="w-full h-full object-cover" />
             ) : (
