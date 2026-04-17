@@ -137,7 +137,7 @@ const ContactSection = () => {
           </div>
 
           {/* Map */}
-          <div className="relative group bg-muted rounded-3xl overflow-hidden h-[260px] md:h-[466px] flex items-center justify-center">
+          <div className="relative group bg-muted rounded-3xl overflow-hidden h-[260px] md:h-[520px] flex items-center justify-center">
             {mapImage ? (
               <img
                 src={mapImage}
