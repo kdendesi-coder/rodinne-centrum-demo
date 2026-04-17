@@ -9,7 +9,13 @@ const Footer = () => {
   const navLinks = [
     { label: "O firme", href: "#about" },
     { label: "Ľudia", href: "#team" },
-    { label: "Aktivity", href: "#activities" },
+    { label: "Aktivity", href: "#activities",
+      dropdown: [
+        { label: "Herňa", href: "https://rodinne-centrum-demo.vercel.app/aktivita/herna"},
+        { label: "Átrium", href: "https://rodinne-centrum-demo.vercel.app/aktivita/atrium"},
+        { label: "Klubík", href: "https://rodinne-centrum-demo.vercel.app/aktivita/klubik"},
+      ]
+     },
     { label: "Galéria", href: "#gallery" },
     { label: "Kontakt", href: "#contact" },
   ];
