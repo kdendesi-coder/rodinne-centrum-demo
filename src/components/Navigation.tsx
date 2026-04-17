@@ -61,7 +61,7 @@ const Navigation = () => {
                     {link.label}
                     {link.dropdown && (
                       <img 
-                        src="https://rodinne-centrum-demo-7bk1ttdkm-kdendesi-coders-projects.vercel.app/icons/down-arrow.png"
+                        src="https://rodinne-centrum-backend-production.up.railway.app/api/icons/down-arrow.png"
                         alt="down-arrow"
                         className="w-5 h-5 transition-transform duration-200 group-hover:rotate-180"
                         />
