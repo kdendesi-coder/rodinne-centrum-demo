@@ -12,9 +12,9 @@ const Navigation = () => {
     { label: "Ľudia", href: "#team" },
     { label: "Aktivity", href: "#activities",
       dropdown: [
-        { label: "Herňa", href: "/aktivita/herna"},
-        { label: "Átrium", href: "/aktivita/atrium"},
-        { label: "Klubík", href: "/aktivita/klubik"},
+        { label: "Herňa", href: "https://rodinne-centrum-demo.vercel.app/aktivita/herna"},
+        { label: "Átrium", href: "https://rodinne-centrum-demo.vercel.app/aktivita/atrium"},
+        { label: "Klubík", href: "https://rodinne-centrum-demo.vercel.app/aktivita/klubik"},
       ]
      },
     { label: "Galéria", href: "#gallery" },
@@ -61,7 +61,7 @@ const Navigation = () => {
                     {link.label}
                     {link.dropdown && (
                       <img 
-                        src="https://rodinne-centrum-demo-7bk1ttdkm-kdendesi-coders-projects.vercel.app/icons/down-arrow.png"
+                        src="https://rodinne-centrum-demo.vercel.app/icons/down-arrow.png"
                         alt="down-arrow"
                         className="w-5 h-5 transition-transform duration-200 group-hover:rotate-180"
                         />
