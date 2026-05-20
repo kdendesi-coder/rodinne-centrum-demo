@@ -429,7 +429,7 @@ const ActivitiesSection = () => {
                                       onClick={() => handleDeleteChildActivity(activity.id, index)}
                                     >
                                       <img 
-                                            src="/icons/close.png"
+                                            src="/close.png"
                                             alt="add"
                                             className="w-4 h-4"
                                             />
@@ -485,7 +485,7 @@ const ActivitiesSection = () => {
                                           onClick={() => handleDeleteLecture(activity.id, i)}
                                         >
                                           <img 
-                                            src="/icons/close.png"
+                                            src="/close.png"
                                             alt="add"
                                             className="w-4 h-4"
                                             />
@@ -509,7 +509,7 @@ const ActivitiesSection = () => {
                                           }}
                                         >
                                           <img 
-                                            src="/icons/plus.png"
+                                            src="/plus.png"
                                             alt="add"
                                             className="w-4 h-4"
                                             />
