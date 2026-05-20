@@ -10,16 +10,19 @@ const GalleryHero = () => {
   const [isEditing, setIsEditing] = useState(false);
 
   return (
-    <div className="container mx-auto px-4 my-10">
-      <div className="relative w-full h-[500px] rounded-2xl overflow-hidden group shadow-lg">
+    <div className="w-full max-w-[1867px] mx-auto px-4 sm:px-6 lg:px-8 my-8 md:my-12">
+      <div className="relative w-full h-[360px] sm:h-[420px] md:h-[560px] lg:h-[680px] xl:h[760px] rounded-2xl md:rounded-3xl overflow-hidden group shadow-lg">
         <img
           src={heroImage}
           alt="Gallery large"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover object-center"
+          loading="eager"
+          decoding="async"
+          fetchPriority="high"
         />
 
         {isAuthenticated && role === "Admin" && (
-          <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="absolute top-3 right-3 md:top-4 md:right-4 opacity-100 lg:opacity-0 lg:group-hover-opacity transition-opacity">
             <Button
               size="icon"
               variant="secondary"
