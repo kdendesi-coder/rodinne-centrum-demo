@@ -34,7 +34,7 @@ const Navigation = () => {
 
             {/* Logo + username */}
             <div className="flex items-center gap-3 min-w-0">
-              <a href="#" className="flex items-center gap-2 min-w-0">
+              <a href="/#" className="flex items-center gap-2 min-w-0">
                 <img
                   src="/logosirotar2BG.png"
                   alt="Company Logo"
