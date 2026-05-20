@@ -9,13 +9,7 @@ const Footer = () => {
   const navLinks = [
     { label: "O firme", href: "/#about" },
     { label: "Ľudia", href: "/#team" },
-    { label: "Aktivity", href: "/#activities",
-      dropdown: [
-        { label: "Herňa", href: "https://rodinne-centrum-demo.vercel.app/aktivita/herna"},
-        { label: "Átrium", href: "https://rodinne-centrum-demo.vercel.app/aktivita/atrium"},
-        { label: "Klubík", href: "https://rodinne-centrum-demo.vercel.app/aktivita/klubik"},
-      ]
-     },
+    { label: "Aktivity", href: "/#activities" },
     { label: "Galéria", href: "/#gallery" },
     { label: "Kontakt", href: "/#contact" },
   ];
@@ -26,79 +20,83 @@ const Footer = () => {
     { label: "GDPR", href: "/#" },
   ];
 
-  const handleAuthClick = () => {
-    if (isAuthenticated) {
-      logout();
-      navigate("/");
-    } else {
-      navigate("/login");
-    }
+  const handleLogout = () => {
+    logout();
+    navigate("/");
   };
 
   return (
-    <footer className="bg-foreground text-background py-12 px-4">
-      <div className="container mx-auto max-w-6xl">
-        <div className="grid md:grid-cols-2 gap-8 mb-8">
+    <footer className="bg-foreground text-background py-10 md:py-16 px-4">
+      <div className="w-full max-w-[1800px] mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12 mb-10 md:mb-12 items-start">
+          
           {/* Left side - Logo and Navigation */}
           <div>
             <a href="#" className="flex items-center">
-              <img 
-                src="/logosirotar2BG.png" 
-                alt="Company Logo" 
-                className="h-16 md:h-20 w-auto object-contain" 
+              <img
+                src="/logosirotar2BG.png"
+                alt="Company Logo"
+                className="h-20 sm:h-20 md:h-24 w-auto object-contain"
               />
             </a>
-            <nav className="flex flex-wrap gap-6">
+
+            <nav className="mt-6 flex flex-wrap gap-x-6 gap-y-3 md:gap-x-8">
               {navLinks.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
-                  className="text-sm hover:text-primary transition-colors"
+                  className="text-base md:text-lg hover:text-primary transition-colors"
                 >
                   {link.label}
                 </a>
               ))}
-              <button
-                onClick={handleAuthClick}
-                className="text-sm hover:text-primary transition-colors"
-              >
-                {isAuthenticated ? "Odhlásiť sa" : "Vstup pre administrátora"}
-              </button>
+
+              {isAuthenticated && (
+                <button
+                  onClick={handleLogout}
+                  className="text-base md:text-lg hover:text-primary transition-colors"
+                >
+                  Odhlásiť sa
+                </button>
+              )}
             </nav>
           </div>
 
           {/* Right side - Social Icons */}
-          <div className="flex items-start justify-end gap-4">
+          <div className="flex items-center justify-start md:justify-end gap-3 sm:gap-4">
             <a
               href="/#"
-              className="w-10 h-10 bg-background/10 hover:bg-background/20 rounded-lg flex items-center justify-center transition-colors"
+              className="w-12 h-12 md:w-14 md:h-14 bg-background/10 hover:bg-background/20 rounded-xl flex items-center justify-center transition-colors"
             >
-              <Facebook className="w-5 h-5" />
+              <Facebook className="w-6 h-6 md:w-7 md:h-7" />
             </a>
+
             <a
               href="/#"
-              className="w-10 h-10 bg-background/10 hover:bg-background/20 rounded-lg flex items-center justify-center transition-colors"
+              className="w-12 h-12 md:w-14 md:h-14 bg-background/10 hover:bg-background/20 rounded-xl flex items-center justify-center transition-colors"
             >
-              <Instagram className="w-5 h-5" />
+              <Instagram className="w-6 h-6 md:w-7 md:h-7" />
             </a>
+
             <a
               href="/#"
-              className="w-10 h-10 bg-background/10 hover:bg-background/20 rounded-lg flex items-center justify-center transition-colors"
+              className="w-12 h-12 md:w-14 md:h-14 bg-background/10 hover:bg-background/20 rounded-xl flex items-center justify-center transition-colors"
             >
-              <Mail className="w-5 h-5" />
+              <Mail className="w-6 h-6 md:w-7 md:h-7" />
             </a>
+
             <a
               href="/#"
-              className="w-10 h-10 bg-background/10 hover:bg-background/20 rounded-lg flex items-center justify-center transition-colors"
+              className="w-12 h-12 md:w-14 md:h-14 bg-background/10 hover:bg-background/20 rounded-xl flex items-center justify-center transition-colors"
             >
-              <Phone className="w-5 h-5" />
+              <Phone className="w-6 h-6 md:w-7 md:h-7" />
             </a>
           </div>
         </div>
 
         {/* Bottom - Legal Links */}
-        <div className="pt-8 border-t border-background/10">
-          <div className="flex flex-wrap gap-6 text-sm text-background/70">
+        <div className="pt-8 md:pt-10 border-t border-background/10">
+          <div className="flex flex-wrap gap-x-6 gap-y-3 md:gap-x-8 text-base md:text-lg text-background/70">
             {legalLinks.map((link) => (
               <a
                 key={link.href}
