@@ -32,7 +32,7 @@ const Footer = () => {
           
           {/* Left side - Logo and Navigation */}
           <div>
-            <a href="#" className="flex items-center">
+            <a href="/#" className="flex items-center">
               <img
                 src="/logosirotar2BG.png"
                 alt="Company Logo"
