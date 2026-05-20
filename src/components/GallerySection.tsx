@@ -129,7 +129,7 @@ const GallerySection = () => {
                         className="w-full h-full object-cover"
                         loading={pageIndex <=1 ? "eager" : "lazy"}
                         decoding="async"
-                        fetchPriority={pageIndex <=1 ? "high" : "low"}
+                        
                       />
                     </div>
                   ))}
