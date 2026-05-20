@@ -7,8 +7,8 @@ const Footer = () => {
   const navigate = useNavigate();
 
   const navLinks = [
-    { label: "O firme", href: "/#about" },
-    { label: "Ľudia", href: "/#team" },
+    { label: "O nás", href: "/#about" },
+    { label: "Náš tím", href: "/#team" },
     { label: "Aktivity", href: "/#activities" },
     { label: "Galéria", href: "/#gallery" },
     { label: "Kontakt", href: "/#contact" },
