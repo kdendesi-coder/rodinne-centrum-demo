@@ -8,7 +8,7 @@ const Navigation = () => {
   const { isAuthenticated, username } = useAuth();
 
   const navLinks = [
-    { label: "O Nas", href: "/#about" },
+    { label: "O Nás", href: "/#about" },
     { label: "Aktivity", href: "/#activities",
       dropdown: [
         { label: "Herňa", href: "/aktivita/herna"},
