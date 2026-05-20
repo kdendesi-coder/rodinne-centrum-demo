@@ -16,8 +16,9 @@ const Navigation = () => {
         { label: "Klubík", href: "/aktivita/klubik"},
       ]
      },
-    { label: "Ľudia", href: "/#team" },
+    
     { label: "Galéria", href: "/#gallery" },
+    { label: "Náš tím", href: "/#team" },
     { label: "Kontakt", href: "/#contact" },
   ];
 
