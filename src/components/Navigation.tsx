@@ -62,7 +62,7 @@ const Navigation = () => {
                     {link.label}
                     {link.dropdown && (
                       <img 
-                        src="/down-arrow.jpg"
+                        src="down-arrow.jpg"
                         alt="down-arrow"
                         className="w-5 h-5 transition-transform duration-200 group-hover:rotate-180"
                         />
