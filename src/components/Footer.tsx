@@ -7,23 +7,23 @@ const Footer = () => {
   const navigate = useNavigate();
 
   const navLinks = [
-    { label: "O firme", href: "#about" },
-    { label: "Ľudia", href: "#team" },
-    { label: "Aktivity", href: "#activities",
+    { label: "O firme", href: "/#about" },
+    { label: "Ľudia", href: "/#team" },
+    { label: "Aktivity", href: "/#activities",
       dropdown: [
         { label: "Herňa", href: "https://rodinne-centrum-demo.vercel.app/aktivita/herna"},
         { label: "Átrium", href: "https://rodinne-centrum-demo.vercel.app/aktivita/atrium"},
         { label: "Klubík", href: "https://rodinne-centrum-demo.vercel.app/aktivita/klubik"},
       ]
      },
-    { label: "Galéria", href: "#gallery" },
-    { label: "Kontakt", href: "#contact" },
+    { label: "Galéria", href: "/#gallery" },
+    { label: "Kontakt", href: "/#contact" },
   ];
 
   const legalLinks = [
-    { label: "Copyright", href: "#" },
-    { label: "Podmienky", href: "#" },
-    { label: "GDPR", href: "#" },
+    { label: "Copyright", href: "/#" },
+    { label: "Podmienky", href: "/#" },
+    { label: "GDPR", href: "/#" },
   ];
 
   const handleAuthClick = () => {
@@ -70,25 +70,25 @@ const Footer = () => {
           {/* Right side - Social Icons */}
           <div className="flex items-start justify-end gap-4">
             <a
-              href="#"
+              href="/#"
               className="w-10 h-10 bg-background/10 hover:bg-background/20 rounded-lg flex items-center justify-center transition-colors"
             >
               <Facebook className="w-5 h-5" />
             </a>
             <a
-              href="#"
+              href="/#"
               className="w-10 h-10 bg-background/10 hover:bg-background/20 rounded-lg flex items-center justify-center transition-colors"
             >
               <Instagram className="w-5 h-5" />
             </a>
             <a
-              href="#"
+              href="/#"
               className="w-10 h-10 bg-background/10 hover:bg-background/20 rounded-lg flex items-center justify-center transition-colors"
             >
               <Mail className="w-5 h-5" />
             </a>
             <a
-              href="#"
+              href="/#"
               className="w-10 h-10 bg-background/10 hover:bg-background/20 rounded-lg flex items-center justify-center transition-colors"
             >
               <Phone className="w-5 h-5" />
