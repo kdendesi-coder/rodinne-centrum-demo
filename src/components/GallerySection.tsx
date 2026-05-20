@@ -21,27 +21,32 @@ const GallerySection = () => {
   const [isAddingImage, setIsAddingImage] = useState(false);
 
   
-  const imagesPerView = 1;
+  const imagesPerView = 2;
+  const totalPages = Math.ceil(images.length / imagesPerView);
 
   const [introText, setIntroText] = useState(
-    "Zachytili sme okamihy radosti, spoločného rastu a priestor, v ktorom sa stretávame. \n Prezrite si fotografie z našich aktivít v herni a Átriu, ktoré hovoria o živote nášho centra. \n Každý obraz je príbehom našej komunity."
+    "Zachytili sme okamihy radosti, spoločného rastu a priestor, v ktorom sa stretávame. Prezrite si fotografie z našich aktivít v herni a Átriu, ktoré hovoria o živote nášho centra. Každý obraz je príbehom našej komunity."
   );
 
   // Auto-cycle through images every 4 seconds
   useEffect(() => {
+    if(totalPages <= 1) return; // No need to cycle if there's only one page
+    
     const interval = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % images.length);
+      setCurrentImageIndex((prev) => (prev + 1) % totalPages);
     }, 4000);
 
     return () => clearInterval(interval);
-  }, [images.length]);
+  }, [totalPages]);
 
   const handleDeleteImage = (index: number) => {
     const newImages = images.filter((_, i) => i !== index);
+    const newTotalPages = Math.ceil(newImages.length / imagesPerView);
+
     setImages(newImages);
-    // Adjust current index if needed
-    if (currentImageIndex >= newImages.length) {
-      setCurrentImageIndex(Math.max(0, newImages.length - 1));
+
+    if (currentImageIndex >= newTotalPages) {
+      setCurrentImageIndex(Math.max(0, newTotalPages - 1));
     }
   };
 
@@ -56,25 +61,29 @@ const GallerySection = () => {
   };
 
   const scrollPrev = () => {
-    setCurrentImageIndex((prev) => (prev - imagesPerView + images.length) % images.length);
+    setCurrentImageIndex((prev) => 
+      prev === 0 ? totalPages - 1 : prev - 1
+    );
   };
 
   const scrollNext = () => {
-    setCurrentImageIndex((prev) => (prev + imagesPerView) % images.length);
+    setCurrentImageIndex((prev) => 
+      prev === totalPages - 1 ? 0 : prev + 1
+    );
   };
 
     // Add this to check authentication
   const { isAuthenticated, role } = useAuth();
 
   return (
-    <section id="gallery" className="py-20 px-4">
-      <div className="container mx-auto max-w-6xl">
+    <section id="gallery" className="py-12 md:py-20 px-4 overflow-hidden">
+      <div className="w-full max-w-[1650px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-3xl md:text-4xl font-bold">Galéria</h2>
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold">Galéria</h2>
         </div>
         
         <div className="relative group mb-12">
-          <p className="text-muted-foreground">{introText}</p>
+          <p className="text-base md:text-lg xl:text-xl leading-[1.8] text-muted-foreground whitespace-pre-line">{introText}</p>
 
           {/* Show edit button only for Admin users */}
           {isAuthenticated && role === "Admin" && (
@@ -91,66 +100,67 @@ const GallerySection = () => {
         </div>
 
         {/* Big preview image with arrow buttons */}
-        <div className="relative mb-8">
-          <div className="overflow-hidden rounded-2xl">
-            <div
-              className="flex gap-6 transition-transform duration-500 ease-in-out"
-              style={{
-                transform: `translateX(-${currentImageIndex * 105}%)`,
-              }}
-            >
-              {images.map((image, index) => (
-                <div
-                  key={index}
-                  className="min-w-[50%] bg-muted rounded-2xl aspect-square flex items-center justify-center overflow-hidden"
-                >
-                  {image ? (
-                    <img
-                      src={image}
-                      alt={`Gallery ${index + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <svg
-                      className="w-16 h-16 text-muted-foreground"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
+       <div className="relative mb-8 lg:md-10">
+        <div className="overflow-hidden rounded-2xl">
+          <div
+            className="flex transition-transform duration-500 ease-in-out"
+            style={{
+              transform: `translateX(-${currentImageIndex * 100}%)`,
+            }}
+          >
+            {Array.from({ length: totalPages }).map((_, pageIndex) => (
+              <div
+                key={pageIndex}
+                className="min-w-full grid grid-cols-1 md:grid-cols-2 md:gap-6 lg:gap-8"
+              >
+                {images
+                  .slice(
+                    pageIndex * imagesPerView,
+                    pageIndex * imagesPerView + imagesPerView
+                  )
+                  .map((image, index) => (
+                    <div
+                      key={index}
+                      className="bg-muted rounded-2xl aspect-[4/3] md:aspect-[3/2] flex items-center justify-center overflow-hidden"
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16"
+                      <img
+                        src={image}
+                        alt={`Gallery ${pageIndex * imagesPerView + index + 1}`}
+                        className="w-full h-full object-cover"
+                        loading={pageIndex <=1 ? "eager" : "lazy"}
+                        decoding="async"
+                        fetchPriority={pageIndex <=1 ? "high" : "low"}
                       />
-                    </svg>
-                  )}
-                </div>
-              ))}
-            </div>
+                    </div>
+                  ))}
+              </div>
+            ))}
           </div>
         </div>
+      </div>
 
         <div className="flex items-center justify-between mt-4">
           <div className="flex gap-2">
-            {images.map((_, i) => (
-              <div
-                key={i}
-                className={`w-2 h-2 rounded-full ${
-                  i === currentImageIndex ? "bg-black" : "bg-gray-300"
-                }`}
-              />
-            ))}
+          {Array.from({ length: totalPages }).map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => setCurrentImageIndex(i)}
+              className={`w-3 h-3 md:w-4 md:h-4 rounded-full transition-all ${
+                i === currentImageIndex ? "bg-black" : "bg-gray-300"
+              }`}
+            />
+          ))}
           </div>
 
           <div className="flex gap-2">
             <Button
               size="icon"
               variant="secondary"
-              className="rounded-full"
+              className="rounded-full h-10 w-10 md:h-12 md:w-12"
               onClick={scrollPrev}
             >
-              <ChevronLeft className="h-4 w-4" />
+              <ChevronLeft className="h-5 w-5 md:h-6 md:w-6" />
             </Button>
 
             <Button
@@ -159,7 +169,7 @@ const GallerySection = () => {
               className="rounded-full"
               onClick={scrollNext}
             >
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="h-5 w-5 md:h-6 md:w-6" />
             </Button>
           </div>
 
@@ -169,15 +179,15 @@ const GallerySection = () => {
 
         {isAuthenticated && role === "Admin" && (
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-8 mb-8">
           {images.map((image, index) => (
             <div 
               key={index} 
-              className="relative group bg-muted rounded-lg overflow-hidden aspect-video flex items-center justify-center cursor-pointer"
-              onClick={() => setCurrentImageIndex(index)}
+              className="relative group bg-muted rounded-2xl overflow-hidden aspect-[4/3] flex items-center justify-center cursor-pointer"
+              onClick={() => setCurrentImageIndex(Math.floor(index / imagesPerView))}
             >
               {image ? (
-                <img src={image} alt={`Gallery ${index + 1}`} className="w-full h-full object-cover" />
+                <img src={image} alt={`Gallery ${index + 1}`} className="w-full h-full object-cover"/>
               ) : (
                 <svg
                   className="w-12 h-12 text-muted-foreground"
