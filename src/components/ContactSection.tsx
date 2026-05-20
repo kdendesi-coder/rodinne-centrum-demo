@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Edit2, Mail, Phone, MapPin } from "lucide-react";
 import EditModal from "./EditModal";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/contexts/AuthContext"; // Add this import
 
 const ContactSection = () => {
   const [isEditingEmail, setIsEditingEmail] = useState(false);
@@ -10,27 +10,26 @@ const ContactSection = () => {
   const [isEditingAddress, setIsEditingAddress] = useState(false);
   const [isEditingMap, setIsEditingMap] = useState(false);
   const [isEditingIntro, setIsEditingIntro] = useState(false);
-
+  
   const [email, setEmail] = useState("info@rcsirotar.sk");
   const [phone, setPhone] = useState("+421 123 456 789");
-  const [address, setAddress] = useState(
-    "o.z. PAX ET BONUM\n(IČO: 30797578; DIČ: 2022364784)\nJezuitská 6, 010 01 Žilina\n(v priestoroch Fidélia)"
-  );
+  const [address, setAddress] = useState("o.z. PAX ET BONUM \n (IČO: 30797578; DIČ: 2022364784),\n Jezuitská 6, 010 01 Žilina \n(v priestoroch Fidélia)");
   const [mapImage, setMapImage] = useState("mapaGoogle.png");
   const [introText, setIntroText] = useState(
     "V prípade záujmu, či akýchkoľvek otázok nás neváhajte kontaktovať. :)"
   );
-
+    // Add this to check authentication
   const { isAuthenticated, role } = useAuth();
 
   return (
-    <section id="contact" className="py-20 px-4">
-      <div className="container mx-auto max-w-6xl">
-        <h2 className="text-3xl md:text-4xl font-bold mb-4">Kontaktuje nás</h2>
-
+    <section id="contact" className="py-12 md:py-20 px-4 overflow-hidden">
+      <div className="w-full max-w-[1650px] mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-8">Kontaktujte nás</h2>
+        
         <div className="relative group/intro mb-12">
-          <p className="text-muted-foreground">{introText}</p>
+          <p className="text-lg md:text-xl xl:text-2xl leading-[1.8] text-muted-foreground">{introText}</p>
 
+          {/* Show edit button only for Admin users */}
           {isAuthenticated && role === "Admin" && (
             <Button
               size="icon"
@@ -43,26 +42,35 @@ const ContactSection = () => {
           )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-[0.72fr_1.28fr] gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-[420px_1fr] xl:grid-cols-[430px_1fr] gap-8 lg:gap-16 xl:gap-24 items-stretch">
           {/* Contact Info */}
-          <div className="space-y-6">
+          <div className="space-y-5 md:space-y-6 w-full max-w-[460px] h-full">
             <div className="relative group/email">
-              <div className="bg-[#F4E9E2] rounded-3xl p-5 min-h-[122px]">
-                <div className="flex flex-col gap-4">
-                  <div className="w-5 h-5 flex justify-center">
-                    <Mail className="w-6 h-6 text-black" />
-                  </div>
 
+              <div className="bg-[#F4E9E2] rounded-3xl p-6 md:p-8 xl:p-10">
+                <div className="flex flex-col gap-4">
+
+                  {/* Ikona */}
+                  <div className="w-8 h-8 flex items-center justify-center">
+                    <Mail className="w-7 h-7 md:w-8 md:h-8 text-black" />
+                  </div>
+                  
+                  {/* Text */}
                   <div>
-                    <h3 className="text-lg font-semibold text-[#5E7322] mb-2">
+                    <h3 className="text-xl md:text-2xl xl:text-3xl font-semibold text-[#5E7322] mb-2">
                       E-mail
                     </h3>
 
-                    <p className="text-[#210F00]">{email}</p>
+                    <p className="text-lg md:text-xl xl:text-2xl text-[#210F00] break-words">
+                      {email}
+                    </p>
                   </div>
+
+
                 </div>
               </div>
 
+              {/* Show edit button only for Admin users */}
               {isAuthenticated && role === "Admin" && (
                 <Button
                   size="icon"
@@ -76,22 +84,32 @@ const ContactSection = () => {
             </div>
 
             <div className="relative group/phone">
-              <div className="bg-[#F4E9E2] rounded-3xl p-5 min-h-[122px]">
-                <div className="flex flex-col gap-4">
-                  <div className="w-5 h-5 flex justify-center">
-                    <Phone className="w-6 h-6 text-black" />
-                  </div>
 
+              <div className="bg-[#F4E9E2] rounded-3xl p-6 md:p-8 xl:p-10">
+                <div className="flex flex-col gap-4">
+
+                  {/* Ikona */}
+                  <div className="w-7 h-7 md:w-8 md:h-8 flex text-black">
+                    <Phone className="w-7 h-7 md:w-8 md:h-8 text-black" />
+                  </div>
+                  
+                  {/* Text */}
                   <div>
-                    <h3 className="text-lg font-semibold text-[#5E7322] mb-2">
-                      Telefónne číslo
+                    <h3 className="text-xl md:text-2xl xl:text-3xl font-semibold text-[#5E7322] mb-2">
+                      Telefón
                     </h3>
 
-                    <p className="text-[#210F00]">{phone}</p>
+                    <p className="text-lg md:text-xl xl:text-2xl text-[#210F00] whitespace-pre-line break-words">
+                      {phone}
+                    </p>
                   </div>
+
+
                 </div>
               </div>
 
+              
+              {/* Show edit button only for Admin users */}
               {isAuthenticated && role === "Admin" && (
                 <Button
                   size="icon"
@@ -105,24 +123,31 @@ const ContactSection = () => {
             </div>
 
             <div className="relative group/address">
-              <div className="bg-[#F4E9E2] rounded-3xl p-5 min-h-[160px]">
+             
+              <div className="bg-[#F4E9E2] rounded-3xl p-6 md:p-8 xl:p-10">
                 <div className="flex flex-col gap-4">
-                  <div className="w-5 h-5 flex justify-center">
-                    <MapPin className="w-6 h-6 text-black" />
-                  </div>
 
+                  {/* Ikona */}
+                  <div className="w-7 h-7 md:w-8 md:h-8 flex items-center justify-center">
+                    <MapPin className="w-7 h-7 md:w-8 md:h-8 text-black" />
+                  </div>
+                  
+                  {/* Text */}
                   <div>
-                    <h3 className="text-lg font-semibold text-[#5E7322] mb-2">
+                    <h3 className="text-lg md:text-2xl xl:text-3xl font-semibold text-[#5E7322] mb-2">
                       Adresa
                     </h3>
 
-                    <p className="text-[#210F00] whitespace-pre-line leading-relaxed">
+                    <p className="text-lg md:text-xl xl:text-2xl text-[#210F00] whitespace-pre-line break-words">
                       {address}
                     </p>
                   </div>
+
+
                 </div>
               </div>
 
+              {/* Show edit button only for Admin users */}
               {isAuthenticated && role === "Admin" && (
                 <Button
                   size="icon"
@@ -137,27 +162,25 @@ const ContactSection = () => {
           </div>
 
           {/* Map */}
-          <div className="relative group bg-muted rounded-3xl overflow-hidden h-[260px] md:h-[520px] flex items-center justify-center">
+          <div className="relative group bg-muted rounded-3xl overflow-hidden w-full h-[260px] sm:h-[320px] md:h-[380px] lg:h-[420px] xl:h-[785px] flex items-center justify-center shadow-lg justify-self-center">
             {mapImage ? (
-              <img
-                src={mapImage}
-                alt="Map"
-                className="w-full h-full object-cover"
-              />
+              <img src={mapImage} alt="Map" className="w-full h-full object-cover object-center" />
             ) : (
               <MapPin className="w-24 h-24 text-muted-foreground" />
             )}
 
+            {/* Show edit button only for Admin users */}
             {isAuthenticated && role === "Admin" && (
-              <Button
-                size="icon"
-                variant="secondary"
-                className="edit-button"
-                onClick={() => setIsEditingMap(true)}
-              >
-                <Edit2 className="h-4 w-4" />
-              </Button>
+            <Button
+              size="icon"
+              variant="secondary"
+              className="edit-button"
+              onClick={() => setIsEditingMap(true)}
+            >
+              <Edit2 className="h-4 w-4" />
+            </Button>
             )}
+
           </div>
         </div>
       </div>
