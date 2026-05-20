@@ -3,23 +3,21 @@ import { Button } from "@/components/ui/button";
 import { Edit2 } from "lucide-react";
 import EditModal from "./EditModal";
 import { useParagraph } from "@/hooks/useParagraph";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/contexts/AuthContext"; 
 
 const AboutSection = () => {
   const [isEditingText, setIsEditingText] = useState(false);
   const [isEditingImage, setIsEditingImage] = useState(false);
-  const [image, setImage] = useState(
-    "https://rcsirotar.sk/wp-content/uploads/2019/05/01_IMGP3994.jpg"
-  );
+  const [image, setImage] = useState("https://rcsirotar.sk/wp-content/uploads/2019/05/01_IMGP3994.jpg");
 
-  const fallbackText = `Rodinné centrum Sirotár pod sebou združuje rôzne aktivity. V rámci neho sme otvorili herňu Rodinného centra a Átrium, ktoré sú určené mamičkám s menšími deťmi.
+  // Use the custom hook - just one line!
+  const { text, isLoading, error, setText } = useParagraph('about');
 
-Cieľom je vytvoriť priestor pre lepšie prežívanie materstva, osobný aj duchovný rozvoj a sebarealizáciu mamičiek. Rovnako aj vytvoriť priestor pre zdravú socializáciu ich ratolestí.`;
-
-  const { setText } = useParagraph("about");
+  // Add this to check authentication
   const { isAuthenticated, role } = useAuth();
+  
 
-   return (
+  return (
     <section id="about" className="py-12 md:py-20 px-4">
       <div className="w-full max-w-[1650px] mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-8">O nás</h2>
