@@ -104,19 +104,19 @@ const ActivitiesSection = () => {
     {
       id: "herna",
       title: "Herňa",
-      icon: "/icons/herna.png",
+      icon: "/herna.jpg",
       content: "Herňa je otvorená pre mamičky a deti každú stredu (okrem prázdnin a sviatkov) od 9:00 h do 12:00 h, program (detská aktivita alebo prednáška) začína o 10:00 h spoločnou modlitbou. Počas programu je k dispozícii spovedná služba a knižnica. ",
     },
     {
       id: "atrium",
       title: "Átrium",
-      icon: "/icons/atrium.png",
+      icon: "/atrium.jpg",
       content: "Átrium je miesto, kde sa deti zoznamujú so základnými pravdami viery cez koncept Katechéz Dobrého pastiera, ktorý je postavený na pedagogických princípoch Márie Montessori a teologických znalostiach Sofie Cavalleti. Deti sú privádzané k modlitbe a poznávaniu Boha, učia sa rozumieť bohatstvu liturgie a poznať Sväté písmo spôsobom pre nich vhodným. ",
     },
     {
       id: "klubik",
       title: "Klubík",
-      icon: "icons/klubik.png",
+      icon: "/klubik.jpg",
       content: "Klub detí je priestor, kde sa stretávajú deti a v malej skupine s podporou sprievodcov majú možnosť objavovať, učiť sa a rásť v bezpečnom prostredí.",
     },
   ]);
@@ -149,7 +149,7 @@ const ActivitiesSection = () => {
 
   const handleAddActivity = (title: string, content: string) => {
     const id = title.toLowerCase().replace(/\s+/g, '-');
-    setActivities((prev) => [...prev, { id, title, content, icon: "/icons/herna.png", }]);
+    setActivities((prev) => [...prev, { id, title, content, icon: "/herna.jpg", }]);
   };
 
   // Aktivity pre deti
@@ -288,21 +288,22 @@ const ActivitiesSection = () => {
   
 
   return (
-    <section id="activities" className="py-12 md:py-20 px-4 bg-muted/30 overflow-hidden">
-      <div className="w-full max-w-[1650px] mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-8">Aktivity</h2>
+    <section id="activities" className="py-20 px-4 bg-muted/30">
+      <div className="container mx-auto max-w-6xl">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-8 sm:mb-12">Aktivity</h2>
 
-        <div className="grid
+        <div className="grid gap-12
                         grid-cols-1
-                        lg:grid-cols-[650px_1fr] xl:grid-cols-[760px_1fr] gap-8 lg:gap-10 items-start">
+                        md:grid-cols-[25%_75%]
+                        lg:grid-cols-[20%_80%]">
 
           {/* Left side - Image */}
           <div className="relative group bg-transparent rounded-lg overflow-hidden
-                w-full max-w-[380px] sm:max-w-[520px] md:max-w-[620px] lg:max-w-[650px] xl:max-w-[750px]
-                aspect-square mx-auto lg:mx-0
-                flex items-center justify-center">
+                flex-shrink-0
+                w-96 h-96 sm:w-96 sm:h-96 md:w-96 md:h-96
+                flex items-center justify-center -ml-16">
             {image ? (
-              <img src={image} alt="Activities" className="w-full h-full object-contain" />
+              <img src={image} alt="Activities" className="w-full h-full object-cover" />
             ) : (
               <div className="text-center p-8">
                 <svg
@@ -336,8 +337,8 @@ const ActivitiesSection = () => {
 
           {/* Right side - Content */}
           <div className="space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-              <h3 className="text-2xl  md:text-3xl xl:text-4xl font-semibold">Naše aktivity</h3>
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-semibold">Naše aktivity</h3>
               {/* Show edit button only for Admin users */}
               {isAuthenticated && role === "Admin" && (
                 <Button
@@ -352,7 +353,7 @@ const ActivitiesSection = () => {
             </div>
 
             {/* Collapsible sections with connecting line */}
-            <div className="relative pl-0 sm:pl-4">
+            <div className="relative pl-4">
             
               <div className="space-y-2">
                 {activities.map((activity, index) => (
@@ -361,28 +362,28 @@ const ActivitiesSection = () => {
                     open={openItems.includes(activity.id)}
                     onOpenChange={() => toggleItem(activity.id)}
                   >
-                    <div className="relative pl-5 sm:pl-8">
+                    <div className="relative pl-8">
                       <div className="absolute left-3 top-0 bottom-0 w-0.5 bg-[#E0DAD5] border-[3px] " />
 
 
                       <CollapsibleTrigger 
                           className={`flex items-center justify-between 
-                                      w-full px-6 lg:px-8 py-5 lg:py-7 
-                                      text-left text-lg md:text-xl xl:text-2xl font-medium transition-all duration-200
-                                      
+                                      w-full px-6 py-4 
+                                      text-left font-medium transition-all duration-200
+                                      hover:bg-muted/50 
                                       bg-[#F4E9E2]
                                       shadow-[0_2px_5px_rgba(0,0,0,0.2)]
                                       ${openItems.includes(activity.id) ? "rounded-t-lg" : "rounded-lg"}`}
                         >
-                        <div className="flex items-center gap-4 sm:gap-5 min-w-0">
+                        <div className="flex item-center gap-4">
 
                           <img 
                             src={activity.icon}
                             alt={activity.title}
-                            className="w-10 h-10 md:w-12 md:h-12 object-contain"
+                            className="w-8 h-8 object-contain"
                           />
 
-                          <span className="truncate">{activity.title}</span>
+                          <span>{activity.title}</span>
                         </div>
 
                         <ChevronDown
@@ -393,16 +394,16 @@ const ActivitiesSection = () => {
                       </CollapsibleTrigger>
                       
                       <CollapsibleContent className="data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up overflow-hidden bg-[#F4E9E2] rounded-b-lg">
-                        <div className="relative group/content p-5 sm:p-7 lg:p-10 flex flex-col gap-8 lg:gap-10 w-full">
+                        <div className="relative group/content p-6 flex flex-col gap-6 w-full">
 
                         {/* Hlavny text */}
-                          <p className="text-base md:text-lg xl:text-xl text-[#210F00] leading-[1.8]">
+                          <p className="text-sm sm:text-sm md:text-base text-[#210F00] leading-relaxed">
                             {activity.content}
                           </p>
 
                           {/* Aktivity pre deti */}
-                          <div className="bg-[#F9F2EC] rounded-xl w-full border-l-4 border-[#B0C9D6] p-5 lg:p-7">
-                            <h3 className="text-xl md:text-2xl xl:text-3xl font-semibold text-[#5E7322] mb-5">
+                          <div className="bg-[#F9F2EC] rounded-lg w-full border-l-4 border-[#B0C9D6] p-4">
+                            <h3 className="text-lg font-semibold text-[#5E7322] mb-4">
                               Aktivity pre deti
                             </h3>
 
@@ -410,9 +411,9 @@ const ActivitiesSection = () => {
                             {childActivities[activity.id]?.map((activita, index) => (
                               <div
                                 key={index}
-                                className="flex items-center justify-between bg-[#DEE2D2] rounded-[1rem] px-5 py-3 lg:px-6 lg:py-4"
+                                className="flex items-center justify-between bg-[#DEE2D2] rounded-[1rem] px-4 py-2"
                               >
-                                <span className="text-base md:text-lg xl:text-xl font-medium">{activita.title}</span>
+                                <span className="text-sm font-medium">{activita.title}</span>
 
                                 {isAuthenticated && role === "Admin" && (
                                   <div className="flex gap-1 ml-2">
@@ -429,7 +430,7 @@ const ActivitiesSection = () => {
                                       onClick={() => handleDeleteChildActivity(activity.id, index)}
                                     >
                                       <img 
-                                            src="/icons/close.png"
+                                            src="/close.jpg"
                                             alt="add"
                                             className="w-4 h-4"
                                             />
@@ -453,8 +454,8 @@ const ActivitiesSection = () => {
 
 
                           {/* Prednasky pre mamicky */}
-                          <div className="bg-[#F9F2EC] rounded-xl w-full border-l-4 border-[#B0C9D6] p-5 lg:p-7">
-                            <h3 className="text-xl md:text-2xl xl:text-3xl font-semibold text-[#5E7322] mb-5">
+                          <div className="bg-[#F9F2EC] rounded-lg w-full border-l-4 border-[#B0C9D6] p-5">
+                            <h3 className="text-lg font-semibold text-[#5E7322] mb-3">
                               Prednášky pre mamičky
                             </h3>
 
@@ -462,10 +463,10 @@ const ActivitiesSection = () => {
                               {lectures[activity.id]?.map((lecture, i) => (
                                 <div
                                   key={i}
-                                  className="bg-[#DEE2D2] rounded-xl p-5 lg:p-6 flex flex-col gap-3"
+                                  className="bg-[#DEE2D2] rounded-xl p-4 flex flex-col gap-2"
                                 >
                                   <div className="flex justify-between items-start">
-                                    <h4 className="text-lg md:text-xl xl:text-2xl text-[#5E7322] font-semibold">{lecture.title}</h4>
+                                    <h4 className="text-[#5E7322] font-semibold">{lecture.title}</h4>
 
                                     {isAuthenticated && role === "Admin" && (
                                       <div className="flex gap-1">
@@ -485,7 +486,7 @@ const ActivitiesSection = () => {
                                           onClick={() => handleDeleteLecture(activity.id, i)}
                                         >
                                           <img 
-                                            src="/icons/close.png"
+                                            src="/close.jpg"
                                             alt="add"
                                             className="w-4 h-4"
                                             />
@@ -509,7 +510,7 @@ const ActivitiesSection = () => {
                                           }}
                                         >
                                           <img 
-                                            src="/icons/plus.png"
+                                            src="/plus.jpg"
                                             alt="add"
                                             className="w-4 h-4"
                                             />
@@ -520,7 +521,7 @@ const ActivitiesSection = () => {
 
                                   {/* Body prednasky s bodkami */}
                                   {lecture.items && lecture.items.length > 0 && (
-                                    <ul className="list-disc list-inside text-[#210F00] text-base md:text-lg xl:text-xl space-y-2">
+                                    <ul className="list-disc list-inside text-[#210F00] text-sm space-y-1">
                                       {lecture.items.map((item, j) => (
                                         <li key={j}>{item}</li>
                                       ))}
@@ -542,19 +543,19 @@ const ActivitiesSection = () => {
                             </div>
 
                             {/* Dodatocny text pod prednaskami */}
-                            <div className="text-[#5E7322] font-semibold mt-2 bg-[#DEE2D2] rounded-xl p-5 lg:p-6 shadow-sm">
+                            <div className="text-[#5E7322] font-semibold mt-2 bg-[#DEE2D2] rounded-xl p-4 shadow-sm">
                               {dalsiePrednasky[activity.id]}
                             </div>
                           </div>
 
                           {/* Rozvrh */}
-                            <div className="bg-[#F9F2EC] rounded-xl p-5 lg:p-7 flex flex-col items-start gap-3 w-full sm:w-fit relative">
-                              <svg className="w-12 h-12 md:w-14 md:h-14 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div className="bg-[#F9F2EC] rounded-xl p-4 flex flex-col items-start gap-2 w-fit relative">
+                              <svg className="w-10 h-10 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                                   d="M12 8v4l3 3M12 2a10 10 0 100 20 10 10 0 000-20z"/>
                               </svg>
 
-                              <div className="text-base md:text-lg xl:text-xl font-semibold">
+                              <div className="text-sm">
                                 <div className="text-sm font-semibold">
                                   {schedule[activity.id]?.den}{" "}
                                   <span className="text-[#5E7322]">{schedule[activity.id]?.cas}</span>
@@ -578,10 +579,10 @@ const ActivitiesSection = () => {
 
 
 
-                          <div className="flex flex-col sm:flex-row gap-3 mt-4 w-full">
+                          <div className="flex flex-col sm:flex-row gap-3 mt-4">
                             <Button 
                               variant="link"
-                              className="w-full sm:w-auto bg-[#F3953F] hover:bg-[#e07d2f] text-white rounded-xl px-6 py-3 sm:px-6 sm:py-3 font-semibold"
+                              className="bg-[#F3953F] hover:bg-[#e07d2f] text-white rounded-xl px-4 py-2 sm:px-6 sm:py-3 font-semibold"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 navigate(`/aktivita/${activity.id}`);
@@ -592,7 +593,7 @@ const ActivitiesSection = () => {
 
                              <Button
                                 variant="secondary"
-                                className="w-full sm:w-auto bg-[#DBD4CE] hover:bg-[#DBD4CE] text-[#210F0080] rounded-xl px-6 py-3 md:text-lg font-semibold"
+                                className="bg-[#DBD4CE] hover:bg-[#DBD4CE] text-[#210F0080] rounded-xl px-6 py-2 font-semibold"
                               >
                                 Pozrieť si program
                               </Button>
