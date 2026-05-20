@@ -8,8 +8,7 @@ const Navigation = () => {
   const { isAuthenticated, username } = useAuth();
 
   const navLinks = [
-    { label: "O firme", href: "/#about" },
-    { label: "Ľudia", href: "/#team" },
+    { label: "O Nas", href: "/#about" },
     { label: "Aktivity", href: "/#activities",
       dropdown: [
         { label: "Herňa", href: "/aktivita/herna"},
@@ -17,6 +16,7 @@ const Navigation = () => {
         { label: "Klubík", href: "/aktivita/klubik"},
       ]
      },
+    { label: "Ľudia", href: "/#team" },
     { label: "Galéria", href: "/#gallery" },
     { label: "Kontakt", href: "/#contact" },
   ];
