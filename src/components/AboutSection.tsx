@@ -28,18 +28,15 @@ const AboutSection = () => {
             <div className="text-lg md:text-xl xl:text-2xl space-y-5 md:space-y-6 leading-[1.8] whitespace-pre-line">
 
             {isLoading ? (
-              <>
-                <p>Rodinné centrum Sirotár pod sebou združuje rôzne aktivity. V rámci neho sme otvorili herňu Rodinného centra 
-                a Átrium , ktoré sú určené mamičkám s menšími deťmi. </p>
-
-                <p>Cieľom je vytvoriť priestor pre lepšie prežívanie materstva, osobný aj duchovný rozvoj a 
-                sebarealizáciu mamičiek. Rovnako aj vytvoriť priestor pre zdravú socializáciu ich ratolestí.</p>
-              </>
-            
+              <p className="text-muted-foreground">Načítavam obsah z backendu...</p>
             ) : error ? (
-              <div className="text-red-500">{error}</div>
+              <div className="text-red-500">
+                {error}
+              </div>
             ) : (
-            <p className="text-muted-foreground leading-relaxed">{text}</p>
+              <p className="text-muted-foreground leading-relaxed">
+                {text || "Text zatiaľ nie je uložený v backende."}
+              </p>
             )}
             </div>
 
