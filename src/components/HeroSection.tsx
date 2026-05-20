@@ -11,11 +11,11 @@ const HeroSection = () => {
   const titlePart1 = "Rodinné centrum";
   const titlePart2 = "Sirotár";
 
-  const [backgroundImage, setBackgroundImage] = useState("Container.jpg");
+  const [backgroundImage, setBackgroundImage] = useState("ContainerLargeEdit2.jpg");
   const { isAuthenticated, role } = useAuth();
 
   return (
-    <div className="mx-2 md:mx-4 mt-20 md:mt-24">
+    <div className="mx-2 md:mx-4 mt-8 md:mt-12">
       <div className="relative min-h-[500px] h-[70vh] md:h-[135vh] rounded-3xl overflow-hidden group">
         
         <img
@@ -37,16 +37,16 @@ const HeroSection = () => {
 
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="relative z-10 text-center px-4 w-full max-w-4xl">
-            <h1 className="font-bold text-[#95C11F] mb-4 text-center uppercase"
+            <h1 className="font-bold text-[#95C11F] mb-4 text-center uppercase w-full flex flex-col items-center"
             style={{
               fontFamily: "Cormorant Garamond",
               fontWeight: "700",
-              fontSize: "clamp(2.5rem, 8vw, 75px)", 
+              fontSize: "clamp(2.3rem, 7vw, 105px)", 
               margin: "0 auto",
-              lineHeight: "1.1"
+              lineHeight: "1"
             }}>
               {/* Prva cast 2 slova */}
-              <span className="block">{titlePart1}</span>
+              <span className="block whitespace-nowrap">{titlePart1}</span>
               {/* Druha cast (1 slovo pod nimi) */}
               <span className="block">{titlePart2}</span>
             </h1>
@@ -60,9 +60,6 @@ const HeroSection = () => {
             <Button
               size="lg"
               className="mt-12 bg-primary hover:bg-primary/90 rounded-2 px-8"
-              onClick={() => {
-                window.location.href = "/#contact";
-              }}
             >
               Kontaktujte nás
             </Button>
