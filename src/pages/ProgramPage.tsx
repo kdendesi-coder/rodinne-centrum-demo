@@ -21,7 +21,7 @@ const ProgramPage = () => {
 
         <div className="w-full flex justify-center">
           <img
-            src="/public/RC-Sirotar-herna-program_2026-05-768x1086.jpg"
+            src="RC-Sirotar-herna-program_2026-05-768x1086.jpg"
             alt="Program"
             className="w-full max-w-[768px] h-auto object-contain rounded-3xl shadow-lg"
           />
