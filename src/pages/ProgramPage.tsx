@@ -16,19 +16,19 @@ const ProgramPage = () => {
         <div className="w-full max-w-[1200px] mx-auto py-12 md:py-20 px-4 sm:px-6 lg:px-8">
           
           {/* Back button */}
-          <Button
-            variant="ghost"
+            <Button 
+            variant="ghost" 
             onClick={() => navigate("/#activities")}
-            className="mb-8 text-base md:text-lg text-[#5E7322] hover:text-[#5E7322] hover:bg-[#DEE2D2]"
-          >
-            <ArrowLeft className="h-5 w-5 mr-2" />
+            className="mb-8"
+            >
+            <ArrowLeft className="h-4 w-4 mr-2" />
             Späť na aktivity
-          </Button>
+            </Button>
 
-          {/* Header */}
-          <h1 className="text-center text-4xl sm:text-5xl md:text-6xl font-bold mb-12 text-[#5E7322]">
+            {/* Header */}
+            <h1 className="text-center text-4xl md:text-5xl font-bold mb-12">
             Program
-          </h1>
+            </h1>
 
           {/* Program image */}
           <div className="relative flex justify-center items-center p-4 sm:p-6 overflow-hidden lg:overflow-visible">
