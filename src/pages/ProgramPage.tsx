@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import programImage from "@/assets/program.jpg";
+import programImage from "../assets/program.jpg";
 
 const ProgramPage = () => {
   const navigate = useNavigate();
