@@ -21,18 +21,15 @@ const ProgramPage = () => {
         </h1>
 
         <div className="relative flex justify-center items-center p-4 sm:p-6 overflow-hidden lg:overflow-visible">
-          {/* Modrý kruh */}
           <div className="absolute top-4 left-4 w-24 h-24 sm:w-32 sm:h-32 lg:w-40 lg:h-40 border-[2.5px] border-sky-400 rounded-full -translate-x-1/4 -translate-y-1/4 flex items-center justify-center -z-10">
             <div className="w-[85%] h-[85%] bg-[#DEE2D2] rounded-full"></div>
           </div>
 
-          {/* Hnedý oblúk */}
           <div
             className="absolute bottom-4 right-4 w-20 h-20 sm:w-28 sm:h-28 lg:w-32 lg:h-32 border-[3px] border-amber-900 rounded-full translate-x-1/4 translate-y-1/4"
             style={{ clipPath: "inset(0 0 0 0)" }}
           ></div>
 
-          {/* Fotka programu */}
           <div
             className="relative z-10 bg-muted rounded-[1.5rem] overflow-hidden border-[6px] sm:border-[10px] w-full max-w-[768px]"
             style={{
