@@ -16,14 +16,14 @@ const ProgramPage = () => {
         <div className="w-full max-w-[1200px] mx-auto py-12 md:py-20 px-4 sm:px-6 lg:px-8">
           
           {/* Back button */}
-            <Button 
+          <Button 
             variant="ghost" 
             onClick={() => navigate("/#activities")}
             className="mb-8"
-            >
+          >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Späť na aktivity
-            </Button>
+          </Button>
 
             {/* Header */}
             <h1 className="text-center text-4xl md:text-5xl font-bold mb-12">
