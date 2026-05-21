@@ -19,11 +19,11 @@ const ProgramPage = () => {
           Program
         </h1>
 
-        <div className="w-full rounded-3xl overflow-hidden shadow-lg bg-muted">
+        <div className="w-full flex justify-center">
           <img
             src="/program.jpg"
             alt="Program"
-            className="w-full h-auto object-contain"
+            className="w-full max-w-[768px] h-auto object-contain rounded-3xl shadow-lg"
           />
         </div>
       </div>
