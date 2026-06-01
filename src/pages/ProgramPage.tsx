@@ -22,7 +22,7 @@ const ProgramPage = () => {
             className="mb-8"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Späť na aktivity
+            Späť na hlavnú stránku
           </Button>
 
             {/* Header */}
