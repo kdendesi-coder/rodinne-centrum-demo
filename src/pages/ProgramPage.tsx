@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import programImage from "@/public/program.jpg";
+//import programImage from "@/public/program.jpg";
 
 const ProgramPage = () => {
   const navigate = useNavigate();
