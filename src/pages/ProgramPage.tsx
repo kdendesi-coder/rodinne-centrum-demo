@@ -36,10 +36,6 @@ const ProgramPage = () => {
             {/* Fotka programu */}
             <div
               className="relative z-10 bg-muted rounded-[1.5rem] overflow-hidden border-[6px] sm:border-[10px] w-full max-w-[768px]"
-              style={{
-                borderColor: "#B0C9D6",
-                boxShadow: "10px 10px 0px",
-              }}
             >
               <img
                 src="/program.jpg"
