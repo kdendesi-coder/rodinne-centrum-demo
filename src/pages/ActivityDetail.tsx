@@ -369,7 +369,7 @@ const ActivityDetail = () => {
             className="mb-8 text-base md:text-lg"
           >
             <ArrowLeft className="h-5 w-5 mr-2" />
-            Späť na aktivity
+            Späť na hlavnú stránku
           </Button>
 
           {/* Header */}
