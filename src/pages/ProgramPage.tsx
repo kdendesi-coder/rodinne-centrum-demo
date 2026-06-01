@@ -33,18 +33,12 @@ const ProgramPage = () => {
           {/* Program image */}
           <div className="relative flex justify-center items-center p-4 sm:p-6 overflow-hidden lg:overflow-visible">
             
-            {/* Hnedý oblúk */}
-            <div
-              className="absolute bottom-4 right-4 w-20 h-20 sm:w-28 sm:h-28 lg:w-32 lg:h-32 border-[3px] border-amber-900 rounded-full translate-x-1/4 translate-y-1/4"
-              style={{ clipPath: "inset(0 0 0 0)" }}
-            ></div>
-
             {/* Fotka programu */}
             <div
               className="relative z-10 bg-muted rounded-[1.5rem] overflow-hidden border-[6px] sm:border-[10px] w-full max-w-[768px]"
               style={{
                 borderColor: "#B0C9D6",
-                boxShadow: "10px 10px 0px #DBD4CE",
+                boxShadow: "10px 10px 0px",
               }}
             >
               <img
