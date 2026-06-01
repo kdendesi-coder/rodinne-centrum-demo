@@ -60,6 +60,9 @@ const HeroSection = () => {
             <Button
               size="lg"
               className="mt-12 bg-primary hover:bg-primary/90 rounded-2 px-8"
+              onClick={() => {
+                document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+              }}
             >
               Kontaktujte nás
             </Button>
