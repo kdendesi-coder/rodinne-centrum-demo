@@ -6,8 +6,8 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import EditModal from "./EditModal";
 import AddActivityModal from "./AddActivityModal";
 import { useAuth } from "@/contexts/AuthContext"; // Add this import
-import { Item } from "@radix-ui/react-accordion";
-import { title } from "process";
+//import { Item } from "@radix-ui/react-accordion";
+//import { title } from "process";
 
 
 
