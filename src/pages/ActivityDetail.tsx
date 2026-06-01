@@ -381,10 +381,10 @@ const ActivityDetail = () => {
           </h1>
 
           {/* Editable CONTENT section */}
-          <div className="bg-muted/30 rounded-lg p-8 space-y-8">
+          <div className="bg-muted/30 rounded-3xl p-5 sm:p-8 lg:p-10 space-y-8 md:space-y-10">
             {/* Text */}
-            <div className="flex items-start justify-between gap-4">
-              <p className="text-lg leading-relaxed text-muted-foreground whitespace-pre-wrap flex-1">
+            <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
+              <p className="text-base sm:text-lg md:text-xl xl:text-2xl leading-[1.8] text-muted-foreground whitespace-pre-wrap flex-1">
                 {activity.content}
               </p>
               {isAuthenticated && (
@@ -401,10 +401,10 @@ const ActivityDetail = () => {
             {/* List 1 */}
             {activity.list1 && activity.list1.length > 0 && (
             <div>
-              <h2 className="text-2xl font-semibold mb-4 text-muted-foreground whitespace-pre-wrap">
+              <h2 className="text-2xl md:text-3xl font-semibold mb-4 text-muted-foreground whitespace-pre-wrap">
                 {activity.list1Title}
               </h2>
-              <ul className="list-disc pl-6 scpace-y-2 text-muted-foreground">
+              <ul className="list-disc pl-6 space-y-2 text-base md:text-lg xl:text-xl text-muted-foreground">
                 {activity.list1.map((item, index) => (
                   <li key={`list1-item-${index}`}>{item}</li>
                 ))}
@@ -424,10 +424,10 @@ const ActivityDetail = () => {
             {/* List 2 */}
             {activity.list2 && activity.list2.length > 0 && (
             <div>
-              <h2 className="text-2xl font-semibold mb-4 text-muted-foreground whitespace-pre-wrap">
+              <h2 className="text-2xl md:text-3xl font-semibold mb-4 text-muted-foreground whitespace-pre-wrap">
                 {activity.list2Title}
               </h2>
-              <ul className="list-disc pl-6 scpace-y-2 text-muted-foreground">
+              <ul className="list-disc pl-6 space-y-2 text-base md:text-lg xl:text-xl text-muted-foreground">
                 {activity.list2.map((item, index) => (
                   <li key={`list2-item-${index}`}>{item}</li>
                 ))}
@@ -448,7 +448,7 @@ const ActivityDetail = () => {
              {activity.photo && activity.photo.length > 0 && (
               <div className="space-y-4">
                 {activity.photo.map((photo, index) => (
-                  <div key={index} className="relative w-full h-[300px] rounded-lg overflow-hidden">
+                  <div key={index} className="relative w-full rounded-3xl overflow-hidden aspect-[4/3] md:aspect-[16/9] shadow-md">
                     <img
                       src={photo.src}
                       alt={photo.alt}
@@ -550,13 +550,13 @@ const ActivityDetail = () => {
 
             {activity.text3 && activity.text3.trim() !== "" && (
               <div className="mb-6">
-                <h2 className="text-2xl text-muted-foreground whitespace-pre-wrap">{activity.text1Title}</h2>
+                <h2 className="text-2xl md:text-3xl text-muted-foreground whitespace-pre-wrap">{activity.text1Title}</h2>
                 {isAuthenticated && (
                   <Button size="icon" variant="secondary" onClick={() => setIsEditingTitleText1(true)}>
                     <Edit2 className="h-4 w-4" />
                   </Button>
                 )}
-                <p className="text-muted-foreground whitespace-pre-wrap">{activity.text3}</p>
+                <p className="text-base md:text-lg xl:text-xl leading-[1.8] text-muted-foreground whitespace-pre-wrap">{activity.text3}</p>
                 {isAuthenticated && (
                   <Button size="icon" variant="secondary" onClick={() => setIsEditingText3(true)}>
                     <Edit2 className="h-4 w-4" />
@@ -567,13 +567,13 @@ const ActivityDetail = () => {
 
             {activity.text4 && activity.text4.trim() !== "" && (
               <div className="mb-6">
-                <h2 className="text-2xl text-muted-foreground whitespace-pre-wrap">{activity.text2Title}</h2>
+                <h2 className="text-2xl md:text-3xl text-muted-foreground whitespace-pre-wrap">{activity.text2Title}</h2>
                 {isAuthenticated && (
                   <Button size="icon" variant="secondary" onClick={() => setIsEditingTitleText2(true)}>
                     <Edit2 className="h-4 w-4" />
                   </Button>
                 )}
-                <p className="text-muted-foreground whitespace-pre-wrap">{activity.text4}</p>
+                <p className="text-base md:text-lg xl:text-xl leading-[1.8] text-muted-foreground whitespace-pre-wrap">{activity.text4}</p>
                 {isAuthenticated && (
                   <Button size="icon" variant="secondary" onClick={() => setIsEditingText4(true)}>
                     <Edit2 className="h-4 w-4" />
@@ -584,7 +584,7 @@ const ActivityDetail = () => {
 
             {activity.text5 && activity.text5.trim() !== "" && (
               <div className="mb-6">
-                <p className="text-muted-foreground whitespace-pre-wrap">{activity.text5}</p>
+                <p className="text-base md:text-lg xl:text-xl leading-[1.8] text-muted-foreground whitespace-pre-wrap">{activity.text5}</p>
                 {isAuthenticated && (
                   <Button size="icon" variant="secondary" onClick={() => setIsEditingText5(true)}>
                     <Edit2 className="h-4 w-4" />
@@ -597,7 +597,7 @@ const ActivityDetail = () => {
             {activity.googleFormLink && (
               <div className="mt-6">
                 <a href={activity.googleFormLink} target = "_blank">
-                  <Button>
+                  <Button className="rounded-xl px-6 py-3 text-base md:text-lg font-semibold">
                     Prihlasit sa
                   </Button>
                 </a>
