@@ -369,14 +369,14 @@ const ActivityDetail = () => {
           <Button 
             variant="ghost" 
             onClick={() => navigate("/#activities")}
-            className="mb-8"
+            className="mb-8 text-base md:text-lg"
           >
-            <ArrowLeft className="h-4 w-4 mr-2" />
+            <ArrowLeft className="h-5 w-5 mr-2" />
             Späť na aktivity
           </Button>
 
           {/* Header */}
-          <h1 className="text-center text-4xl md:text-5xl font-bold mb-12">
+          <h1 className="text-center text-4xl sm:text-5xl md:text-6xl font-bold mb-10 md:mb-14">
             {activity.title}
           </h1>
 
