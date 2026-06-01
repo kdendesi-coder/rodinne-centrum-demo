@@ -289,7 +289,7 @@ const ActivitiesSection = () => {
 
   return (
     <section id="activities" className="py-12 md:py-20 px-4 bg-muted/30 overflow-hidden">
-      <div className="w-full max-w-[1650px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-8">Aktivity</h2>
 
         <div className="grid
