@@ -48,7 +48,7 @@ const ProgramPage = () => {
               }}
             >
               <img
-                src={programImage}
+                src="/program.jpg"
                 alt="Program"
                 className="w-full h-auto object-contain"
               />
