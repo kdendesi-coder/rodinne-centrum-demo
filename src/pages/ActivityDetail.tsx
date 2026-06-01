@@ -135,10 +135,7 @@ const ActivityDetail = () => {
   const [isEditingTitleText1, setIsEditingTitleText1] = useState(false);
   const [isEditingTitleText2, setIsEditingTitleText2] = useState(false);
 
-
   const [isEditingPhotoIndex, setIsEditingPhotoIndex] = useState<number | null>(null); 
-
-
 
 
   // Load data from localStorage or fallback to default
