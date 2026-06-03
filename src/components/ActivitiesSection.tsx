@@ -294,7 +294,7 @@ const ActivitiesSection = () => {
 
         <div className="grid
                         grid-cols-1
-                        lg:grid-cols-[650px_1fr] xl:grid-cols-[760px_1fr] gap-8 lg:gap-10 items-start">
+                        lg:grid-cols-2 gap-8 lg:gap-10 items-start">
 
           {/* Left side - Image */}
           <div className="relative group bg-transparent rounded-lg overflow-hidden
@@ -412,7 +412,7 @@ const ActivitiesSection = () => {
                                 key={index}
                                 className="flex items-center justify-between bg-[#DEE2D2] rounded-[1rem] px-5 py-3 lg:px-6 lg:py-4"
                               >
-                                <span className="text-base md:text-lg xl:text-xl font-medium">{activita.title}</span>
+                                <span className="text-lg md:text-xl xl:text-2xl font-medium">{activita.title}</span>
 
                                 {isAuthenticated && role === "Admin" && (
                                   <div className="flex gap-1 ml-2">
@@ -601,8 +601,6 @@ const ActivitiesSection = () => {
                                 Pozrieť si program
                               </Button>
                           </div>
-
-                          
                           
                           {/* Show edit button only for Admin users */}
                           {isAuthenticated && role === "Admin" && (
