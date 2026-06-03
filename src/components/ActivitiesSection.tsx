@@ -294,7 +294,7 @@ const ActivitiesSection = () => {
 
         <div className="grid
                         grid-cols-1
-                        lg:grid-cols-2 gap-8 lg:gap-10 items-start">
+                        lg:grid-cols-[1fr_2fr] gap-8 lg:gap-10 items-start">
 
           {/* Left side - Image */}
           <div className="relative group bg-transparent rounded-lg overflow-hidden
@@ -458,7 +458,7 @@ const ActivitiesSection = () => {
                               Prednášky pre mamičky
                             </h3>
 
-                            <div className="grid md:grid-cols-2 gap-4">
+                            <div className="grid md:grid-cols-2 gap-6 lg:gap-8 w-full">
                               {lectures[activity.id]?.map((lecture, i) => (
                                 <div
                                   key={i}
