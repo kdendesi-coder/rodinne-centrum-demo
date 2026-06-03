@@ -15,7 +15,7 @@ const HeroSection = () => {
   const { isAuthenticated, role } = useAuth();
 
   return (
-    <div className="mx-2 md:mx-4 mt-8 md:mt-12">
+    <div className="mx-2 md:mx-4 mt-4 md:mt-6">
       <div className="relative min-h-[500px] h-[70vh] md:h-[135vh] rounded-3xl overflow-hidden group">
         
         <img
@@ -41,9 +41,9 @@ const HeroSection = () => {
             style={{
               fontFamily: "Cormorant Garamond",
               fontWeight: "700",
-              fontSize: "clamp(2.3rem, 7vw, 105px)", 
+              fontSize: "clamp(3rem, 8vw, 120px)", 
               margin: "0 auto",
-              lineHeight: "1"
+              lineHeight: "1.1"
             }}>
               {/* Prva cast 2 slova */}
               <span className="block whitespace-nowrap">{titlePart1}</span>
@@ -52,14 +52,14 @@ const HeroSection = () => {
             </h1>
 
             <div className="flex flex-wrap justify-center gap-2 md:gap-4 mt-8">
-              <span className="px-3 py-1 md:px-4 md:py-2 rounded-full border border-[#5E7322] text-[#5E7322] text-sm md:text-base font-medium">Komunita</span>
-              <span className="px-3 py-1 md:px-4 md:py-2 rounded-full border border-[#C66812] text-[#C66812] text-sm md:text-base font-medium">Rast</span>
-              <span className="px-3 py-1 md:px-4 md:py-2 rounded-full border border-[#0C5E85] text-[#0C5E85] text-sm md:text-base font-medium">Duchovné zázemie</span>
+              <span className="px-4 py-2 md:px-6 md:py-3 rounded-full border border-[#5E7322] text-[#5E7322] text-base md:text-base font-medium">Komunita</span>
+              <span className="px-4 py-2 md:px-6 md:py-3 rounded-full border border-[#C66812] text-[#C66812] text-base md:text-base font-medium">Rast</span>
+              <span className="px-4 py-2 md:px-6 md:py-3 rounded-full border border-[#0C5E85] text-[#0C5E85] text-base md:text-base font-medium">Duchovné zázemie</span>
             </div>
 
             <Button
               size="lg"
-              className="mt-12 bg-primary hover:bg-primary/90 rounded-2 px-8"
+              className="mt-6 bg-primary hover:bg-primary/90 rounded-2 px-8 md:px-12 py-3 md:py-4 text-lg md:text-2xl font-semibold"
               onClick={() => {
                 document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
               }}
