@@ -41,7 +41,7 @@ const HeroSection = () => {
             style={{
               fontFamily: "Cormorant Garamond",
               fontWeight: "700",
-              fontSize: "clamp(3rem, 8vw, 120px)", 
+              fontSize: "clamp(2.3rem, 7vw, 105px)", 
               margin: "0 auto",
               lineHeight: "1.1"
             }}>
