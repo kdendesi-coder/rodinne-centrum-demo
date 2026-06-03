@@ -496,7 +496,7 @@ const ActivityDetail = () => {
             {/* Text atrium projekt */}
             {activity.textAtrium && activity.textAtrium.trim() !== "" && (
               <div className="mb-6">
-                <p className="text-muted-foreground whitespace-pre-wrap">{activity.textAtrium}</p>
+                <p className="text-base md:text-lg xl:text-xl leading-[1.8] text-muted-foreground whitespace-pre-wrap">{activity.textAtrium}</p>
                 {isAuthenticated && (
                   <Button size="icon" variant="secondary" onClick={() => setIsEditingTextAtrium(true)}>
                     <Edit2 className="h-4 w-4" />
@@ -509,7 +509,7 @@ const ActivityDetail = () => {
             {/* Text atrium financie */}
             {activity.fiancie && activity.fiancie.trim() !== "" && (
               <div className="mb-6">
-                <p className="text-muted-foreground whitespace-pre-wrap">{activity.fiancie}</p>
+                <p className="text-base md:text-lg xl:text-xl leading-[1.8] text-muted-foreground whitespace-pre-wrap">{activity.fiancie}</p>
                 {isAuthenticated && (
                   <Button size="icon" variant="secondary" onClick={() => setIsEditingTextFinancie(true)}>
                     <Edit2 className="h-4 w-4" />
@@ -523,7 +523,7 @@ const ActivityDetail = () => {
              {/* Text */}
             {activity.text1 && activity.text1.trim() !== "" && (
               <div className="mb-6">
-                <p className="text-muted-foreground whitespace-pre-wrap">{activity.text1}</p>
+                <p className="text-base md:text-lg xl:text-xl leading-[1.8] text-muted-foreground whitespace-pre-wrap">{activity.text1}</p>
                 {isAuthenticated && (
                   <Button size="icon" variant="secondary" onClick={() => setIsEditingText1(true)}>
                     <Edit2 className="h-4 w-4" />
@@ -535,7 +535,7 @@ const ActivityDetail = () => {
 
             {activity.text2 && activity.text2.trim() !== "" && (
               <div className="mb-6">
-                <p className="text-muted-foreground whitespace-pre-wrap">{activity.text2}</p>
+                <p className="text-base md:text-lg xl:text-xl leading-[1.8] text-muted-foreground whitespace-pre-wrap">{activity.text2}</p>
                 {isAuthenticated && (
                   <Button size="icon" variant="secondary" onClick={() => setIsEditingText2(true)}>
                     <Edit2 className="h-4 w-4" />
