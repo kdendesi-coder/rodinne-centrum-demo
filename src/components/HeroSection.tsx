@@ -15,7 +15,7 @@ const HeroSection = () => {
   const { isAuthenticated, role } = useAuth();
 
   return (
-    <div className="mx-2 md:mx-4 mt-4 md:mt-6">
+    <div className="mx-2 md:mx-4 mt-4 md:mt-8">
       <div className="relative min-h-[500px] h-[70vh] md:h-[135vh] rounded-3xl overflow-hidden group">
         
         <img
