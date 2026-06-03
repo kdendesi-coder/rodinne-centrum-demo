@@ -52,9 +52,9 @@ const HeroSection = () => {
             </h1>
 
             <div className="flex flex-wrap justify-center gap-2 md:gap-4 mt-8">
-              <span className="px-4 py-2 md:px-6 md:py-3 rounded-full border border-[#5E7322] text-[#5E7322] text-base md:text-base font-medium">Komunita</span>
-              <span className="px-4 py-2 md:px-6 md:py-3 rounded-full border border-[#C66812] text-[#C66812] text-base md:text-base font-medium">Rast</span>
-              <span className="px-4 py-2 md:px-6 md:py-3 rounded-full border border-[#0C5E85] text-[#0C5E85] text-base md:text-base font-medium">Duchovné zázemie</span>
+              <span className="px-4 py-2 md:px-6 md:py-3 rounded-full border border-[#5E7322] text-[#5E7322] text-lg md:text-xl font-medium">Komunita</span>
+              <span className="px-4 py-2 md:px-6 md:py-3 rounded-full border border-[#C66812] text-[#C66812] text-lg md:text-xl font-medium">Rast</span>
+              <span className="px-4 py-2 md:px-6 md:py-3 rounded-full border border-[#0C5E85] text-[#0C5E85] text-lg md:text-xl font-medium">Duchovné zázemie</span>
             </div>
 
             <Button
