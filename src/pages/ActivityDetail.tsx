@@ -473,7 +473,7 @@ const ActivityDetail = () => {
              {/* Text prihlaska s klikateľným odkazom */}
             {activity.textPrihlaska && activity.textPrihlaska.trim() !== "" && (
               <div className="mb-6">
-                <p className="text-muted-foreground whitespace-pre-wrap">
+                <p className="text-base md:text-lg xl:text-xl leading-[1.8] text-muted-foreground whitespace-pre-wrap">
                   {activity.textPrihlaska.split("https://forms.gle/").map((part, index) => (
                     <>
                       {part}
