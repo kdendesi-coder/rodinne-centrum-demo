@@ -3,15 +3,17 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Edit2 } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+
 import { useState } from "react";
+
 import EditModal from "@/components/EditModal";
 import { useAuth } from "@/contexts/AuthContext";
+//import programImage from "@/public/program.jpg";
 
 const ProgramPage = () => {
   const navigate = useNavigate();
   const { isAuthenticated, role } = useAuth();
 
-  // pole súborov (fotky alebo PDF)
   const [programFiles, setProgramFiles] = useState<string[]>(["/program.jpg"]);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -29,57 +31,53 @@ const ProgramPage = () => {
             className="mb-8"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Späť na aktivity
+            Späť na hlavnú stránku
           </Button>
 
-          {/* Header */}
-          <h1 className="text-center text-4xl md:text-5xl font-bold mb-12">
+            {/* Header */}
+            <h1 className="text-center text-4xl md:text-5xl font-bold mb-12">
             Program
-          </h1>
+            </h1>
 
-          {/* Grid pre všetky programy */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {programFiles.map((file, idx) => (
-              <div
-                key={idx}
-                className="relative bg-muted rounded-2xl overflow-hidden border-[6px] sm:border-[10px]"
-              >
-                <img
-                  src={file}
-                  alt={`Program ${idx + 1}`}
-                  className="w-full h-auto object-contain"
-                />
+          {/* Program image */}
+          <div className="relative flex justify-center items-center p-4 sm:p-6 overflow-hidden lg:overflow-visible">
+            
+            {/* Fotka programu */}
+            <div
+              className="relative z-10 bg-muted rounded-[1.5rem] overflow-hidden border-[6px] sm:border-[10px] w-full max-w-[768px]"
+            >
+              <img
+                src={programFiles[0]}
+                alt="Program"
+                className="w-full h-auto object-contain"
+              />
+              
+              {isAuthenticated && role === "Admin" && (
+                <div className="absolute top-4 right-4 z-20">
+                  <Button size="icon" variant="secondary" onClick={() => setIsEditing(true)}>
+                    <Edit2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              )}
 
-                {/* Admin edit button */}
-                {isAuthenticated && role === "Admin" && (
-                  <div className="absolute top-4 right-4 z-20">
-                    <Button 
-                      size="icon" 
-                      variant="secondary" 
-                      onClick={() => setIsEditing(true)}
-                    >
-                      <Edit2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                )}
-              </div>
-            ))}
+            </div>
+
+            {isEditing && (
+              <EditModal
+                isOpen={true}
+                onClose={() => setIsEditing(false)}
+                title="Upraviť program"
+                type="file"
+                initialValue={programFiles}
+                onSave={(newFiles: string[]) => {
+                  setProgramFiles(newFiles);
+                  setIsEditing(false);
+                }}
+              />
+            )}
+
+            
           </div>
-
-          {/* Edit modal pre admina (drag & drop) */}
-          {isEditing && isAuthenticated && role === "Admin" && (
-            <EditModal
-              isOpen={true}
-              onClose={() => setIsEditing(false)}
-              title="Upraviť program"
-              type="file"
-              initialValue={programFiles}
-              onSave={(newFiles: string[]) => {
-                setProgramFiles(newFiles);
-                setIsEditing(false);
-              }}
-            />
-          )}
         </div>
       </main>
 
