@@ -18,7 +18,7 @@ interface EditModalProps {
 }
 
 const EditModal = ({ isOpen, onClose, title, type, initialValue, onSave }: EditModalProps) => {
-  const [files, setFiles] = useState<string[]>(initialValue || []);
+  const [files, setFiles] = useState<string[]>(Array.isArray(initialValue) ? initialValue : []);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleDrop = (e: React.DragEvent) => {
@@ -56,8 +56,7 @@ const EditModal = ({ isOpen, onClose, title, type, initialValue, onSave }: EditM
             Presuň súbory sem alebo klikni pre výber
           </p>
 
-          {/* TU VLOŽÍŠ TEN BLOCK */}
-          {files.length > 0 && (
+          {Array.isArray(files) && files.length > 0 && (
             <div className="mt-4 flex flex-wrap gap-2 justify-center">
               {files.map((f, i) => (
                 <div key={i} className="w-32 h-32 border rounded overflow-hidden">
