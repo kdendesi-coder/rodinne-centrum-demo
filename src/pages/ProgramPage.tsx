@@ -62,19 +62,17 @@ const ProgramPage = () => {
 
             </div>
 
-            {isEditing && (
-              <EditModal
-                isOpen={true}
-                onClose={() => setIsEditing(false)}
-                title="Upraviť program"
-                type="file"
-                initialValue={programFiles}
-                onSave={(newFiles: string[]) => {
-                  setProgramFiles(newFiles);
-                  setIsEditing(false);
-                }}
-              />
-            )}
+            <EditModal
+              isOpen={isEditing}
+              onClose={() => setIsEditing(false)}
+              title="Upraviť program"
+              type="file"
+              initialValue={programFiles}
+              onSave={(newFiles: string[]) => {
+                setProgramFiles(newFiles); // vždy len jeden obrázok
+                setIsEditing(false);
+              }}
+            />
           </div>
         </div>
       </main>
