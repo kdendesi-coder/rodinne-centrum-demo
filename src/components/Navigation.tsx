@@ -1,6 +1,7 @@
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 
@@ -51,13 +52,18 @@ const Navigation = () => {
               </a>
 
               {isAuthenticated && username && (
-                <span className="hidden sm:inline text-sm font-medium text-gray-700 truncate">
-                  {username}
-                </span>
-
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium text-gray-700 truncate">
+                    {username}
+                  </span>
+                  <button
+                    onClick={handleLogout}
+                    className="text-base md:text-lg hover:text-primary transition-colors"
+                  >
+                    Odhlásiť sa
+                  </button>
+                </div>
               )}
-            </div>
-
             {/* Desktop nav */}
             <div className="hidden md:flex items-center gap-4 lg:gap-6">
               {navLinks.map((link) => (
@@ -99,14 +105,7 @@ const Navigation = () => {
               ))}
 
 
-              {isAuthenticated && (
-                <button
-                  onClick={handleLogout}
-                  className="text-base md:text-lg hover:text-primary transition-colors"
-                >
-                  Odhlásiť sa
-                </button>
-              )}
+      
             </div>
 
             {/* Mobile button */}
