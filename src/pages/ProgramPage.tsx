@@ -47,7 +47,7 @@ const ProgramPage = () => {
               className="relative z-10 bg-muted rounded-[1.5rem] overflow-hidden border-[6px] sm:border-[10px] w-full max-w-[768px]"
             >
               <img
-                src={programFiles[0]}
+                src={programFiles[0] || "/program.jpg"}
                 alt="Program"
                 className="w-full h-auto object-contain"
               />

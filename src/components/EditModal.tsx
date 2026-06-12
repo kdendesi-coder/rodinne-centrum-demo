@@ -56,7 +56,7 @@ const EditModal = ({ isOpen, onClose, title, type, initialValue, onSave }: EditM
             Presuň súbory sem alebo klikni pre výber
           </p>
 
-          {/* Preview súborov */}
+          {/* TU VLOŽÍŠ TEN BLOCK */}
           {files.length > 0 && (
             <div className="mt-4 flex flex-wrap gap-2 justify-center">
               {files.map((f, i) => (
