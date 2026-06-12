@@ -73,6 +73,9 @@ const ProgramPage = () => {
                   setProgramFile(newFile);
                   setIsEditing(false);
                 }}
+                
+                accept = ".jpg,.jpeg,.png,.gif"
+                enableDragAndDrop = {true}
               />
             )}
           </div>
