@@ -54,6 +54,7 @@ const Navigation = () => {
                 <span className="hidden sm:inline text-sm font-medium text-gray-700 truncate">
                   {username}
                 </span>
+
               )}
             </div>
 
