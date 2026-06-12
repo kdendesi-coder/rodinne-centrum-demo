@@ -1,12 +1,21 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Edit2 } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+
+import { useState } from "react";
+
+import EditModal from "@/components/EditModal";
+import { useAuth } from "@/contexts/AuthContext";
 //import programImage from "@/public/program.jpg";
 
 const ProgramPage = () => {
   const navigate = useNavigate();
+  const { isAuthenticated, role } = useAuth();
+
+  const [programFile, setProgramFile] = useState<string>("/program.jpg");
+  const [isEditing, setIsEditing] = useState(false);
 
   return (
     <div className="min-h-screen bg-background">
@@ -38,11 +47,34 @@ const ProgramPage = () => {
               className="relative z-10 bg-muted rounded-[1.5rem] overflow-hidden border-[6px] sm:border-[10px] w-full max-w-[768px]"
             >
               <img
-                src="/program.jpg"
+                src={programFile}
                 alt="Program"
                 className="w-full h-auto object-contain"
               />
+              
+              {isAuthenticated && role === "Admin" && (
+                <div className="absolute top-4 right-4 z-20">
+                  <Button size="icon" variant="secondary" onClick={() => setIsEditing(true)}>
+                    <Edit2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              )}
+
             </div>
+
+            {isEditing && (
+              <EditModal
+                isOpen={true}
+                onClose={() => setIsEditing(false)}
+                title="Upraviť program"
+                type="image"
+                initialValue={programFile}
+                onSave={(newFile: string) => {
+                  setProgramFile(newFile);
+                  setIsEditing(false);
+                }}
+              />
+            )}
           </div>
         </div>
       </main>
