@@ -58,7 +58,7 @@ const Navigation = () => {
                   </span>
                   <button
                     onClick={handleLogout}
-                    className="text-base md:text-lg hover:text-primary transition-colors"
+                    className="text-base md:text-lg font-medium text-gray-700 truncate"
                   >
                     Odhlásiť sa
                   </button>
