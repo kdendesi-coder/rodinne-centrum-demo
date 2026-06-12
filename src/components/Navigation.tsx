@@ -52,19 +52,20 @@ const Navigation = () => {
               </a>
 
               {isAuthenticated && username && (
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-gray-700 truncate">
-                    {username}
-                  </span>
-                  <button
-                    onClick={handleLogout}
-                    className="text-base md:text-lg hover:text-primary transition-colors"
-                  >
-                    Odhlásiť sa
-                  </button>
-                </div>
-              )}
-            
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium text-gray-700 truncate">
+                  {username}
+                </span>
+                <button
+                  onClick={handleLogout}
+                  className="text-base md:text-lg hover:text-primary transition-colors"
+                >
+                  Odhlásiť sa
+                </button>
+              </div>
+            )}
+
+
             {/* Desktop nav */}
             <div className="hidden md:flex items-center gap-4 lg:gap-6">
               {navLinks.map((link) => (
@@ -116,6 +117,8 @@ const Navigation = () => {
                   </button>
                 </div>
               )}
+            </div>
+      
             </div>
 
             {/* Mobile button */}
