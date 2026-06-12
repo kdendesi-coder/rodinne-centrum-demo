@@ -52,19 +52,11 @@ const Navigation = () => {
               </a>
 
               {isAuthenticated && username && (
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-medium text-gray-700 truncate">
+                <span className="hidden sm:inline text-sm font-medium text-gray-700 truncate">
                   {username}
                 </span>
-                <button
-                  onClick={handleLogout}
-                  className="text-base md:text-lg hover:text-primary transition-colors"
-                >
-                  Odhlásiť sa
-                </button>
-              </div>
-            )}
-
+              )}
+            </div>
 
             {/* Desktop nav */}
             <div className="hidden md:flex items-center gap-4 lg:gap-6">
@@ -73,52 +65,38 @@ const Navigation = () => {
                   <a
                     href={link.href}
                     className="flex items-center gap-1 text-base lg:text-lg font-medium text-gray-800 hover:text-[#5E7322] transition-colors duration-200 whitespace-nowrap"
-                  >
+                  > 
+
                     {link.label}
                     {link.dropdown && (
-                      <img
+                      <img 
                         src="/down-arrow.jpg"
                         alt="down-arrow"
                         className="w-5 h-5 transition-transform duration-200 group-hover:rotate-180"
-                      />
-                    )}
+                        />
+                    )}  
                   </a>
-
+                  
+                  {/* Dropdown menu */}
                   {link.dropdown && (
                     <div className="absolute left-0 top-full mt-2 w-40 bg-[#DEE2D2] rounded-2xl shadow-lg
                                     opacity-0 invisible
                                     group-hover:opacity-100 group-hover:visible
                                     transition-all duration-200 overflow-hidden">
+
                       {link.dropdown.map((item) => (
-                        <a
+                        <a 
                           key={item.href}
                           href={item.href}
                           className="block px-4 py-3 text-base text-gray-700 hover:text-[#5E7322]"
                         >
                           {item.label}
                         </a>
-                      ))}
+                      ))} 
                     </div>
                   )}
                 </div>
               ))}
-
-              {/* Admin username + logout vedľa linkov */}
-              {isAuthenticated && username && (
-                <div className="flex items-center gap-2 ml-4">
-                  <span className="text-base md:text-lg font-medium text-gray-700 truncate">
-                    {username}
-                  </span>
-                  <button
-                    onClick={handleLogout}
-                    className="text-base md:text-lg hover:text-primary transition-colors"
-                  >
-                    Odhlásiť sa
-                  </button>
-                </div>
-              )}
-            </div>
-      
             </div>
 
             {/* Mobile button */}
