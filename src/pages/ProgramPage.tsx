@@ -5,15 +5,14 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 
 import { useState } from "react";
-
 import EditModal from "@/components/EditModal";
 import { useAuth } from "@/contexts/AuthContext";
-//import programImage from "@/public/program.jpg";
 
 const ProgramPage = () => {
   const navigate = useNavigate();
   const { isAuthenticated, role } = useAuth();
 
+  // Pole pre viac súborov
   const [programFiles, setProgramFiles] = useState<string[]>(["/program.jpg"]);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -34,34 +33,40 @@ const ProgramPage = () => {
             Späť na hlavnú stránku
           </Button>
 
-            {/* Header */}
-            <h1 className="text-center text-4xl md:text-5xl font-bold mb-12">
+          {/* Header */}
+          <h1 className="text-center text-4xl md:text-5xl font-bold mb-12">
             Program
-            </h1>
+          </h1>
 
-          {/* Program image */}
-          <div className="relative flex justify-center items-center p-4 sm:p-6 overflow-hidden lg:overflow-visible">
-            
-            {/* Fotka programu */}
-            <div
-              className="relative z-10 bg-muted rounded-[1.5rem] overflow-hidden border-[6px] sm:border-[10px] w-full max-w-[768px]"
-            >
-              <img
-                src={programFiles[0]}
-                alt="Program"
-                className="w-full h-auto object-contain"
-              />
-              
-              {isAuthenticated && role === "Admin" && (
-                <div className="absolute top-4 right-4 z-20">
-                  <Button size="icon" variant="secondary" onClick={() => setIsEditing(true)}>
-                    <Edit2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              )}
+          {/* Program images */}
+          <div className="relative flex flex-wrap justify-center items-start gap-6">
+            {programFiles.map((file, index) => (
+              <div
+                key={index}
+                className="relative z-10 bg-muted rounded-[1.5rem] overflow-hidden border-[6px] sm:border-[10px] w-full max-w-[768px]"
+              >
+                {file.endsWith(".pdf") ? (
+                  <embed src={file} type="application/pdf" width="100%" height="500px" />
+                ) : (
+                  <img
+                    src={file}
+                    alt={`Program ${index}`}
+                    className="w-full h-auto object-contain"
+                  />
+                )}
 
-            </div>
+                {/* Admin edit button */}
+                {isAuthenticated && role === "Admin" && index === 0 && (
+                  <div className="absolute top-4 right-4 z-20">
+                    <Button size="icon" variant="secondary" onClick={() => setIsEditing(true)}>
+                      <Edit2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                )}
+              </div>
+            ))}
 
+            {/* Edit modal */}
             {isEditing && (
               <EditModal
                 isOpen={true}
@@ -75,8 +80,6 @@ const ProgramPage = () => {
                 }}
               />
             )}
-
-            
           </div>
         </div>
       </main>
