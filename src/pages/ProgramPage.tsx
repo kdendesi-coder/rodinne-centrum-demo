@@ -76,17 +76,7 @@ const ProgramPage = () => {
               />
             )}
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-              {programFiles.map((file, idx) => (
-                <div key={idx} className="border rounded p-2">
-                  {file.endsWith(".pdf") ? (
-                    <embed src={file} type="application/pdf" width="100%" height="200px" />
-                  ) : (
-                    <img src={file} alt={`Program ${idx}`} className="w-full h-auto object-contain" />
-                  )}
-                </div>
-              ))}
-            </div>
+            
           </div>
         </div>
       </main>
