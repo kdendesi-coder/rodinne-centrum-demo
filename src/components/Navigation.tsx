@@ -51,10 +51,18 @@ const Navigation = () => {
                 <span className="text-base sm:text-lg text-[#5E7322] uppercase truncate">RC Sirotár</span>
               </a>
 
-              {isAuthenticated && username && (
-                <span className="hidden sm:inline text-sm font-medium text-gray-700 truncate">
-                  {username}
-                </span>
+               {isAuthenticated && username && (
+                <div className="flex items-center gap-2 ml-4">
+                  <span className="text-base md:text-lg font-medium text-gray-700 truncate">
+                    {username}
+                  </span>
+                  <button
+                    onClick={handleLogout}
+                    className="text-base md:text-lg hover:text-primary transition-colors"
+                  >
+                    Odhlásiť sa
+                  </button>
+                </div>
               )}
             </div>
 
