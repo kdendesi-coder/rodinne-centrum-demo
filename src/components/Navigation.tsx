@@ -2,10 +2,12 @@ import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { isAuthenticated, username } = useAuth();
+  const { isAuthenticated, username, logout } = useAuth();
+  const navigate = useNavigate();
 
   const navLinks = [
     { label: "O Nás", href: "/#about" },
@@ -21,6 +23,11 @@ const Navigation = () => {
     { label: "Náš tím", href: "/#team" },
     { label: "Kontakt", href: "/#contact" },
   ];
+
+   const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
 
  return (
     <nav className="fixed top-3 left-0 w-full z-50 px-2 sm:px-4">
@@ -89,6 +96,16 @@ const Navigation = () => {
                   )}
                 </div>
               ))}
+
+
+              {isAuthenticated && (
+                <button
+                  onClick={handleLogout}
+                  className="text-base md:text-lg hover:text-primary transition-colors"
+                >
+                  Odhlásiť sa
+                </button>
+              )}
             </div>
 
             {/* Mobile button */}

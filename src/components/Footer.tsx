@@ -1,10 +1,7 @@
 import { Facebook, Instagram, Mail, Phone } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
 
 const Footer = () => {
-  const { isAuthenticated, logout } = useAuth();
-  const navigate = useNavigate();
+ 
 
   const navLinks = [
     { label: "O nás", href: "/#about" },
@@ -20,10 +17,7 @@ const Footer = () => {
     { label: "GDPR", href: "/#" },
   ];
 
-  const handleLogout = () => {
-    logout();
-    navigate("/");
-  };
+ 
 
   return (
     <footer className="bg-foreground text-background py-10 md:py-16 px-4">
@@ -51,14 +45,7 @@ const Footer = () => {
                 </a>
               ))}
 
-              {isAuthenticated && (
-                <button
-                  onClick={handleLogout}
-                  className="text-base md:text-lg hover:text-primary transition-colors"
-                >
-                  Odhlásiť sa
-                </button>
-              )}
+              
             </nav>
           </div>
 
