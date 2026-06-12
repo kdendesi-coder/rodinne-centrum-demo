@@ -18,15 +18,13 @@ interface EditModalProps {
 }
 
 const EditModal = ({ isOpen, onClose, title, type, initialValue, onSave }: EditModalProps) => {
-  const [files, setFiles] = useState<string[]>(initialValue);
+  const [files, setFiles] = useState<string[]>(Array.isArray(initialValue) ? initialValue : []);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
-    const droppedFiles = Array.from(e.dataTransfer.files);
-    if (droppedFiles.length > 0) {
-      setFiles([URL.createObjectURL(droppedFiles[0])]); // nahradí existujúcu
-    }
+    const droppedFiles = Array.from(e.dataTransfer.files).map(f => URL.createObjectURL(f));
+    setFiles(prev => [...prev, ...droppedFiles]);
   };
 
   const handleDragOver = (e: React.DragEvent) => e.preventDefault();
@@ -46,33 +44,40 @@ const EditModal = ({ isOpen, onClose, title, type, initialValue, onSave }: EditM
         >
           <input
             type="file"
+            multiple
             ref={fileInputRef}
             className="hidden"
             onChange={(e) => {
-              const newFile = e.target.files?.[0];
-              if (newFile) setFiles([URL.createObjectURL(newFile)]);
+              const newFiles = e.target.files ? Array.from(e.target.files).map(f => URL.createObjectURL(f)) : [];
+              setFiles(prev => [...prev, ...newFiles]);
             }}
           />
           <p className="text-sm text-gray-500 mt-2">
-            Presuň súbor sem alebo klikni pre výber
+            Presuň súbory sem alebo klikni pre výber
           </p>
 
-          {file && (
-            <div className="mt-4 w-48 h-48 mx-auto border rounded overflow-hidden">
-              {file.endsWith(".pdf") ? (
-                <embed src={file} type="application/pdf" width="100%" height="100%" />
-              ) : (
-                <img src={file} alt="Preview" className="w-full h-full object-contain" />
-              )}
+          {Array.isArray(files) && files.length > 0 && (
+            <div className="mt-4 flex flex-wrap gap-2 justify-center">
+              {files.map((f, i) => (
+                <div key={i} className="w-32 h-32 border rounded overflow-hidden">
+                  {f.endsWith(".pdf") ? (
+                    <embed src={f} type="application/pdf" width="100%" height="100%" />
+                  ) : (
+                    <img src={f} alt={`Preview ${i}`} className="w-full h-full object-contain" />
+                  )}
+                </div>
+              ))}
             </div>
           )}
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancel</Button>
+          <Button variant="outline" onClick={onClose}>
+            Cancel
+          </Button>
           <Button
             onClick={() => {
-              onSave([file]); // uloží len nový súbor
+              onSave(files);
               onClose();
             }}
           >
