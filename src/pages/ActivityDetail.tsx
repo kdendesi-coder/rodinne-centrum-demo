@@ -590,7 +590,7 @@ const ActivityDetail = () => {
               </div>
             )}
 
-            <div className="mt-6 flex flex-col gap-4">
+            <div className="mt-6 flex flex-col gap-4 items-start">
               <a href={activity.googleFormLink} target="_blank">
                 <Button className="rounded-xl px-6 py-3 text-base md:text-lg font-semibold">
                   Prihlásiť sa
@@ -599,7 +599,7 @@ const ActivityDetail = () => {
 
               <Button
                 variant="secondary"
-                className="w-full sm:w-auto bg-[#BDB4CE] hover:bg-[#BDB4CE] text-[#210F0080] rounded-xl px-6 py-3"
+                className="rounded-xl px-6 py-3 text-base md:text-lg font-semibold w-auto"
                 onClick={(e) => {
                   e.stopPropagation();
                   navigate("/program");
