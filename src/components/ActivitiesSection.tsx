@@ -112,7 +112,10 @@ useEffect(() => {
         setOpenItems(["herna", "atrium", "klubik"]);
       }
     },
-    { threshold: 0.3 }
+    {
+      threshold: 0.1,
+      rootMargin: "0px 0px -100px 0px" 
+    }
   );
 
   if (sectionRef.current) {
@@ -121,7 +124,6 @@ useEffect(() => {
 
   return () => observer.disconnect();
 }, []);
-
 
   const navigate = useNavigate();
   const [activities, setActivities] = useState<Activity[]>([
