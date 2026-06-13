@@ -592,7 +592,7 @@ const ActivityDetail = () => {
 
             {/* Google form */}
             {activity.googleFormLink && (
-              <div className="mt-6">
+              <div className="mt-6 flex flex-col gap-4">
                 <a href={activity.googleFormLink} target = "_blank">
                   <Button className="rounded-xl px-6 py-3 text-base md:text-lg font-semibold">
                     Prihlasit sa
@@ -601,7 +601,7 @@ const ActivityDetail = () => {
               </div>
             )}
 
-        </div>
+
             <Button
               variant="secondary"
               className="w-full sm:w-auto bg-[#DBD4CE] hover:bg-[#DBD4CE] text-[#210F0080] rounded-xl px-6 py-3 md:text-lg font-semibold"
@@ -613,7 +613,7 @@ const ActivityDetail = () => {
                 Pozrieť si program
               </Button>
 
-        
+        </div>
       </main>
       <Footer />
 
