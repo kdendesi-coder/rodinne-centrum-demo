@@ -9,7 +9,7 @@ import Login from "./pages/Login";
 import ActivityDetail from "./pages/ActivityDetail";
 import NotFound from "./pages/NotFound";
 import ProgramPage from "./pages/ProgramPage";
-
+import BackToTop from "@/components/BackToTop";
 
 
 const queryClient = new QueryClient();
