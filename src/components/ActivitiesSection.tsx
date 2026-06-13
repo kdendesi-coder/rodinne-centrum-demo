@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Edit2, ChevronDown, Plus } from "lucide-react";
@@ -17,6 +17,25 @@ interface Activity {
   content: string;
   icon?: string;
 }
+
+const sectionRef = useRef(null);
+
+useEffect(() => {
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        setOpenItems(["herna", "atrium", "klubik"]);
+      }
+    },
+    { threshold: 0.3 }
+  );
+
+  if (sectionRef.current) {
+    observer.observe(sectionRef.current);
+  }
+
+  return () => observer.disconnect();
+}, []);
 
 //povodne data
 const aktivity = {
@@ -288,7 +307,7 @@ const ActivitiesSection = () => {
   
 
   return (
-    <section id="activities" className="py-12 md:py-20 px-4 bg-muted/30 overflow-hidden">
+    <section id="activities" ref={sectionRef} className="py-12 md:py-20 px-4 bg-muted/30 overflow-hidden">
       <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-8">Aktivity</h2>
 
@@ -658,3 +677,7 @@ const ActivitiesSection = () => {
 };
 
 export default ActivitiesSection;
+function setOpenItems(arg0: string[]) {
+  throw new Error("Function not implemented.");
+}
+

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -336,7 +336,6 @@ const ActivityDetail = () => {
   const openEditPhotoModal = (index: number) => {
     setIsEditingPhotoIndex(index);
   };
-
   
 
   if (!activity) {
