@@ -608,7 +608,7 @@ const ActivityDetail = () => {
               <div className="mt-6 flex flex-col sm:flex-row gap-4">
                 <a href={activity.googleFormLink} target = "_blank">
                   <Button className="rounded-xl px-6 py-3 text-base md:text-lg font-semibold">
-                    Prihlasit sa
+                    Prihlasovanie do Átria Dobrého pastiera
                   </Button>
                 </a>
               </div>
