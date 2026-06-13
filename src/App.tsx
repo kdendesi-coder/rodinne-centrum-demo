@@ -10,6 +10,8 @@ import ActivityDetail from "./pages/ActivityDetail";
 import NotFound from "./pages/NotFound";
 import ProgramPage from "./pages/ProgramPage";
 
+
+
 const queryClient = new QueryClient();
 
 const App = () => (
