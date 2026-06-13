@@ -591,7 +591,7 @@ const ActivityDetail = () => {
             )}
 
 
-             <div className="mt-10 flex flex-col sm:flex-row gap-4">
+             <div className="mt-10 flex flex-col sm:flex-row gap-4 items-start">
               <Button
                 variant="secondary"
                 className="bg-[#DBD4CE] hover:bg-[#DBD4CE] text-[#210F0080] rounded-xl px-6 py-3 md:text-lg font-semibold"
