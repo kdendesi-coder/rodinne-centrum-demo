@@ -25,7 +25,7 @@ const AboutSection = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
 
           <div className="relative group">
-            <div className="text-lg md:text-xl xl:text-2xl space-y-5 md:space-y-6 leading-[1.8] whitespace-pre-line">
+            <div className="text-lg md:text-xl xl:text-2xl space-y-5 md:space-y-6 leading-[1.8] whitespace-pre-line max-w-[700px]">
 
             {isLoading ? (
               <p className="text-muted-foreground">Načítavam obsah z backendu...</p>
@@ -76,7 +76,7 @@ const AboutSection = () => {
             {image ? (
               <>
               <img 
-                src={image} 
+                src={image || "/01_gallery.jpg"} 
                 alt="About" 
                 className="z-0 w-full h-full object-cover transition-transform duration-200 group-hover:scale-105" 
               />
