@@ -344,7 +344,7 @@ const ActivityDetail = () => {
       <div className="min-h-screen">
         <Navigation />
         <main className="pt-24">
-          <div className="w-full max-w-[1400px] mx-auto py-12 md:py-20 px-4 sm:px-6 lg:px-8">
+          <div className="w-auto max-w-[1400px] mx-auto py-12 md:py-20 px-4 sm:px-6 lg:px-8">
             <h1 className="text-3xl font-bold mb-4">Aktivita nenájdená</h1>
             <Button variant="outline" onClick={() => navigate("/")}>
               <ArrowLeft className="h-4 w-4 mr-2" />
