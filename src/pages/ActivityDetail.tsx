@@ -601,6 +601,18 @@ const ActivityDetail = () => {
               </div>
             )}
 
+
+            <Button
+                                variant="secondary"
+                                className="w-full sm:w-auto bg-[#DBD4CE] hover:bg-[#DBD4CE] text-[#210F0080] rounded-xl px-6 py-3 md:text-lg font-semibold"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  navigate("/program");
+                                }}
+                              >
+                                Pozrieť si program
+                              </Button>
+
         </div>
       </main>
       <Footer />
