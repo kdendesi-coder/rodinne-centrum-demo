@@ -113,16 +113,17 @@ useEffect(() => {
       }
     },
     {
-      threshold: 0.2,
-      rootMargin: "0px 0px -50px 0px" 
+      threshold: 0.2, // bezpečný middle ground
     }
   );
 
-  if (sectionRef.current) {
-    observer.observe(sectionRef.current);
-  }
+  const el = sectionRef.current;
 
-  return () => observer.disconnect();
+  if (el) observer.observe(el);
+
+  return () => {
+    if (el) observer.unobserve(el);
+  };
 }, []);
 
   const navigate = useNavigate();
@@ -148,7 +149,7 @@ useEffect(() => {
   ]);
 
 
-  const [openItems, setOpenItems] = useState<string[]>(["herna"]);
+  const [openItems, setOpenItems] = useState<string[]>([]);
   const [editingActivity, setEditingActivity] = useState<string | null>(null);
   const [isEditingImage, setIsEditingImage] = useState(false);
   const [isAddingActivity, setIsAddingActivity] = useState(false);
