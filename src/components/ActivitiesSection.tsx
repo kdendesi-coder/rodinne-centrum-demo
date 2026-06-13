@@ -18,24 +18,6 @@ interface Activity {
   icon?: string;
 }
 
-const sectionRef = useRef(null);
-
-useEffect(() => {
-  const observer = new IntersectionObserver(
-    ([entry]) => {
-      if (entry.isIntersecting) {
-        setOpenItems(["herna", "atrium", "klubik"]);
-      }
-    },
-    { threshold: 0.3 }
-  );
-
-  if (sectionRef.current) {
-    observer.observe(sectionRef.current);
-  }
-
-  return () => observer.disconnect();
-}, []);
 
 //povodne data
 const aktivity = {
@@ -118,6 +100,29 @@ const rozvrh = {
 
 
 const ActivitiesSection = () => {
+
+
+  
+const sectionRef = useRef(null);
+
+useEffect(() => {
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        setOpenItems(["herna", "atrium", "klubik"]);
+      }
+    },
+    { threshold: 0.3 }
+  );
+
+  if (sectionRef.current) {
+    observer.observe(sectionRef.current);
+  }
+
+  return () => observer.disconnect();
+}, []);
+
+
   const navigate = useNavigate();
   const [activities, setActivities] = useState<Activity[]>([
     {
