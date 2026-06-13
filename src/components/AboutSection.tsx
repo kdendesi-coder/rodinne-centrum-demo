@@ -69,7 +69,7 @@ const AboutSection = () => {
           </div>
 
           {/* HLAVNÝ OBRAZ: Nastavený na fixných 600x400px */}
-          <div className="relative z-10 group bg-muted rounded-[1.5rem] overflow-hidden border-[6px] sm:border-[10px] w-full max-w-[750px] aspect-[3/2]"
+          <div className="relative z-10 group bg-muted rounded-[1.5rem] overflow-hidden border-[4px] sm:border-[10px] w-full max-w-[750px] aspect-[3/2]"
           style={{borderColor: '#B0C9D6',
             boxShadow: '10px 10px 0px #DBD4CE'
           }}>
@@ -78,7 +78,7 @@ const AboutSection = () => {
               <img 
                 src={image || "/01_gallery.jpg"} 
                 alt="About" 
-                className="z-0 w-full h-full object-cover transition-transform duration-200 group-hover:scale-105" 
+                className="z-0 w-full h-full object-cover transition-transform duration-200 group-hover:scale-105 transition-transform duration-200 will-change-transform" 
               />
 
               <div className="absolute inset-0 rounded-[3rem] pointer-events-none opacity-10 transition-opacity duration-300 group-hover:opacity-0"
