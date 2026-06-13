@@ -112,7 +112,7 @@ useEffect(() => {
         setOpenItems(["herna", "atrium", "klubik"]);
       }
     },
-    { threshold: 0.7 }
+    { threshold: 0.3 }
   );
 
   if (sectionRef.current) {
