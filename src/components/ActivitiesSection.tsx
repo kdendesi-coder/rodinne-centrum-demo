@@ -126,6 +126,14 @@ useEffect(() => {
   };
 }, []);
 
+useEffect(() => {
+  const timeout = setTimeout(() => {
+    setOpenItems(["herna", "atrium", "klubik"]);
+  }, 500);
+
+  return () => clearTimeout(timeout);
+}, []);
+
   const navigate = useNavigate();
   const [activities, setActivities] = useState<Activity[]>([
     {
