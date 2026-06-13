@@ -63,7 +63,7 @@ const AboutSection = () => {
 
           {/* Hnedý oblúk - posunutý k pravému dolnému rohu 600px obrazu */}
           <div 
-            className="absolute bottom-2 right-2 w-[18%] max-w-[120px] aspect-square sm:w-28 sm:h-28 lg:w-32 lg:h-32 border-[3px] border-amber-900 rounded-full translate-x-1/4 translate-y-1/4"
+            className="absolute bottom-2 right-2 w-[18%] max-w-[140px] aspect-square sm:w-28 sm:h-28 lg:w-32 lg:h-32 border-[3px] border-amber-900 rounded-full translate-x-1/4 translate-y-1/4"
             style={{ clipPath: 'inset(0 0 0 0)' }}
           >
           </div>
