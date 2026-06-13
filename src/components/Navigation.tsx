@@ -38,7 +38,7 @@ const Navigation = () => {
                       border border-black/5">
 
         <div className="px-4 sm:px-6 py-3 md:py-4">
-          <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center justify-between gap-4 flex-wrap">
 
             {/* Logo + username */}
             <div className="flex items-center gap-3 min-w-0">
@@ -46,19 +46,21 @@ const Navigation = () => {
                 <img
                   src="/logosirotar2BG.png"
                   alt="Company Logo"
-                  className="h-8 md:h-10 w-auto object-contain shrink-0"
+                  className="h-6 sm:h-8 md:h-10 w-auto object-contain shrink-0"
                 />
-                <span className="text-base sm:text-lg text-[#5E7322] uppercase truncate">RC Sirotár</span>
+                <span className="text-base sm:text-lg text-[#5E7322] uppercase truncate max-w-[120px]">
+                  RC Sirotár
+                </span>
               </a>
 
                {isAuthenticated && username && (
-                <div className="flex items-center gap-2 ml-4">
-                  <span className="text-base md:text-lg font-medium text-gray-700 truncate">
+                <div className="hidden sm:flex items-center gap-2 ml-4 flex-shrink-0">
+                  <span className="text-base md:text-lg font-medium text-gray-700 truncate max-w-[120px]">
                     {username}
                   </span>
                   <button
                     onClick={handleLogout}
-                    className="text-base md:text-lg font-medium text-gray-700 truncate"
+                    className="text-sm md:text-base font-medium text-gray-700 truncate whitespace-nowrap"
                   >
                     Odhlásiť sa
                   </button>
@@ -87,7 +89,7 @@ const Navigation = () => {
                   
                   {/* Dropdown menu */}
                   {link.dropdown && (
-                    <div className="absolute left-0 top-full mt-2 w-40 bg-[#DEE2D2] rounded-2xl shadow-lg
+                    <div className="absolute left-0 top-full mt-2 min-w-[160px] bg-[#DEE2D2] rounded-2xl shadow-lg
                                     opacity-0 invisible
                                     group-hover:opacity-100 group-hover:visible
                                     transition-all duration-200 overflow-hidden">
