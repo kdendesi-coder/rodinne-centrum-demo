@@ -57,13 +57,13 @@ const AboutSection = () => {
         <div className="relative p-4 sm:p-6 flex justify-center items-center overflow-hidden lg:overflow-visible">
           
           {/* Modrý kruh - posunutý tak, aby sedel k 600px šírke */}
-          <div className="absolute top-2 left-2 w-[20%] max-w-[140px] aspect-square sm:w-32 sm:h-32 lg:w-40 lg:h-40 border-[2.5px] border-sky-400 rounded-full -translate-x-1/4 -translate-y-1/4 flex items-center justify-center -z-10">
+          <div className="absolute top-2 left-2 w-[20%] max-w-[140px] sm:w-32 sm:h-32 lg:w-40 lg:h-40 border-[2.5px] border-sky-400 rounded-full -translate-x-1/4 -translate-y-1/4 flex items-center justify-center -z-10">
             <div className="w-[85%] h-[85%] bg-[#DEE2D2] rounded-full"></div>
           </div>
 
           {/* Hnedý oblúk - posunutý k pravému dolnému rohu 600px obrazu */}
           <div 
-            className="absolute bottom-2 right-2 w-[18%] max-w-[140px] aspect-square sm:w-28 sm:h-28 lg:w-32 lg:h-32 border-[3px] border-amber-900 rounded-full translate-x-1/4 translate-y-1/4"
+            className="absolute bottom-2 right-2 w-[18%] max-w-[140px] sm:w-28 sm:h-28 lg:w-32 lg:h-32 border-[3px] border-amber-900 rounded-full translate-x-1/4 translate-y-1/4"
             style={{ clipPath: 'inset(0 0 0 0)' }}
           >
           </div>
