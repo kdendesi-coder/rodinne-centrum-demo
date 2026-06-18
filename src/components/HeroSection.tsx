@@ -51,10 +51,10 @@ const HeroSection = () => {
               <span className="block">{titlePart2}</span>
             </h1>
 
-            <div className="flex flex-wrap justify-center gap-2 md:gap-4 mt-8">
-              <span className="px-4 py-2 md:px-6 md:py-3 rounded-full border border-[#5E7322] text-[#5E7322] text-lg md:text-xl font-medium items-center justify-center">Komunita</span>
-              <span className="px-4 py-2 md:px-6 md:py-3 rounded-full border border-[#C66812] text-[#C66812] text-lg md:text-xl font-medium items-center justify-center">Rast</span>
-              <span className="px-4 py-2 md:px-6 md:py-3 rounded-full border border-[#0C5E85] text-[#0C5E85] text-lg md:text-xl font-medium items-center justify-center">Duchovné zázemie</span>
+            <div className="flex flex-wrap justify-center gap-2 md:gap-4 mt-6">
+              <span className="px-3 py-1 md:px-4 md:py-2 rounded-full border border-[#5E7322] text-[#5E7322] text-sm md:text-base font-medium items-center justify-center">Komunita</span>
+              <span className="px-3 py-1 md:px-4 md:py-2 rounded-full border border-[#C66812] text-[#C66812] text-sm md:text-base font-medium items-center justify-center">Rast</span>
+              <span className="px-3 py-1 md:px-4 md:py-2 rounded-full border border-[#0C5E85] text-[#0C5E85] text-sm md:text-base font-medium items-center justify-center">Duchovné zázemie</span>
             </div>
 
             <Button
