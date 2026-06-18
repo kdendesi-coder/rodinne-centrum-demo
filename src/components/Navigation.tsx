@@ -60,7 +60,7 @@ const Navigation = () => {
                   </span>
                   <button
                     onClick={handleLogout}
-                    className="text-sm md:text-base font-medium text-gray-700 truncate whitespace-nowrap"
+                    className="text-base md:text-lg font-medium text-gray-700 truncate max-w-[120px] whitespace-nowrap"
                   >
                     Odhlásiť sa
                   </button>
