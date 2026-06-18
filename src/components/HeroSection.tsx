@@ -59,7 +59,7 @@ const HeroSection = () => {
 
             <Button
               size="lg"
-              className="mt-6 bg-primary hover:bg-primary/90 rounded-2 px-8 md:px-12 py-3 md:py-4 text-lg md:text-2xl font-semibold"
+              className="mt-6 bg-primary hover:bg-primary/90 rounded-full px-12 md:px-16 py-3 md:py-4 text-lg md:text-3xl font-semibold"
               onClick={() => {
                 document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
               }}
