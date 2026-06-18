@@ -18,11 +18,11 @@ const ProgramPage = () => {
   const [isEditing, setIsEditing] = useState(false);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       <Navigation />
 
       <main className="pt-24">
-        <div className="w-full max-w-[1200px] mx-auto py-12 md:py-20 px-4 sm:px-6 lg:px-8">
+        <div className="w-full max-w-[1400px] mx-auto py-12 md:py-20 px-4 sm:px-6 lg:px-8">
           
           {/* Back button */}
           <Button 
