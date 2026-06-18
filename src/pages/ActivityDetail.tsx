@@ -602,9 +602,11 @@ const ActivityDetail = () => {
                 Pozrieť si program
               </Button>
 
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfqm51JNlBk0HdOyG2RoZsianKgNvZ6uSajSdtS7Yv5l0AJZw/closedform" target="_blank" rel="noopener noreferrer">
               <Button className="rounded-xl px-6 py-3 text-base md:text-lg font-semibold">
                 Prihlasovanie do Átria Dobrého pastiera
               </Button>
+            </a>
 
             </div>
            
