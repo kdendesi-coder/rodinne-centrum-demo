@@ -113,7 +113,7 @@ useEffect(() => {
       }
     },
     {
-      threshold: 0.2, // bezpečný middle ground
+      threshold: 0.01, // bezpečný middle ground
     }
   );
 
