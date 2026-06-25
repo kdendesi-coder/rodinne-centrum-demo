@@ -129,7 +129,7 @@ useEffect(() => {
 useEffect(() => {
   const timeout = setTimeout(() => {
     setOpenItems(["herna", "atrium", "klubik"]);
-  }, 2000);
+  }, 200);
 
   return () => clearTimeout(timeout);
 }, []);
