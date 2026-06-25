@@ -107,26 +107,32 @@ const sectionRef = useRef(null);
 
 useEffect(() => {
   const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        const id = entry.target.getAttribute("data-id");
-        if (entry.isIntersecting && id && !openItems.includes(id)) {
-          setOpenItems((prev) => [...prev, id]);
-        }
-      });
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        setOpenItems(["herna", "atrium", "klubik"]);
+      }
     },
-    { threshold: 0.2 }
+    {
+      threshold: 0.01, // bezpečný middle ground
+    }
   );
 
-  const elements = document.querySelectorAll("[data-id]");
-  elements.forEach((el) => observer.observe(el));
+  const el = sectionRef.current;
+
+  if (el) observer.observe(el);
 
   return () => {
-    elements.forEach((el) => observer.unobserve(el));
+    if (el) observer.unobserve(el);
   };
-}, [openItems]);
+}, []);
 
+useEffect(() => {
+  const timeout = setTimeout(() => {
+    setOpenItems(["herna", "atrium", "klubik"]);
+  }, 500);
 
+  return () => clearTimeout(timeout);
+}, []);
 
   const navigate = useNavigate();
   const [activities, setActivities] = useState<Activity[]>([
@@ -389,7 +395,6 @@ useEffect(() => {
                     key={activity.id}
                     open={openItems.includes(activity.id)}
                     onOpenChange={() => toggleItem(activity.id)}
-                    data-id={activity.id} // pridaj toto
                   >
                     <div className="relative pl-5 sm:pl-8">
                       <div className="absolute left-3 top-0 bottom-0 w-0.5 bg-[#E0DAD5] border-[3px] " />
