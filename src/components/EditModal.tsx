@@ -14,32 +14,58 @@ interface EditModalProps {
   title: string;
   type: "image" | "file";
   localStorageKey: string;
-  initialValue?: string[];
-  onSave: (files: string[]) => void;
+  initialValue?: string;
+  onSave: (file: string) => void;
 }
 
-const EditModal = ({ isOpen, onClose, title, type, localStorageKey, initialValue = [], onSave }: EditModalProps) => {
-  const [file, setFile] = useState<string>(initialValue[0] || "");
+const EditModal = ({
+  isOpen,
+  onClose,
+  title,
+  type,
+  localStorageKey,
+  initialValue = "",
+  onSave,
+}: EditModalProps) => {
+  const [file, setFile] = useState<string>(initialValue);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // načítanie zo storage pri mount
   useEffect(() => {
     const savedFile = localStorage.getItem(localStorageKey);
     if (savedFile) setFile(savedFile);
-    else setFile(initialValue[0] || "");
+    else setFile(initialValue);
   }, [initialValue, isOpen, localStorageKey]);
 
-  const handleDrop = (e: React.DragEvent) => {
+  // Konverzia súboru na Base64
+  const fileToBase64 = (file: File) =>
+    new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+
+  const handleDrop = async (e: React.DragEvent) => {
     e.preventDefault();
     const droppedFile = e.dataTransfer.files[0];
     if (droppedFile) {
-      const url = URL.createObjectURL(droppedFile);
-      setFile(url);
-      localStorage.setItem(localStorageKey, url); 
+      const base64 = await fileToBase64(droppedFile);
+      setFile(base64);
+      localStorage.setItem(localStorageKey, base64);
     }
   };
 
   const handleDragOver = (e: React.DragEvent) => e.preventDefault();
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newFile = e.target.files?.[0];
+    if (newFile) {
+      const base64 = await fileToBase64(newFile);
+      setFile(base64);
+      localStorage.setItem(localStorageKey, base64);
+    }
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -58,14 +84,7 @@ const EditModal = ({ isOpen, onClose, title, type, localStorageKey, initialValue
             type="file"
             ref={fileInputRef}
             className="hidden"
-            onChange={(e) => {
-              const newFile = e.target.files?.[0];
-              if (newFile) {
-                const url = URL.createObjectURL(newFile);
-                setFile(url);
-                localStorage.setItem(localStorageKey, url); 
-              }
-            }}
+            onChange={handleFileChange}
           />
           <p className="text-sm text-gray-500 mt-2">
             Presuň súbor sem alebo klikni pre výber
@@ -89,8 +108,8 @@ const EditModal = ({ isOpen, onClose, title, type, localStorageKey, initialValue
           <Button
             onClick={() => {
               if (file) {
-                onSave([file]);
-                localStorage.setItem(localStorageKey, file); // uloženie pri save
+                onSave(file);
+                localStorage.setItem(localStorageKey, file);
               }
               onClose();
             }}
