@@ -12,32 +12,22 @@ interface EditModalProps {
   isOpen: boolean;
   onClose: () => void;
   title: string;
-  type: "image" | "file";
   localStorageKey: string;
   initialValue?: string;
   onSave: (file: string) => void;
 }
 
-const EditModal = ({
-  isOpen,
-  onClose,
-  title,
-  type,
-  localStorageKey,
-  initialValue = "",
-  onSave,
-}: EditModalProps) => {
+const EditModal = ({ isOpen, onClose, title, localStorageKey, initialValue = "", onSave }: EditModalProps) => {
   const [file, setFile] = useState<string>(initialValue);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // načítanie zo storage pri mount
   useEffect(() => {
     const savedFile = localStorage.getItem(localStorageKey);
     if (savedFile) setFile(savedFile);
     else setFile(initialValue);
   }, [initialValue, isOpen, localStorageKey]);
 
-  // Konverzia súboru na Base64
+  // prevod súboru na Base64
   const fileToBase64 = (file: File) =>
     new Promise<string>((resolve, reject) => {
       const reader = new FileReader();
@@ -80,15 +70,8 @@ const EditModal = ({
           onDragOver={handleDragOver}
           onClick={() => fileInputRef.current?.click()}
         >
-          <input
-            type="file"
-            ref={fileInputRef}
-            className="hidden"
-            onChange={handleFileChange}
-          />
-          <p className="text-sm text-gray-500 mt-2">
-            Presuň súbor sem alebo klikni pre výber
-          </p>
+          <input type="file" ref={fileInputRef} className="hidden" onChange={handleFileChange} />
+          <p className="text-sm text-gray-500 mt-2">Presuň súbor sem alebo klikni pre výber</p>
 
           {file && (
             <div className="mt-4 w-48 h-48 mx-auto border rounded overflow-hidden">
@@ -102,14 +85,12 @@ const EditModal = ({
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>
-            Cancel
-          </Button>
+          <Button variant="outline" onClick={onClose}>Cancel</Button>
           <Button
             onClick={() => {
               if (file) {
                 onSave(file);
-                localStorage.setItem(localStorageKey, file);
+                localStorage.setItem(localStorageKey, file); 
               }
               onClose();
             }}
