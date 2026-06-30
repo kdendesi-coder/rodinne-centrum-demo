@@ -13,24 +13,29 @@ interface EditModalProps {
   onClose: () => void;
   title: string;
   type: "image" | "file";
-  initialValue: string[]; // pole, ale len 1 súbor sa použije
+  localStorageKey: string;
+  initialValue?: string[];
   onSave: (files: string[]) => void;
 }
 
-const EditModal = ({ isOpen, onClose, title, type, initialValue, onSave }: EditModalProps) => {
-  const [file, setFile] = useState<string>(initialValue?.[0] || "");
+const EditModal = ({ isOpen, onClose, title, type, localStorageKey, initialValue = [], onSave }: EditModalProps) => {
+  const [file, setFile] = useState<string>(initialValue[0] || "");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Pri otvorení modalu nastavíme aktuálnu hodnotu
+  // načítanie zo storage pri mount
   useEffect(() => {
-    setFile(initialValue?.[0] || "");
-  }, [initialValue, isOpen]);
+    const savedFile = localStorage.getItem(localStorageKey);
+    if (savedFile) setFile(savedFile);
+    else setFile(initialValue[0] || "");
+  }, [initialValue, isOpen, localStorageKey]);
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     const droppedFile = e.dataTransfer.files[0];
     if (droppedFile) {
-      setFile(URL.createObjectURL(droppedFile)); // nahradí predchádzajúci
+      const url = URL.createObjectURL(droppedFile);
+      setFile(url);
+      localStorage.setItem(localStorageKey, url); 
     }
   };
 
@@ -55,10 +60,13 @@ const EditModal = ({ isOpen, onClose, title, type, initialValue, onSave }: EditM
             className="hidden"
             onChange={(e) => {
               const newFile = e.target.files?.[0];
-              if (newFile) setFile(URL.createObjectURL(newFile));
+              if (newFile) {
+                const url = URL.createObjectURL(newFile);
+                setFile(url);
+                localStorage.setItem(localStorageKey, url); 
+              }
             }}
           />
-
           <p className="text-sm text-gray-500 mt-2">
             Presuň súbor sem alebo klikni pre výber
           </p>
@@ -80,7 +88,10 @@ const EditModal = ({ isOpen, onClose, title, type, initialValue, onSave }: EditM
           </Button>
           <Button
             onClick={() => {
-              if (file) onSave([file]); // uloží iba aktuálny
+              if (file) {
+                onSave([file]);
+                localStorage.setItem(localStorageKey, file); // uloženie pri save
+              }
               onClose();
             }}
           >
