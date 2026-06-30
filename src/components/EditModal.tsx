@@ -19,11 +19,10 @@ interface EditModalProps {
 }
 
 const EditModal = ({ isOpen, onClose, title, type, localStorageKey, initialValue = [], onSave }: EditModalProps) => {
-  // Stav pre aktuálne zobrazený súbor (môže byť Base64 string)
   const [file, setFile] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Načítanie zo storage alebo initialValue pri otvorení modalu alebo zmene kľúča
+  // Načítanie zo storage alebo initialValue pri otvorení modalu
   useEffect(() => {
     if (isOpen) {
       const savedFile = localStorage.getItem(localStorageKey);
@@ -35,7 +34,6 @@ const EditModal = ({ isOpen, onClose, title, type, localStorageKey, initialValue
     }
   }, [isOpen, localStorageKey, initialValue]);
 
-  // Pomocná funkcia na konverziu súboru do Base64 (DataURL)
   const convertToBase64 = (selectedFile: File): Promise<string> => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -45,15 +43,18 @@ const EditModal = ({ isOpen, onClose, title, type, localStorageKey, initialValue
     });
   };
 
-  // Spracovanie vybraného súboru
   const handleFileChange = async (selectedFile: File | undefined) => {
     if (!selectedFile) return;
 
+    // KONTROLA VEĽKOSTI: Ak má súbor viac ako 3 MB, radšej ho nepusti ďalej
+    if (selectedFile.size > 3 * 1024 * 1024) {
+      alert("Súbor je príliš veľký! Vyber si obrázok menší ako 3 MB, inak ho Local Storage neuloží.");
+      return;
+    }
+
     try {
-      // Skonvertujeme súbor do Base64 textu
       const base64String = await convertToBase64(selectedFile);
-      // Okamžite zmeníme stav v reálnom čase (používateľ vidí zmenu preview)
-      setFile(base64String);
+      setFile(base64String); // Zmena v reálnom čase v modale
     } catch (error) {
       console.error("Chyba pri čítaní súboru:", error);
     }
@@ -61,33 +62,47 @@ const EditModal = ({ isOpen, onClose, title, type, localStorageKey, initialValue
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
-    const droppedFile = e.dataTransfer.files[0];
-    handleFileChange(droppedFile);
+    handleFileChange(e.dataTransfer.files[0]);
   };
 
-  const handleDragOver = (e: React.DragEvent) => e.preventDefault();
-
   const handleSave = () => {
-    if (file) {
-      // Uložíme permanentný Base64 string do LocalStorage
-      localStorage.setItem(localStorageKey, file);
-      // Odovzdáme ho rodičovskému komponentu
-      onSave([file]);
+    if (!file) {
+      onClose();
+      return;
     }
-    onClose();
+
+    try {
+      // 1. Pokus o zápis do Local Storage
+      localStorage.setItem(localStorageKey, file);
+      console.log("Úspešne uložené do Local Storage pod kľúčom:", localStorageKey);
+
+      // 2. Odoslanie do rodiča (zabezpečí zmenu na stránke v reálnom čase)
+      onSave([file]);
+      
+      // 3. Zatvorenie modalu až po úspešnom uložení
+      onClose();
+    } catch (error: any) {
+      console.error("CRITICAL ERROR pri ukladaní do Local Storage:", error);
+      
+      if (error.name === "QuotaExceededError" || error.code === 22) {
+        alert("Chyba: Local Storage je plný! Tento obrázok má príliš veľké rozlíšenie/veľkosť.");
+      } else {
+        alert("Nepodarilo sa uložiť súbor: " + error.message);
+      }
+    }
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[525px] animate-scale-in">
+      <DialogContent className="sm:max-w-[525px]">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
 
         <div
-          className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center cursor-pointer"
+          className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center cursor-pointer hover:bg-gray-50 transition-colors"
           onDrop={handleDrop}
-          onDragOver={handleDragOver}
+          onDragOver={(e) => e.preventDefault()}
           onClick={() => fileInputRef.current?.click()}
         >
           <input
@@ -102,8 +117,7 @@ const EditModal = ({ isOpen, onClose, title, type, localStorageKey, initialValue
           </p>
 
           {file && (
-            <div className="mt-4 w-48 h-48 mx-auto border rounded overflow-hidden">
-              {/* Kontrola Base64 pre PDF alebo podľa typu */}
+            <div className="mt-4 w-48 h-48 mx-auto border rounded overflow-hidden flex items-center justify-center bg-gray-100">
               {file.startsWith("data:application/pdf") || file.endsWith(".pdf") ? (
                 <embed src={file} type="application/pdf" width="100%" height="100%" />
               ) : (
