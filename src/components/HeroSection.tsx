@@ -10,9 +10,14 @@ const HeroSection = () => {
   const { isAuthenticated, role } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
 
+  // Obrázok s lokálnym storage
   const [heroImage, setHeroImage] = useState<string>(() => {
     return localStorage.getItem(HERO_KEY) || "/ContainerLargeEdit2.jpg";
   });
+
+  // Text na hero sekciu
+  const titlePart1 = "Rodinné centrum";
+  const titlePart2 = "Sirotár";
 
   const handleSave = (file: string) => {
     setHeroImage(file);
@@ -22,8 +27,31 @@ const HeroSection = () => {
   return (
     <div className="w-full max-w-[1867px] mx-auto px-4 sm:px-6 lg:px-8 my-8 md:my-12">
       <div className="relative w-full h-[560px] md:h-[680px] lg:h-[760px] rounded-3xl overflow-hidden group shadow-lg">
-        <img src={heroImage} alt="Hero background" className="w-full h-full object-cover object-center" />
+        
+        {/* Obrázok */}
+        <img
+          src={heroImage}
+          alt="Hero background"
+          className="w-full h-full object-cover object-center"
+        />
 
+        {/* Text nad obrázkom */}
+        <div className="absolute inset-0 flex items-center justify-center z-10">
+          <h1
+            className="text-center font-bold text-[#95C11F] uppercase"
+            style={{
+              fontFamily: "Cormorant Garamond",
+              fontWeight: 700,
+              fontSize: "clamp(2rem, 7vw, 80px)",
+              lineHeight: 1.1
+            }}
+          >
+            <span className="block">{titlePart1}</span>
+            <span className="block">{titlePart2}</span>
+          </h1>
+        </div>
+
+        {/* Tlačidlo na úpravu obrázku */}
         {isAuthenticated && role === "Admin" && (
           <Button
             size="icon"
@@ -35,6 +63,7 @@ const HeroSection = () => {
           </Button>
         )}
 
+        {/* Edit modal */}
         <EditModal
           isOpen={isEditing}
           onClose={() => setIsEditing(false)}
