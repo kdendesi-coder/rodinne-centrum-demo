@@ -14,7 +14,7 @@ interface EditModalProps {
   title: string;
   type: "image" | "file";
   localStorageKey: string;
-  initialValue?: string | string[]; // podporuje string aj pole
+  initialValue?: string; // jeden súbor
   onSave: (file: string) => void;
 }
 
@@ -41,28 +41,20 @@ const compressImage = (file: File, maxWidth = 1200, quality = 0.7): Promise<stri
         ctx?.drawImage(img, 0, 0, width, height);
         resolve(canvas.toDataURL("image/jpeg", quality));
       };
-      img.onerror = (err) => reject(err);
+      img.onerror = reject;
     };
-    reader.onerror = (err) => reject(err);
+    reader.onerror = reject;
   });
 
 const EditModal = ({ isOpen, onClose, title, type, initialValue = "", localStorageKey, onSave }: EditModalProps) => {
-  const [file, setFile] = useState<string>("");
-
+  const [file, setFile] = useState<string>(initialValue);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // načítanie pri otvorení modalu
+  // načítanie zo storage pri otvorení modalu
   useEffect(() => {
     if (isOpen) {
-      let value = "";
-      if (Array.isArray(initialValue)) {
-        value = initialValue[0] || "";
-      } else if (typeof initialValue === "string") {
-        value = initialValue;
-      }
-
       const saved = localStorage.getItem(localStorageKey);
-      setFile(saved || value);
+      setFile(saved || initialValue);
     }
   }, [isOpen, initialValue, localStorageKey]);
 
@@ -96,7 +88,7 @@ const EditModal = ({ isOpen, onClose, title, type, initialValue = "", localStora
   };
 
   const handleSave = () => {
-    if (file && typeof file === "string") {
+    if (file) {
       onSave(file);
       localStorage.setItem(localStorageKey, file);
     }
@@ -125,7 +117,7 @@ const EditModal = ({ isOpen, onClose, title, type, initialValue = "", localStora
           />
           <p className="text-sm text-gray-500 mt-2">Presuň súbor sem alebo klikni pre výber</p>
 
-          {typeof file === "string" && file && (
+          {file && (
             <div className="mt-4 w-48 h-48 mx-auto border rounded overflow-hidden flex items-center justify-center bg-gray-100">
               {file.startsWith("data:application/pdf") ? (
                 <embed src={file} type="application/pdf" width="100%" height="100%" />
