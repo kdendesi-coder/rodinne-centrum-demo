@@ -13,8 +13,8 @@ interface EditModalProps {
   onClose: () => void;
   title: string;
   type: "image" | "file";
-  localStorageKey: string; 
-  initialValue?: string;   
+  localStorageKey: string;
+  initialValue?: string | string[]; // podporuje string aj pole
   onSave: (file: string) => void;
 }
 
@@ -47,14 +47,22 @@ const compressImage = (file: File, maxWidth = 1200, quality = 0.7): Promise<stri
   });
 
 const EditModal = ({ isOpen, onClose, title, type, initialValue = "", localStorageKey, onSave }: EditModalProps) => {
-  const [file, setFile] = useState<string>(initialValue);
+  const [file, setFile] = useState<string>("");
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // načítanie pri otvorení modalu
   useEffect(() => {
     if (isOpen) {
-      const savedFile = localStorage.getItem(localStorageKey);
-      if (savedFile) setFile(savedFile);
-      else setFile(initialValue);
+      let value = "";
+      if (Array.isArray(initialValue)) {
+        value = initialValue[0] || "";
+      } else if (typeof initialValue === "string") {
+        value = initialValue;
+      }
+
+      const saved = localStorage.getItem(localStorageKey);
+      setFile(saved || value);
     }
   }, [isOpen, initialValue, localStorageKey]);
 
@@ -64,8 +72,9 @@ const EditModal = ({ isOpen, onClose, title, type, initialValue = "", localStora
     if (selectedFile.type === "application/pdf" || selectedFile.name.endsWith(".pdf")) {
       const reader = new FileReader();
       reader.onload = () => {
-        setFile(reader.result as string);
-        localStorage.setItem(localStorageKey, reader.result as string);
+        const result = reader.result as string;
+        setFile(result);
+        localStorage.setItem(localStorageKey, result);
       };
       reader.readAsDataURL(selectedFile);
       return;
@@ -84,6 +93,14 @@ const EditModal = ({ isOpen, onClose, title, type, initialValue = "", localStora
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     handleFileChange(e.dataTransfer.files[0]);
+  };
+
+  const handleSave = () => {
+    if (file && typeof file === "string") {
+      onSave(file);
+      localStorage.setItem(localStorageKey, file);
+    }
+    onClose();
   };
 
   return (
@@ -108,7 +125,7 @@ const EditModal = ({ isOpen, onClose, title, type, initialValue = "", localStora
           />
           <p className="text-sm text-gray-500 mt-2">Presuň súbor sem alebo klikni pre výber</p>
 
-          {file && (
+          {typeof file === "string" && file && (
             <div className="mt-4 w-48 h-48 mx-auto border rounded overflow-hidden flex items-center justify-center bg-gray-100">
               {file.startsWith("data:application/pdf") ? (
                 <embed src={file} type="application/pdf" width="100%" height="100%" />
@@ -121,7 +138,7 @@ const EditModal = ({ isOpen, onClose, title, type, initialValue = "", localStora
 
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>Cancel</Button>
-          <Button onClick={() => { if (file) onSave(file); onClose(); }}>Save</Button>
+          <Button onClick={handleSave}>Save</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
