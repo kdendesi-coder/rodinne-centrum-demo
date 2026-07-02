@@ -13,8 +13,8 @@ interface EditModalProps {
   onClose: () => void;
   title: string;
   type: "image" | "file";
-  localStorageKey: string; // pre ukladanie
-  initialValue?: string;   // len jeden súbor
+  localStorageKey: string; 
+  initialValue?: string;   
   onSave: (file: string) => void;
 }
 
