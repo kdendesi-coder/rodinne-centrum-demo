@@ -19,7 +19,7 @@ const AboutSection = () => {
   
   const handleSaveImage = (files: string[]) => {
     if (files && files[0]) {
-      setImage(files[0]); // Uloží na backend
+      setImage(files[0]); 
     }
   };
 
