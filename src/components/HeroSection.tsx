@@ -4,31 +4,29 @@ import { Edit2 } from "lucide-react";
 import EditModal from "./EditModal";
 import { useAuth } from "@/contexts/AuthContext";
 
-// Firebase
+// Firebase imports
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
-import { app } from "@/lib/firebase";
-
-const HERO_DOC = "hero_image_doc";
+import { app } from "@/lib/firebase"; // tvoja Firebase init
 
 const HeroSection = () => {
   const { isAuthenticated, role } = useAuth();
   const [isEditingImage, setIsEditingImage] = useState(false);
+
   const [backgroundImage, setBackgroundImage] = useState("/ContainerLargeEdit2.jpg");
 
   const storage = getStorage(app);
   const firestore = getFirestore(app);
 
+  const HERO_DOC = "hero_image_doc";
+
+  // Načítanie obrázka zo servera pri mount
   useEffect(() => {
     const fetchImage = async () => {
-      try {
-        const docRef = doc(firestore, "heroImages", HERO_DOC);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          setBackgroundImage(docSnap.data().url);
-        }
-      } catch (err) {
-        console.error("Failed to fetch hero image:", err);
+      const docRef = doc(firestore, "heroImages", HERO_DOC);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setBackgroundImage(docSnap.data().url);
       }
     };
     fetchImage();
@@ -36,20 +34,23 @@ const HeroSection = () => {
 
   const handleSaveImage = async (fileBase64: string) => {
     try {
-      // Prevod Base64 na Blob
+      // prevedieme Base64 na blob
       const res = await fetch(fileBase64);
       const blob = await res.blob();
 
+      // upload do Firebase Storage
       const storageRef = ref(storage, "hero_background.jpg");
       await uploadBytes(storageRef, blob);
 
       const downloadUrl = await getDownloadURL(storageRef);
 
+      // uloženie URL do Firestore
       await setDoc(doc(firestore, "heroImages", HERO_DOC), { url: downloadUrl });
 
+      // update state
       setBackgroundImage(downloadUrl);
     } catch (err) {
-      console.error("Upload failed:", err);
+      console.error("Upload failed", err);
       alert("Nepodarilo sa uložiť obrázok na server");
     }
   };
@@ -93,7 +94,7 @@ const HeroSection = () => {
         title="Edit Hero Background"
         type="image"
         initialValue={backgroundImage}
-        onSave={handleSaveImage}
+        onSave={handleSaveImage} // uložíme priamo do cloudu
       />
     </div>
   );
