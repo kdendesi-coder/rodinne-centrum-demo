@@ -12,13 +12,13 @@ const HeroSection = () => {
 
   const [backgroundImage, setBackgroundImage] = useState<string>("/ContainerLargeEdit2.jpg");
 
-  // Načítanie z localStorage pri mount
+  // Pri mount načítame Base64 z localStorage
   useEffect(() => {
     const saved = localStorage.getItem(HERO_KEY);
     if (saved) setBackgroundImage(saved);
   }, []);
 
-  // Uloženie zmeny do localStorage
+  // Funkcia, ktorá ukladá Base64 do state aj do localStorage
   const handleSaveImage = (file: string) => {
     setBackgroundImage(file);
     localStorage.setItem(HERO_KEY, file);
@@ -50,18 +50,9 @@ const HeroSection = () => {
 
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="relative z-10 text-center px-4 w-full max-w-4xl">
-            <h1
-              className="font-bold text-[#95C11F] mb-4 text-center uppercase w-full flex flex-col items-center"
-              style={{
-                fontFamily: "Cormorant Garamond",
-                fontWeight: "700",
-                fontSize: "clamp(2.3rem, 7vw, 105px)",
-                margin: "0 auto",
-                lineHeight: "1.1"
-              }}
-            >
-              <span className="block whitespace-nowrap">{titlePart1}</span>
-              <span className="block">{titlePart2}</span>
+            <h1 className="font-bold text-[#95C11F] mb-4 text-center uppercase flex flex-col items-center">
+              <span>{titlePart1}</span>
+              <span>{titlePart2}</span>
             </h1>
 
             <div className="flex flex-wrap justify-center gap-2 md:gap-4 mt-6">
@@ -93,8 +84,8 @@ const HeroSection = () => {
         title="Upraviť Hero Background"
         type="image"
         initialValue={backgroundImage}
-        localStorageKey={HERO_KEY}
         onSave={handleSaveImage}
+        localStorageKey={HERO_KEY} // Táto vlastnosť umožní uložiť Base64 trvalo
       />
     </div>
   );
