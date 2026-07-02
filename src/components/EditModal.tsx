@@ -46,21 +46,30 @@ const compressImage = (file: File, maxWidth = 1200, quality = 0.7): Promise<stri
     reader.onerror = reject;
   });
 
-const EditModal = ({ isOpen, onClose, title, type, initialValue = "", localStorageKey, onSave }: EditModalProps) => {
-  const [file, setFile] = useState<string>(initialValue);
+const EditModal = ({
+  isOpen,
+  onClose,
+  title,
+  type,
+  initialValue = "",
+  localStorageKey,
+  onSave,
+}: EditModalProps) => {
+  const [file, setFile] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // načítanie zo storage pri otvorení modalu
+  // Načíta súbor zo storage alebo z initialValue pri otvorení modalu
   useEffect(() => {
-    if (isOpen) {
-      const saved = localStorage.getItem(localStorageKey);
-      setFile(saved || initialValue);
-    }
+    if (!isOpen) return;
+    const saved = localStorage.getItem(localStorageKey);
+    setFile(saved || initialValue);
   }, [isOpen, initialValue, localStorageKey]);
 
+  // Zmena súboru z input alebo drag&drop
   const handleFileChange = async (selectedFile?: File) => {
     if (!selectedFile) return;
 
+    // PDF súbory
     if (selectedFile.type === "application/pdf" || selectedFile.name.endsWith(".pdf")) {
       const reader = new FileReader();
       reader.onload = () => {
@@ -72,6 +81,7 @@ const EditModal = ({ isOpen, onClose, title, type, initialValue = "", localStora
       return;
     }
 
+    // Obrázky
     try {
       const compressed = await compressImage(selectedFile);
       setFile(compressed);
@@ -129,7 +139,9 @@ const EditModal = ({ isOpen, onClose, title, type, initialValue = "", localStora
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancel</Button>
+          <Button variant="outline" onClick={onClose}>
+            Cancel
+          </Button>
           <Button onClick={handleSave}>Save</Button>
         </DialogFooter>
       </DialogContent>
