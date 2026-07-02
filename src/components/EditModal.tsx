@@ -12,20 +12,18 @@ interface EditModalProps {
   isOpen: boolean;
   onClose: () => void;
   title: string;
-  type: "image" | "file" | "text";
-  localStorageKey?: string; 
-  initialValue?: string | string[]; 
-  onSave: (files: string[]) => void;
-  backendId?: string;
+  type: "image" | "file";
+  initialValue?: string; // len 1 súbor
+  onSave: (file: string) => void;
 }
 
-const compressImage = (selectedFile: File, maxWidth = 1200, quality = 0.7): Promise<string> => {
-  return new Promise((resolve, reject) => {
+const compressImage = (file: File, maxWidth = 1200, quality = 0.7): Promise<string> =>
+  new Promise((resolve, reject) => {
     const reader = new FileReader();
-    reader.readAsDataURL(selectedFile);
-    reader.onload = (event) => {
+    reader.readAsDataURL(file);
+    reader.onload = () => {
       const img = new Image();
-      img.src = event.target?.result as string;
+      img.src = reader.result as string;
       img.onload = () => {
         const canvas = document.createElement("canvas");
         let width = img.width;
@@ -38,64 +36,42 @@ const compressImage = (selectedFile: File, maxWidth = 1200, quality = 0.7): Prom
 
         canvas.width = width;
         canvas.height = height;
-
         const ctx = canvas.getContext("2d");
         ctx?.drawImage(img, 0, 0, width, height);
-
-        const compressedBase64 = canvas.toDataURL("image/jpeg", quality);
-        resolve(compressedBase64);
+        resolve(canvas.toDataURL("image/jpeg", quality));
       };
       img.onerror = (err) => reject(err);
     };
     reader.onerror = (err) => reject(err);
   });
-};
 
-const convertToBase64 = (selectedFile: File): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(selectedFile);
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = (error) => reject(error);
-  });
-};
-
-const EditModal = ({ isOpen, onClose, title, type, initialValue, onSave }: EditModalProps) => {
-  const [file, setFile] = useState<string>("");
+const EditModal = ({ isOpen, onClose, title, type, initialValue = "", onSave }: EditModalProps) => {
+  const [file, setFile] = useState<string>(initialValue);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (isOpen) {
-      if (Array.isArray(initialValue)) {
-        setFile(initialValue[0] || "");
-      } else {
-        setFile(initialValue || "");
-      }
-    }
+    if (isOpen) setFile(initialValue);
   }, [isOpen, initialValue]);
 
-  const handleFileChange = async (selectedFile: File | undefined) => {
+  const handleFileChange = async (selectedFile?: File) => {
     if (!selectedFile) return;
 
     if (selectedFile.type === "application/pdf" || selectedFile.name.endsWith(".pdf")) {
       if (selectedFile.size > 3 * 1024 * 1024) {
-        alert("PDF súbor je príliš veľký! Maximum pre PDF je 3 MB.");
+        alert("PDF súbor je príliš veľký! Maximum je 3 MB.");
         return;
       }
-      try {
-        const base64String = await convertToBase64(selectedFile);
-        setFile(base64String);
-      } catch (error) {
-        console.error("Chyba pri čítaní PDF:", error);
-      }
+      const reader = new FileReader();
+      reader.onload = () => setFile(reader.result as string);
+      reader.readAsDataURL(selectedFile);
       return;
     }
 
     try {
-      const compressedBase64 = await compressImage(selectedFile, 1200, 0.7);
-      setFile(compressedBase64);
+      const compressed = await compressImage(selectedFile);
+      setFile(compressed);
     } catch (error) {
-      console.error("Chyba pri kompresii obrázka:", error);
+      console.error(error);
       alert("Nepodarilo sa spracovať obrázok.");
     }
   };
@@ -103,16 +79,6 @@ const EditModal = ({ isOpen, onClose, title, type, initialValue, onSave }: EditM
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     handleFileChange(e.dataTransfer.files[0]);
-  };
-
-  const handleSave = () => {
-    if (!file) {
-      onClose();
-      return;
-    }
-    
-    onSave([file]);
-    onClose();
   };
 
   return (
@@ -141,10 +107,9 @@ const EditModal = ({ isOpen, onClose, title, type, initialValue, onSave }: EditM
 
           {file && (
             <div className="mt-4 w-48 h-48 mx-auto border rounded overflow-hidden flex items-center justify-center bg-gray-100">
-              {file.startsWith("data:application/pdf") || file.endsWith(".pdf") ? (
+              {file.startsWith("data:application/pdf") ? (
                 <embed src={file} type="application/pdf" width="100%" height="100%" />
               ) : (
-                // eslint-disable-next-line @next/next/no-img-element
                 <img src={file} alt="Preview" className="w-full h-full object-contain" />
               )}
             </div>
@@ -152,10 +117,13 @@ const EditModal = ({ isOpen, onClose, title, type, initialValue, onSave }: EditM
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button onClick={handleSave}>
+          <Button variant="outline" onClick={onClose}>Cancel</Button>
+          <Button
+            onClick={() => {
+              if (file) onSave(file);
+              onClose();
+            }}
+          >
             Save
           </Button>
         </DialogFooter>
