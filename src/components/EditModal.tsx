@@ -12,9 +12,9 @@ interface EditModalProps {
   isOpen: boolean;
   onClose: () => void;
   title: string;
-  type: "image" | "file" | "text"; // Pridal som aj "text" pre istotu kvôli About sekcii
-  localStorageKey: string;
-  initialValue?: string[];
+  type: "image" | "file" | "text";
+  localStorageKey?: string; 
+  initialValue?: string | string[]; 
   onSave: (files: string[]) => void;
   backendId?: string;
 }
@@ -60,22 +60,19 @@ const convertToBase64 = (selectedFile: File): Promise<string> => {
   });
 };
 
-const EditModal = ({ isOpen, onClose, title, type, localStorageKey, initialValue = [], onSave }: EditModalProps) => {
+const EditModal = ({ isOpen, onClose, title, type, initialValue, onSave }: EditModalProps) => {
   const [file, setFile] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
- 
   useEffect(() => {
     if (isOpen) {
-      const savedFile = localStorage.getItem(localStorageKey);
-      if (savedFile) {
-        setFile(savedFile);
-      } else {
+      if (Array.isArray(initialValue)) {
         setFile(initialValue[0] || "");
+      } else {
+        setFile(initialValue || "");
       }
     }
-
-  }, [isOpen, localStorageKey]);
+  }, [isOpen, initialValue]);
 
   const handleFileChange = async (selectedFile: File | undefined) => {
     if (!selectedFile) return;
@@ -95,9 +92,8 @@ const EditModal = ({ isOpen, onClose, title, type, localStorageKey, initialValue
     }
 
     try {
-      
       const compressedBase64 = await compressImage(selectedFile, 1200, 0.7);
-      setFile(compressedBase64); 
+      setFile(compressedBase64);
     } catch (error) {
       console.error("Chyba pri kompresii obrázka:", error);
       alert("Nepodarilo sa spracovať obrázok.");
@@ -114,21 +110,9 @@ const EditModal = ({ isOpen, onClose, title, type, localStorageKey, initialValue
       onClose();
       return;
     }
-
-    try {
-      localStorage.setItem(localStorageKey, file);
-
-      onSave([file]);
-      
-      onClose();
-    } catch (error: any) {
-      console.error("Chyba pri ukladaní:", error);
-      if (error.name === "QuotaExceededError" || error.code === 22) {
-        alert("Chyba: Úložisko je plné. Vyber iný obrázok.");
-      } else {
-        alert("Nepodarilo sa uložiť: " + error.message);
-      }
-    }
+    
+    onSave([file]);
+    onClose();
   };
 
   return (
@@ -160,7 +144,7 @@ const EditModal = ({ isOpen, onClose, title, type, localStorageKey, initialValue
               {file.startsWith("data:application/pdf") || file.endsWith(".pdf") ? (
                 <embed src={file} type="application/pdf" width="100%" height="100%" />
               ) : (
-               
+                // eslint-disable-next-line @next/next/no-img-element
                 <img src={file} alt="Preview" className="w-full h-full object-contain" />
               )}
             </div>
