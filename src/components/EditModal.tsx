@@ -12,10 +12,11 @@ interface EditModalProps {
   isOpen: boolean;
   onClose: () => void;
   title: string;
-  type: "image" | "file";
+  type: "image" | "file" | "text"; // Pridal som aj "text" pre istotu kvôli About sekcii
   localStorageKey: string;
   initialValue?: string[];
   onSave: (files: string[]) => void;
+  backendId?: string;
 }
 
 const compressImage = (selectedFile: File, maxWidth = 1200, quality = 0.7): Promise<string> => {
@@ -41,7 +42,6 @@ const compressImage = (selectedFile: File, maxWidth = 1200, quality = 0.7): Prom
         const ctx = canvas.getContext("2d");
         ctx?.drawImage(img, 0, 0, width, height);
 
-        
         const compressedBase64 = canvas.toDataURL("image/jpeg", quality);
         resolve(compressedBase64);
       };
@@ -64,6 +64,7 @@ const EditModal = ({ isOpen, onClose, title, type, localStorageKey, initialValue
   const [file, setFile] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+ 
   useEffect(() => {
     if (isOpen) {
       const savedFile = localStorage.getItem(localStorageKey);
@@ -73,16 +74,15 @@ const EditModal = ({ isOpen, onClose, title, type, localStorageKey, initialValue
         setFile(initialValue[0] || "");
       }
     }
-  }, [isOpen, localStorageKey]);
 
+  }, [isOpen, localStorageKey]);
 
   const handleFileChange = async (selectedFile: File | undefined) => {
     if (!selectedFile) return;
 
-
     if (selectedFile.type === "application/pdf" || selectedFile.name.endsWith(".pdf")) {
       if (selectedFile.size > 3 * 1024 * 1024) {
-        alert("PDF súbor je príliš veľký! Maximum pre PDF v Local Storage sú 3 MB.");
+        alert("PDF súbor je príliš veľký! Maximum pre PDF je 3 MB.");
         return;
       }
       try {
@@ -95,11 +95,12 @@ const EditModal = ({ isOpen, onClose, title, type, localStorageKey, initialValue
     }
 
     try {
+      
       const compressedBase64 = await compressImage(selectedFile, 1200, 0.7);
       setFile(compressedBase64); 
     } catch (error) {
       console.error("Chyba pri kompresii obrázka:", error);
-      alert("Nepodarilo sa spracovať a skomprimovať obrázok.");
+      alert("Nepodarilo sa spracovať obrázok.");
     }
   };
 
@@ -115,19 +116,17 @@ const EditModal = ({ isOpen, onClose, title, type, localStorageKey, initialValue
     }
 
     try {
-      
       localStorage.setItem(localStorageKey, file);
-      
+
       onSave([file]);
       
-      // 3. Zatvorenie modalu
       onClose();
     } catch (error: any) {
-      console.error("Chyba pri ukladaní do Local Storage:", error);
+      console.error("Chyba pri ukladaní:", error);
       if (error.name === "QuotaExceededError" || error.code === 22) {
-        alert("Chyba: Local Storage je stále plný! Skús vybrať ešte menší obrázok alebo vyčisti Local Storage.");
+        alert("Chyba: Úložisko je plné. Vyber iný obrázok.");
       } else {
-        alert("Nepodarilo sa uložiť súbor: " + error.message);
+        alert("Nepodarilo sa uložiť: " + error.message);
       }
     }
   };
@@ -161,6 +160,7 @@ const EditModal = ({ isOpen, onClose, title, type, localStorageKey, initialValue
               {file.startsWith("data:application/pdf") || file.endsWith(".pdf") ? (
                 <embed src={file} type="application/pdf" width="100%" height="100%" />
               ) : (
+               
                 <img src={file} alt="Preview" className="w-full h-full object-contain" />
               )}
             </div>
