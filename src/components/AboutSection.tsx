@@ -5,28 +5,21 @@ import EditModal from "./EditModal";
 import { useParagraph } from "@/hooks/useParagraph";
 import { useAuth } from "@/contexts/AuthContext"; 
 
-const ABOUT_IMAGE_KEY = "about_section_image";
-
 const AboutSection = () => {
   const [isEditingText, setIsEditingText] = useState(false);
   const [isEditingImage, setIsEditingImage] = useState(false);
 
-
-  const [image, setImage] = useState<string>(() => {
-    if (typeof window !== "undefined") {
-      const savedImage = localStorage.getItem(ABOUT_IMAGE_KEY);
-      if (savedImage) return savedImage;
-    }
-    return "https://rcsirotar.sk/wp-content/uploads/2019/05/01_IMGP3994.jpg";
-  });
-
+  // Načítanie textu z backendu
   const { text, isLoading, error, setText } = useParagraph('about');
+  
+  // Načítanie obrázka z backendu
+  const { text: image, setText: setImage } = useParagraph('about_image');
 
   const { isAuthenticated, role } = useAuth();
   
   const handleSaveImage = (files: string[]) => {
     if (files && files[0]) {
-      setImage(files[0]);
+      setImage(files[0]); // Uloží na backend
     }
   };
 
@@ -53,7 +46,6 @@ const AboutSection = () => {
             )}
             </div>
 
-            
             {isAuthenticated && role === "Admin" && (
               <Button
                 size="icon"
@@ -83,26 +75,16 @@ const AboutSection = () => {
           style={{borderColor: '#B0C9D6',
             boxShadow: '10px 10px 0px #DBD4CE'
           }}>
-            {image ? (
-              <>
-              <img 
-                src={image || "/01_gallery.jpg"} 
-                alt="About" 
-                className="z-0 w-full h-full object-cover transition-transform duration-200 group-hover:scale-105 will-change-transform" 
-              />
+            <img 
+              src={image || "https://rcsirotar.sk/wp-content/uploads/2019/05/01_IMGP3994.jpg"} 
+              alt="About" 
+              className="z-0 w-full h-full object-cover transition-transform duration-200 group-hover:scale-105 will-change-transform" 
+            />
 
-              <div className="absolute inset-0 rounded-[3rem] pointer-events-none opacity-10 transition-opacity duration-300 group-hover:opacity-0"
-              style={{backgroundColor: '#B0C9D6'
-              }}>
-              </div>
-              </>
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-                <svg className="w-24 h-24 opacity-20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-              </div>
-            )}
+            <div className="absolute inset-0 rounded-[3rem] pointer-events-none opacity-10 transition-opacity duration-300 group-hover:opacity-0"
+            style={{backgroundColor: '#B0C9D6'
+            }}>
+            </div>
 
             {isAuthenticated && role === "Admin" && (
               <Button
@@ -124,8 +106,7 @@ const AboutSection = () => {
         onClose={() => setIsEditingText(false)}
         title="Edit About Text"
         type="text"
-        localStorageKey="about_section_text"
-        initialValue={[text]}
+        initialValue={[text || ""]}
         onSave={(files) => setText(files[0])}
         backendId="about"
       />
@@ -135,8 +116,7 @@ const AboutSection = () => {
         onClose={() => setIsEditingImage(false)}
         title="Edit About Image"
         type="image"
-        localStorageKey={ABOUT_IMAGE_KEY}
-        initialValue={[image]} 
+        initialValue={[image || "https://rcsirotar.sk/wp-content/uploads/2019/05/01_IMGP3994.jpg"]}
         onSave={handleSaveImage}
       />
     </section>
