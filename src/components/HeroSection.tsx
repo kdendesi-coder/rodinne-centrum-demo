@@ -14,9 +14,13 @@ const HeroSection = () => {
   const { text: backgroundImage, setText: setBackgroundImage } = useParagraph('hero_image');
   const { isAuthenticated, role } = useAuth();
 
+
+  const isImageValid = backgroundImage && backgroundImage.startsWith("data:image");
+  const finalImage = isImageValid ? backgroundImage : "/ContainerLargeEdit2.jpg"; 
+
   const handleSaveImage = (files: string[]) => {
     if (files && files[0]) {
-      setBackgroundImage(files[0]); 
+      setBackgroundImage(files[0]);
     }
   };
 
@@ -25,7 +29,7 @@ const HeroSection = () => {
       <div className="relative w-full h-[360px] sm:h-[420px] md:h-[560px] lg:h-[680px] xl:h-[760px] rounded-2xl md:rounded-3xl overflow-hidden group shadow-lg">
         
         <img
-          src={backgroundImage || "ContainerLargeEdit2.jpg"}
+          src={finalImage}
           alt="Hero background"
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
@@ -79,7 +83,7 @@ const HeroSection = () => {
         onClose={() => setIsEditingImage(false)}
         title="Edit Hero Background"
         type="image"
-        initialValue={[backgroundImage || "ContainerLargeEdit2.jpg"]}
+        initialValue={[finalImage]}
         onSave={handleSaveImage}
       />
     </div>
