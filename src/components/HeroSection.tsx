@@ -4,15 +4,29 @@ import { Edit2 } from "lucide-react";
 import EditModal from "./EditModal";
 import { useAuth } from "@/contexts/AuthContext";
 
+const HERO_IMAGE_KEY = "hero_background_image";
+
 const HeroSection = () => {
   const [isEditingImage, setIsEditingImage] = useState(false);
 
-  // Rozdelil som nadpis na dve časti pre lepšiu kontrolu
   const titlePart1 = "Rodinné centrum";
   const titlePart2 = "Sirotár";
 
-  const [backgroundImage, setBackgroundImage] = useState("ContainerLargeEdit2.jpg");
+   const [backgroundImage, setBackgroundImage] = useState<string>(() => {
+    if (typeof window !== "undefined") { 
+      const savedImage = localStorage.getItem(HERO_IMAGE_KEY);
+      if (savedImage) return savedImage;
+    }
+    return "ContainerLargeEdit2.jpg";
+  });
+
   const { isAuthenticated, role } = useAuth();
+
+  const handleSaveImage = (files: string[]) => {
+    if (files && files[0]) {
+      setBackgroundImage(files[0]);
+    }
+  };
 
   return (
     <div className="w-full max-w-[1867px] mx-auto px-4 sm:px-6 lg:px-8 my-8 md:my-12">
@@ -45,9 +59,7 @@ const HeroSection = () => {
               margin: "0 auto",
               lineHeight: "1.1"
             }}>
-              {/* Prva cast 2 slova */}
               <span className="block whitespace-nowrap">{titlePart1}</span>
-              {/* Druha cast (1 slovo pod nimi) */}
               <span className="block">{titlePart2}</span>
             </h1>
 
@@ -70,13 +82,15 @@ const HeroSection = () => {
         </div>
       </div>
 
+      
       <EditModal
         isOpen={isEditingImage}
         onClose={() => setIsEditingImage(false)}
         title="Edit Hero Background"
         type="image"
-        initialValue={backgroundImage}
-        onSave={setBackgroundImage}
+        localStorageKey={HERO_IMAGE_KEY}
+        initialValue={[backgroundImage]}
+        onSave={handleSaveImage} 
       />
     </div>
   );
