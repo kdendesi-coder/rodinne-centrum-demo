@@ -13,7 +13,7 @@ interface EditModalProps {
   onClose: () => void;
   title: string;
   type: "image" | "file";
-  initialValue?: string; // len 1 súbor
+  initialValue?: string; 
   onSave: (file: string) => void;
 }
 
@@ -36,8 +36,11 @@ const compressImage = (file: File, maxWidth = 1200, quality = 0.7): Promise<stri
 
         canvas.width = width;
         canvas.height = height;
+
         const ctx = canvas.getContext("2d");
-        ctx?.drawImage(img, 0, 0, width, height);
+        if (!ctx) return reject("Cannot get canvas context");
+
+        ctx.drawImage(img, 0, 0, width, height);
         resolve(canvas.toDataURL("image/jpeg", quality));
       };
       img.onerror = (err) => reject(err);
@@ -49,6 +52,7 @@ const EditModal = ({ isOpen, onClose, title, type, initialValue = "", onSave }: 
   const [file, setFile] = useState<string>(initialValue);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+
   useEffect(() => {
     if (isOpen) setFile(initialValue);
   }, [isOpen, initialValue]);
@@ -56,6 +60,7 @@ const EditModal = ({ isOpen, onClose, title, type, initialValue = "", onSave }: 
   const handleFileChange = async (selectedFile?: File) => {
     if (!selectedFile) return;
 
+    // PDF
     if (selectedFile.type === "application/pdf" || selectedFile.name.endsWith(".pdf")) {
       if (selectedFile.size > 3 * 1024 * 1024) {
         alert("PDF súbor je príliš veľký! Maximum je 3 MB.");
@@ -67,9 +72,10 @@ const EditModal = ({ isOpen, onClose, title, type, initialValue = "", onSave }: 
       return;
     }
 
+    // Obrázok
     try {
       const compressed = await compressImage(selectedFile);
-      setFile(compressed);
+      setFile(compressed); 
     } catch (error) {
       console.error(error);
       alert("Nepodarilo sa spracovať obrázok.");
@@ -117,7 +123,9 @@ const EditModal = ({ isOpen, onClose, title, type, initialValue = "", onSave }: 
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancel</Button>
+          <Button variant="outline" onClick={onClose}>
+            Cancel
+          </Button>
           <Button
             onClick={() => {
               if (file) onSave(file);
