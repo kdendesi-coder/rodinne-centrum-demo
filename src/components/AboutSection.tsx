@@ -5,30 +5,17 @@ import EditModal from "./EditModal";
 import { useParagraph } from "@/hooks/useParagraph";
 import { useAuth } from "@/contexts/AuthContext"; 
 
-const ABOUT_IMAGE_KEY = "about_section_image";
-
 const AboutSection = () => {
   const [isEditingText, setIsEditingText] = useState(false);
   const [isEditingImage, setIsEditingImage] = useState(false);
+  const [image, setImage] = useState("https://rcsirotar.sk/wp-content/uploads/2019/05/01_IMGP3994.jpg");
 
-
-  const [image, setImage] = useState<string>(() => {
-    if (typeof window !== "undefined") {
-      const savedImage = localStorage.getItem(ABOUT_IMAGE_KEY);
-      if (savedImage) return savedImage;
-    }
-    return "https://rcsirotar.sk/wp-content/uploads/2019/05/01_IMGP3994.jpg";
-  });
-
+  // Use the custom hook - just one line!
   const { text, isLoading, error, setText } = useParagraph('about');
 
+  // Add this to check authentication
   const { isAuthenticated, role } = useAuth();
   
-  const handleSaveImage = (files: string[]) => {
-    if (files && files[0]) {
-      setImage(files[0]);
-    }
-  };
 
   return (
     <section id="about" className="py-12 md:py-20 px-4">
@@ -53,7 +40,7 @@ const AboutSection = () => {
             )}
             </div>
 
-            
+            {/* Show edit button only for Admin users */}
             {isAuthenticated && role === "Admin" && (
               <Button
                 size="icon"
@@ -69,16 +56,19 @@ const AboutSection = () => {
 
         <div className="relative p-4 sm:p-6 flex justify-center items-center overflow-hidden lg:overflow-visible">
           
+          {/* Modrý kruh - posunutý tak, aby sedel k 600px šírke */}
           <div className="absolute top-2 left-2 w-24 h-24 sm:w-32 sm:h-32 lg:w-40 lg:h-40 border-[2.5px] border-sky-400 rounded-full -translate-x-1/4 -translate-y-1/4 flex items-center justify-center -z-10">
             <div className="w-[85%] h-[85%] bg-[#DEE2D2] rounded-full"></div>
           </div>
 
+          {/* Hnedý oblúk - posunutý k pravému dolnému rohu 600px obrazu */}
           <div 
             className="absolute bottom-2 right-2 w-20 h-20 sm:w-28 sm:h-28 lg:w-32 lg:h-32 border-[3px] border-amber-900 rounded-full translate-x-1/4 translate-y-1/4"
             style={{ clipPath: 'inset(0 0 0 0)' }}
           >
           </div>
 
+          {/* HLAVNÝ OBRAZ: Nastavený na fixných 600x400px */}
           <div className="relative z-10 group bg-muted rounded-[1.5rem] overflow-hidden border-[4px] sm:border-[10px] w-full max-w-[750px] aspect-[3/2]"
           style={{borderColor: '#B0C9D6',
             boxShadow: '10px 10px 0px #DBD4CE'
@@ -88,7 +78,7 @@ const AboutSection = () => {
               <img 
                 src={image || "/01_gallery.jpg"} 
                 alt="About" 
-                className="z-0 w-full h-full object-cover transition-transform duration-200 group-hover:scale-105 will-change-transform" 
+                className="z-0 w-full h-full object-cover transition-transform duration-200 group-hover:scale-105 transition-transform duration-200 will-change-transform" 
               />
 
               <div className="absolute inset-0 rounded-[3rem] pointer-events-none opacity-10 transition-opacity duration-300 group-hover:opacity-0"
@@ -104,6 +94,7 @@ const AboutSection = () => {
               </div>
             )}
 
+            {/* Admin tlačidlo */}
             {isAuthenticated && role === "Admin" && (
               <Button
                 size="icon"
@@ -124,20 +115,17 @@ const AboutSection = () => {
         onClose={() => setIsEditingText(false)}
         title="Edit About Text"
         type="text"
-        localStorageKey="about_section_text"
-        initialValue={[text]}
-        onSave={(files) => setText(files[0])}
-        backendId="about"
+        initialValue={text}
+        onSave={setText}
+        backendId="about" // Pass the paragraph ID
       />
-      
       <EditModal
         isOpen={isEditingImage}
         onClose={() => setIsEditingImage(false)}
         title="Edit About Image"
         type="image"
-        localStorageKey={ABOUT_IMAGE_KEY}
-        initialValue={[image]} 
-        onSave={handleSaveImage}
+        initialValue={image}
+        onSave={setImage}
       />
     </section>
   );
