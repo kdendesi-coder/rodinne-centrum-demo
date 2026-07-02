@@ -18,11 +18,52 @@ interface EditModalProps {
   onSave: (files: string[]) => void;
 }
 
+const compressImage = (selectedFile: File, maxWidth = 1200, quality = 0.7): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(selectedFile);
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target?.result as string;
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        let width = img.width;
+        let height = img.height;
+
+        if (width > maxWidth) {
+          height = Math.round((height * maxWidth) / width);
+          width = maxWidth;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext("2d");
+        ctx?.drawImage(img, 0, 0, width, height);
+
+        
+        const compressedBase64 = canvas.toDataURL("image/jpeg", quality);
+        resolve(compressedBase64);
+      };
+      img.onerror = (err) => reject(err);
+    };
+    reader.onerror = (err) => reject(err);
+  });
+};
+
+const convertToBase64 = (selectedFile: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(selectedFile);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
+};
+
 const EditModal = ({ isOpen, onClose, title, type, localStorageKey, initialValue = [], onSave }: EditModalProps) => {
   const [file, setFile] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Načítanie zo storage alebo initialValue iba v momente, keď sa modal otvorí
   useEffect(() => {
     if (isOpen) {
       const savedFile = localStorage.getItem(localStorageKey);
@@ -32,35 +73,33 @@ const EditModal = ({ isOpen, onClose, title, type, localStorageKey, initialValue
         setFile(initialValue[0] || "");
       }
     }
-    // Zámerne tu nesledujeme 'initialValue', aby re-render rodiča neresetoval rozpracovaný stav v modale
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, localStorageKey]);
 
-  // Pomocná funkcia na konverziu súboru do Base64 textu
-  const convertToBase64 = (selectedFile: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(selectedFile);
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = (error) => reject(error);
-    });
-  };
 
-  // Spracovanie vybraného alebo dropnutého súboru
   const handleFileChange = async (selectedFile: File | undefined) => {
     if (!selectedFile) return;
 
-    // KONTROLA VEĽKOSTI: Local Storage má limit ~5 MB. Súbory nad 3 MB radšej nepúšťame.
-    if (selectedFile.size > 3 * 1024 * 1024) {
-      alert("Súbor je príliš veľký! Vyber si obrázok menší ako 3 MB, inak ho Local Storage neuloží.");
+
+    if (selectedFile.type === "application/pdf" || selectedFile.name.endsWith(".pdf")) {
+      if (selectedFile.size > 3 * 1024 * 1024) {
+        alert("PDF súbor je príliš veľký! Maximum pre PDF v Local Storage sú 3 MB.");
+        return;
+      }
+      try {
+        const base64String = await convertToBase64(selectedFile);
+        setFile(base64String);
+      } catch (error) {
+        console.error("Chyba pri čítaní PDF:", error);
+      }
       return;
     }
 
     try {
-      const base64String = await convertToBase64(selectedFile);
-      setFile(base64String); // Zmena v reálnom čase (používateľ vidí náhľad okamžite)
+      const compressedBase64 = await compressImage(selectedFile, 1200, 0.7);
+      setFile(compressedBase64); 
     } catch (error) {
-      console.error("Chyba pri čítaní súboru:", error);
+      console.error("Chyba pri kompresii obrázka:", error);
+      alert("Nepodarilo sa spracovať a skomprimovať obrázok.");
     }
   };
 
@@ -76,18 +115,17 @@ const EditModal = ({ isOpen, onClose, title, type, localStorageKey, initialValue
     }
 
     try {
-      // 1. Zápis permanentného Base64 stringu do Local Storage
+      
       localStorage.setItem(localStorageKey, file);
       
-      // 2. Odoslanie upraveného súboru rodičovi, aby sa prekreslila hlavná stránka
       onSave([file]);
       
-      // 3. Zatvorenie modalu až po úspešnom uložení
+      // 3. Zatvorenie modalu
       onClose();
     } catch (error: any) {
       console.error("Chyba pri ukladaní do Local Storage:", error);
       if (error.name === "QuotaExceededError" || error.code === 22) {
-        alert("Chyba: Local Storage je plný! Tento obrázok má príliš veľké rozlíšenie alebo veľkosť.");
+        alert("Chyba: Local Storage je stále plný! Skús vybrať ešte menší obrázok alebo vyčisti Local Storage.");
       } else {
         alert("Nepodarilo sa uložiť súbor: " + error.message);
       }
