@@ -15,8 +15,8 @@ const HeroSection = () => {
   const { isAuthenticated, role } = useAuth();
 
   return (
-    <div className="w-full max-w-[1867px] mx-auto px-4 sm:px-6 lg:px-8 my-8 md:my-12">
-      <div className="relative w-full h-[360px] sm:h-[420px] md:h-[560px] lg:h-[680px] xl:h-[760px] rounded-2xl md:rounded-3xl overflow-hidden group shadow-lg">
+    <div className="mx-2 md:mx-4 mt-4 md:mt-8">
+      <div className="relative min-h-[500px] h-[70vh] md:h-[135vh] rounded-3xl overflow-hidden group">
         
         <img
           src={backgroundImage}
