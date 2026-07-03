@@ -13,58 +13,56 @@ interface EditModalProps {
   onClose: () => void;
   title: string;
   type: "image" | "file";
-  initialValue: string[]; // pole, ale len 1 súbor sa použije
-  onSave: (files: string[]) => void;
+  initialValue: string; // len jeden súbor
+  onSave: (file: string) => Promise<void>; // async pre cloud save
 }
 
 const EditModal = ({ isOpen, onClose, title, type, initialValue, onSave }: EditModalProps) => {
-  const [file, setFile] = useState<string>(initialValue?.[0] || "");
+  const [file, setFile] = useState<string>(initialValue);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Pri otvorení modalu nastavíme aktuálnu hodnotu
   useEffect(() => {
-    setFile(initialValue?.[0] || "");
-  }, [initialValue, isOpen]);
+    if (isOpen) setFile(initialValue);
+  }, [isOpen, initialValue]);
 
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    const droppedFile = e.dataTransfer.files[0];
-    if (droppedFile) {
-      setFile(URL.createObjectURL(droppedFile)); // nahradí predchádzajúci
-    }
+  const handleFileChange = async (selectedFile?: File) => {
+    if (!selectedFile) return;
+    const reader = new FileReader();
+    reader.onload = async () => {
+      const result = reader.result as string;
+      setFile(result);
+    };
+    reader.readAsDataURL(selectedFile);
   };
 
-  const handleDragOver = (e: React.DragEvent) => e.preventDefault();
+  const handleSave = async () => {
+    if (file) {
+      await onSave(file); // uloží na server/cloud
+    }
+    onClose();
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[525px] animate-scale-in">
+      <DialogContent className="sm:max-w-[525px]">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
 
         <div
-          className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center cursor-pointer"
-          onDrop={handleDrop}
-          onDragOver={handleDragOver}
+          className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center cursor-pointer hover:bg-gray-50 transition-colors"
           onClick={() => fileInputRef.current?.click()}
         >
           <input
             type="file"
             ref={fileInputRef}
             className="hidden"
-            onChange={(e) => {
-              const newFile = e.target.files?.[0];
-              if (newFile) setFile(URL.createObjectURL(newFile));
-            }}
+            accept={type === "image" ? "image/*" : ".pdf"}
+            onChange={(e) => handleFileChange(e.target.files?.[0])}
           />
-
-          <p className="text-sm text-gray-500 mt-2">
-            Presuň súbor sem alebo klikni pre výber
-          </p>
-
+          <p className="text-sm text-gray-500 mt-2">Presuň súbor sem alebo klikni pre výber</p>
           {file && (
-            <div className="mt-4 w-48 h-48 mx-auto border rounded overflow-hidden">
+            <div className="mt-4 w-48 h-48 mx-auto border rounded overflow-hidden flex items-center justify-center bg-gray-100">
               {file.endsWith(".pdf") ? (
                 <embed src={file} type="application/pdf" width="100%" height="100%" />
               ) : (
@@ -75,17 +73,8 @@ const EditModal = ({ isOpen, onClose, title, type, initialValue, onSave }: EditM
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button
-            onClick={() => {
-              if (file) onSave([file]); // uloží iba aktuálny
-              onClose();
-            }}
-          >
-            Save
-          </Button>
+          <Button variant="outline" onClick={onClose}>Cancel</Button>
+          <Button onClick={handleSave}>Save</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
