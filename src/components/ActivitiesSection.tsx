@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useParagraph } from "@/hooks/useParagraph";
+
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Edit2, ChevronDown, Plus } from "lucide-react";
@@ -7,6 +7,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import EditModal from "./EditModal";
 import AddActivityModal from "./AddActivityModal";
 import { useAuth } from "@/contexts/AuthContext"; // Add this import
+import { useParagraph } from "@/hooks/useParagraph";
 //import { Item } from "@radix-ui/react-accordion";
 //import { title } from "process";
 
