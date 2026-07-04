@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useParagraph } from "@/hooks/useParagraph";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Edit2, ChevronDown, Plus } from "lucide-react";
@@ -10,6 +11,13 @@ import { useAuth } from "@/contexts/AuthContext"; // Add this import
 //import { title } from "process";
 
 
+const { text: activitiesImage, setText: setActivitiesImage } =
+  useParagraph("activities_image");
+
+const image =
+  activitiesImage && activitiesImage.startsWith("data:image")
+    ? activitiesImage
+    : "/logosirotarPaint.png";
 
 interface Activity {
   id: string;
@@ -161,7 +169,7 @@ useEffect(() => {
   const [editingActivity, setEditingActivity] = useState<string | null>(null);
   const [isEditingImage, setIsEditingImage] = useState(false);
   const [isAddingActivity, setIsAddingActivity] = useState(false);
-  const [image, setImage] = useState("logosirotarPaint.png");
+  
 
   const [childActivities, setChildActivities] = useState<typeof aktivity>(aktivity);
   const [lectures, setLectures] = useState<typeof prednasky>(prednasky);
@@ -173,13 +181,16 @@ useEffect(() => {
     );
   };
 
+  const { text: activitiesData, setText: setActivitiesData } =
+  useParagraph("activities_data");
   
-  const handleSaveActivity = (id: string, newContent: string) => {
-  const updated = activities.map(activity =>
+ const handleSaveActivity = async (id: string, newContent: string) => {
+  const updated = activities.map((activity) =>
     activity.id === id ? { ...activity, content: newContent } : activity
   );
+
   setActivities(updated);
-  localStorage.setItem("activities", JSON.stringify(updated)); 
+  await setActivitiesData(JSON.stringify(updated));
 };
 
   const handleAddActivity = (title: string, content: string) => {
@@ -677,15 +688,18 @@ useEffect(() => {
         onSave={setImage}
       />
       {editingActivity && (
-        <EditModal
-          isOpen={true}
-          onClose={() => setEditingActivity(null)}
-          title={`Edit ${activities.find((a) => a.id === editingActivity)?.title}`}
-          type="text"
-          initialValue={
-            activities.find((a) => a.id === editingActivity)?.content || ""
-          }
-          onSave={(content) => handleSaveActivity(editingActivity, content)}
+       <EditModal
+          isOpen={isEditingImage}
+          onClose={() => setIsEditingImage(false)}
+          title="Edit Activities Image"
+          type="image"
+          initialValue={[image]}
+          onSave={async (files) => {
+            if (files && files[0]) {
+              await setActivitiesImage(files[0]);
+              setIsEditingImage(false);
+            }
+          }}
         />
       )}
     </section>
@@ -693,7 +707,4 @@ useEffect(() => {
 };
 
 export default ActivitiesSection;
-function setOpenItems(arg0: string[]) {
-  throw new Error("Function not implemented.");
-}
 
