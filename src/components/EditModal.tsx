@@ -17,7 +17,6 @@ interface EditModalProps {
   initialValue?: string | string[];
   onSave: (value: string | string[]) => void;
   backendId?: string;
-  localStorageKey?: string;
 }
 
 const fileToBase64 = (file: File): Promise<string> =>
@@ -35,7 +34,6 @@ const EditModal = ({
   type,
   initialValue = "",
   onSave,
-  localStorageKey,
 }: EditModalProps) => {
   const getInitial = () => {
     if (Array.isArray(initialValue)) return initialValue[0] || "";
@@ -46,36 +44,24 @@ const EditModal = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (!isOpen) return;
-
-    if (localStorageKey) {
-      const saved = localStorage.getItem(localStorageKey);
-      setValue(saved || getInitial());
-    } else {
+    if (isOpen) {
       setValue(getInitial());
     }
-  }, [isOpen, initialValue, localStorageKey]);
+  }, [isOpen, initialValue]);
 
   const handleFile = async (file?: File) => {
     if (!file) return;
 
     const base64 = await fileToBase64(file);
     setValue(base64);
-
-    if (localStorageKey) {
-      localStorage.setItem(localStorageKey, base64);
-    }
   };
 
   const handleSave = () => {
     if (type === "text") {
       onSave(value);
     } else {
+      if (!value) return;
       onSave([value]);
-    }
-
-    if (localStorageKey) {
-      localStorage.setItem(localStorageKey, value);
     }
 
     onClose();

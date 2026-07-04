@@ -1,4 +1,4 @@
- import { useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Edit2 } from "lucide-react";
 import EditModal from "./EditModal";
@@ -7,18 +7,24 @@ import { useParagraph } from "@/hooks/useParagraph";
 
 const HeroSection = () => {
   const [isEditingImage, setIsEditingImage] = useState(false);
+
+  const titlePart1 = "Rodinné centrum";
+  const titlePart2 = "Sirotár";
+
   const { isAuthenticated, role } = useAuth();
 
-  const { text: heroImage, setText: setHeroImage } = useParagraph("hero_image");
+  const { text: savedImage, setText: setSavedImage } =
+    useParagraph("hero_image");
 
   const backgroundImage =
-    heroImage && heroImage.startsWith("data:image")
-      ? heroImage
+    savedImage && savedImage.startsWith("data:image")
+      ? savedImage
       : "/ContainerLargeEdit2.jpg";
 
   const handleSaveImage = (files: string[]) => {
-    if (files?.[0]) {
-      setHeroImage(files[0]);
+    if (files && files[0]) {
+      setSavedImage(files[0]);
+      setIsEditingImage(false);
     }
   };
 
@@ -54,9 +60,31 @@ const HeroSection = () => {
                 lineHeight: "1.1",
               }}
             >
-              <span className="block whitespace-nowrap">Rodinné centrum</span>
-              <span className="block">Sirotár</span>
+              <span className="block whitespace-nowrap">{titlePart1}</span>
+              <span className="block">{titlePart2}</span>
             </h1>
+
+            <div className="flex flex-wrap justify-center gap-2 md:gap-4 mt-6">
+              <span className="px-3 py-1 md:px-4 md:py-2 rounded-full border border-[#5E7322] text-[#5E7322] text-sm md:text-base font-medium">
+                Komunita
+              </span>
+              <span className="px-3 py-1 md:px-4 md:py-2 rounded-full border border-[#C66812] text-[#C66812] text-sm md:text-base font-medium">
+                Rast
+              </span>
+              <span className="px-3 py-1 md:px-4 md:py-2 rounded-full border border-[#0C5E85] text-[#0C5E85] text-sm md:text-base font-medium">
+                Duchovné zázemie
+              </span>
+            </div>
+
+            <Button
+              size="lg"
+              className="mt-6 bg-primary hover:bg-primary/90 rounded-full px-12 md:px-16 py-6 md:py-8 text-lg md:text-3xl font-semibold flex items-center justify-center"
+              onClick={() => {
+                document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+              }}
+            >
+              Kontaktujte nás
+            </Button>
           </div>
         </div>
       </div>
@@ -74,4 +102,3 @@ const HeroSection = () => {
 };
 
 export default HeroSection;
-/>
