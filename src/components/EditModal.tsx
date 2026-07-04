@@ -1,4 +1,35 @@
-useEffect(() => {
+import { useState, useRef, useEffect } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+
+interface EditModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  title: string;
+  type: "image" | "file";
+  initialValue: string[];
+  onSave: (files: string[]) => void;
+}
+
+const fileToBase64 = (file: File): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+
+const EditModal = ({ isOpen, onClose, title, type, initialValue, onSave }: EditModalProps) => {
+  const [file, setFile] = useState<string>(initialValue?.[0] || "");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
     if (isOpen) {
       setFile(initialValue?.[0] || "");
     }
