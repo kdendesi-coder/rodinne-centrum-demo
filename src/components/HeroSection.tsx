@@ -75,15 +75,17 @@ const HeroSection = () => {
               </span>
             </div>
 
-            <Button
-              size="lg"
-              className="mt-6 bg-primary hover:bg-primary/90 rounded-full px-12 md:px-16 py-6 md:py-8 text-lg md:text-3xl font-semibold flex items-center justify-center"
-              onClick={() => {
-                document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
-              }}
-            >
-              Kontaktujte nás
-            </Button>
+            <div className="mt-6 flex justify-center">
+              <Button
+                size="lg"
+                className="bg-primary hover:bg-primary/90 rounded-full px-12 md:px-16 py-6 md:py-8 text-lg md:text-3xl font-semibold flex items-center justify-center text-center"
+                onClick={() => {
+                  document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+                }}
+              >
+                Kontaktujte nás
+              </Button>
+            </div>
           </div>
         </div>
       </div>
