@@ -26,7 +26,7 @@ const imageToBase64Compressed = (file: File): Promise<string> =>
 
       img.onload = () => {
         const canvas = document.createElement("canvas");
-        const maxWidth = 1200;
+        const maxWidth = 800;
 
         let width = img.width;
         let height = img.height;
