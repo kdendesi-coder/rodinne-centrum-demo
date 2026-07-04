@@ -17,14 +17,45 @@ interface EditModalProps {
   onSave: (files: string[]) => Promise<void>;
 }
 
-const fileToBase64 = (file: File): Promise<string> =>
+const imageToBase64Compressed = (file: File): Promise<string> =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
-    reader.onload = () => resolve(reader.result as string);
+
+    reader.onload = () => {
+      const img = new Image();
+
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const maxWidth = 1200;
+
+        let width = img.width;
+        let height = img.height;
+
+        if (width > maxWidth) {
+          height = Math.round((height * maxWidth) / width);
+          width = maxWidth;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return reject("Canvas error");
+
+        ctx.drawImage(img, 0, 0, width, height);
+
+        const compressed = canvas.toDataURL("image/jpeg", 0.7);
+        resolve(compressed);
+      };
+
+      img.onerror = reject;
+      img.src = reader.result as string;
+    };
+
     reader.onerror = reject;
     reader.readAsDataURL(file);
   });
-
+  
 const EditModal = ({ isOpen, onClose, title, type, initialValue, onSave }: EditModalProps) => {
   const [file, setFile] = useState<string>(initialValue?.[0] || "");
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -38,7 +69,11 @@ const EditModal = ({ isOpen, onClose, title, type, initialValue, onSave }: EditM
   const handleFile = async (selectedFile?: File) => {
     if (!selectedFile) return;
 
-    const base64 = await fileToBase64(selectedFile);
+    const base64 =
+      selectedFile.type.startsWith("image/")
+        ? await imageToBase64Compressed(selectedFile)
+        : await fileToBase64(selectedFile);
+
     setFile(base64);
   };
 
