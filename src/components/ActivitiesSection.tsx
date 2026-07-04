@@ -11,13 +11,6 @@ import { useAuth } from "@/contexts/AuthContext"; // Add this import
 //import { title } from "process";
 
 
-const { text: activitiesImage, setText: setActivitiesImage } =
-  useParagraph("activities_image");
-
-const image =
-  activitiesImage && activitiesImage.startsWith("data:image")
-    ? activitiesImage
-    : "/logosirotarPaint.png";
 
 interface Activity {
   id: string;
@@ -108,6 +101,14 @@ const rozvrh = {
 
 
 const ActivitiesSection = () => {
+
+  const { text: activitiesImage, setText: setActivitiesImage } =
+  useParagraph("activities_image");
+
+const image =
+  activitiesImage && activitiesImage.startsWith("data:image")
+    ? activitiesImage
+    : "/logosirotarPaint.png";
 
 
   
@@ -679,26 +680,17 @@ useEffect(() => {
         onSave={handleAddActivity}
       />
 
-      <EditModal
-        isOpen={isEditingImage}
-        onClose={() => setIsEditingImage(false)}
-        title="Edit Activities Image"
-        type="image"
-        initialValue={image}
-        onSave={setImage}
-      />
-      {editingActivity && (
-       <EditModal
-          isOpen={isEditingImage}
-          onClose={() => setIsEditingImage(false)}
-          title="Edit Activities Image"
-          type="image"
-          initialValue={[image]}
-          onSave={async (files) => {
-            if (files && files[0]) {
-              await setActivitiesImage(files[0]);
-              setIsEditingImage(false);
-            }
+     {editingActivity && (
+        <EditModal
+          isOpen={true}
+          onClose={() => setEditingActivity(null)}
+          title={`Edit ${activities.find((a) => a.id === editingActivity)?.title}`}
+          type="text"
+          initialValue={activities.find((a) => a.id === editingActivity)?.content || ""}
+          onSave={(value) => {
+            const newContent = Array.isArray(value) ? value[0] : value;
+            handleSaveActivity(editingActivity, newContent);
+            setEditingActivity(null);
           }}
         />
       )}
