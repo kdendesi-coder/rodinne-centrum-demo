@@ -7,65 +7,34 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 
 interface EditModalProps {
   isOpen: boolean;
   onClose: () => void;
   title: string;
-  type: "text" | "image" | "file";
-  initialValue?: string | string[];
-  onSave: (value: string | string[]) => void;
-  backendId?: string;
+  type: "image" | "file";
+  initialValue: string[]; // pole, ale len 1 súbor sa použije
+  onSave: (files: string[]) => void;
 }
 
-const fileToBase64 = (file: File): Promise<string> =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-
-const EditModal = ({
-  isOpen,
-  onClose,
-  title,
-  type,
-  initialValue = "",
-  onSave,
-}: EditModalProps) => {
-  const getInitial = () => {
-    if (Array.isArray(initialValue)) return initialValue[0] || "";
-    return initialValue || "";
-  };
-
-  const [value, setValue] = useState<string>(getInitial());
+const EditModal = ({ isOpen, onClose, title, type, initialValue, onSave }: EditModalProps) => {
+  const [file, setFile] = useState<string>(initialValue?.[0] || "");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Pri otvorení modalu nastavíme aktuálnu hodnotu
   useEffect(() => {
-    if (isOpen) {
-      setValue(getInitial());
+    setFile(initialValue?.[0] || "");
+  }, [initialValue, isOpen]);
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    const droppedFile = e.dataTransfer.files[0];
+    if (droppedFile) {
+      setFile(URL.createObjectURL(droppedFile)); // nahradí predchádzajúci
     }
-  }, [isOpen, initialValue]);
-
-  const handleFile = async (file?: File) => {
-    if (!file) return;
-
-    const base64 = await fileToBase64(file);
-    setValue(base64);
   };
 
-  const handleSave = () => {
-    if (type === "text") {
-      onSave(value);
-    } else {
-      if (!value) return;
-      onSave([value]);
-    }
-
-    onClose();
-  };
+  const handleDragOver = (e: React.DragEvent) => e.preventDefault();
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -74,49 +43,32 @@ const EditModal = ({
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
 
-        <div className="py-4">
-          {type === "text" ? (
-            <Textarea
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
-              rows={7}
-              className="w-full"
-              placeholder="Napíš text..."
-            />
-          ) : (
-            <div
-              className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center cursor-pointer"
-              onDrop={(e) => {
-                e.preventDefault();
-                handleFile(e.dataTransfer.files[0]);
-              }}
-              onDragOver={(e) => e.preventDefault()}
-              onClick={() => fileInputRef.current?.click()}
-            >
-              <input
-                type="file"
-                ref={fileInputRef}
-                className="hidden"
-                accept={type === "image" ? "image/*" : ".pdf,image/*"}
-                onChange={(e) => handleFile(e.target.files?.[0])}
-              />
+        <div
+          className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center cursor-pointer"
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+          onClick={() => fileInputRef.current?.click()}
+        >
+          <input
+            type="file"
+            ref={fileInputRef}
+            className="hidden"
+            onChange={(e) => {
+              const newFile = e.target.files?.[0];
+              if (newFile) setFile(URL.createObjectURL(newFile));
+            }}
+          />
 
-              <p className="text-sm text-gray-500 mt-2">
-                Presuň súbor sem alebo klikni pre výber
-              </p>
+          <p className="text-sm text-gray-500 mt-2">
+            Presuň súbor sem alebo klikni pre výber
+          </p>
 
-              {value && (
-                <div className="mt-4 w-48 h-48 mx-auto border rounded overflow-hidden">
-                  {value.startsWith("data:application/pdf") || value.endsWith(".pdf") ? (
-                    <embed src={value} type="application/pdf" width="100%" height="100%" />
-                  ) : (
-                    <img
-                      src={value}
-                      alt="Preview"
-                      className="w-full h-full object-contain"
-                    />
-                  )}
-                </div>
+          {file && (
+            <div className="mt-4 w-48 h-48 mx-auto border rounded overflow-hidden">
+              {file.endsWith(".pdf") ? (
+                <embed src={file} type="application/pdf" width="100%" height="100%" />
+              ) : (
+                <img src={file} alt="Preview" className="w-full h-full object-contain" />
               )}
             </div>
           )}
@@ -126,7 +78,12 @@ const EditModal = ({
           <Button variant="outline" onClick={onClose}>
             Cancel
           </Button>
-          <Button onClick={handleSave}>
+          <Button
+            onClick={() => {
+              if (file) onSave([file]); // uloží iba aktuálny
+              onClose();
+            }}
+          >
             Save
           </Button>
         </DialogFooter>
