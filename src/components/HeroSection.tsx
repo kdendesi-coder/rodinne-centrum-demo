@@ -20,9 +20,9 @@ const HeroSection = () => {
       ? savedImage
       : "/ContainerLargeEdit2.jpg";
 
-  const handleSaveImage = (files: string[]) => {
+  const handleSaveImage = async (files: string[]) => {
     if (files && files[0]) {
-      setSavedImage(files[0]);
+      await setSavedImage(files[0]);
       setIsEditingImage(false);
     }
   };

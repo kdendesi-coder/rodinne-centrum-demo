@@ -14,7 +14,7 @@ interface EditModalProps {
   title: string;
   type: "image" | "file";
   initialValue: string[];
-  onSave: (files: string[]) => void;
+  onSave: (files: string[]) => Promise<void>;
 }
 
 const fileToBase64 = (file: File): Promise<string> =>
@@ -88,9 +88,10 @@ const EditModal = ({ isOpen, onClose, title, type, initialValue, onSave }: EditM
             Cancel
           </Button>
           <Button
-            onClick={() => {
-              if (file) onSave([file]);
-              onClose();
+            onClick={async () => {
+              if (file) {
+                await onSave([file]);
+              }
             }}
           >
             Save

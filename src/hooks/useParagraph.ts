@@ -1,38 +1,37 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface ParagraphData {
   id: string;
   text: string;
 }
 
-// Hook to fetch and manage paragraph text by ID
+const API_URL = "https://rodinne-centrum-backend-production.up.railway.app";
+
 export const useParagraph = (paragraphId: string) => {
-  const [text, setText] = useState<string>('');
+  const [text, setTextState] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { token } = useAuth();
 
   useEffect(() => {
     const fetchParagraph = async () => {
       try {
         setIsLoading(true);
         setError(null);
-        // Tu je zmena URL pre požiadavku na backend na Railway alebo Vercel
-        const response = await fetch(`https://rodinne-centrum-backend-production.up.railway.app/text/${paragraphId}`);
-        
+
+        const response = await fetch(`${API_URL}/text/${paragraphId}`);
+
         if (!response.ok) {
-          if (response.status === 404) {
-            setText(`Content for ${paragraphId} will appear here...`);
-            return;
-          }
-          throw new Error(`Failed to fetch paragraph: ${response.status}`);
+          setTextState("");
+          return;
         }
-        
+
         const data: ParagraphData = await response.json();
-        setText(data.text);
+        setTextState(data.text || "");
       } catch (err) {
         console.error(`Error fetching paragraph ${paragraphId}:`, err);
-        setError('Failed to load content');
-        setText(`Failed to load ${paragraphId} content`);
+        setError("Failed to load content");
       } finally {
         setIsLoading(false);
       }
@@ -40,6 +39,28 @@ export const useParagraph = (paragraphId: string) => {
 
     fetchParagraph();
   }, [paragraphId]);
+
+  const setText = async (newText: string) => {
+    if (!token) {
+      console.error("No token - user is not logged in");
+      return;
+    }
+
+    const response = await fetch(`${API_URL}/text/${paragraphId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ text: newText }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to update text: ${response.status}`);
+    }
+
+    setTextState(newText);
+  };
 
   return { text, isLoading, error, setText };
 };
