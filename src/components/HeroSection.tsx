@@ -71,12 +71,13 @@ const HeroSection = () => {
       </div>
 
       <EditModal
-        isOpen={isEditingImage}
-        onClose={() => setIsEditingImage(false)}
-        title="Edit Hero Background"
-        type="image"
-        initialValue={backgroundImage}
-        onSave={setBackgroundImage}
+         isOpen={isEditingImage}
+         onClose={() => setIsEditingImage(false)}
+         title="Edit Hero Background"
+         type="image"
+         initialValue={[backgroundImage]}
+         onSave={(files) => setBackgroundImage(files[0])}
+
       />
     </div>
   );
