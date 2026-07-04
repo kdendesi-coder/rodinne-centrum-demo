@@ -14,29 +14,37 @@ export const useParagraph = (paragraphId: string) => {
   const [error, setError] = useState<string | null>(null);
   const { token } = useAuth();
 
-  useEffect(() => {
-    const fetchParagraph = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
+  const fetchParagraph = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
 
-        const response = await fetch(`${API_URL}/text/${paragraphId}`);
-
-        if (!response.ok) {
-          setTextState("");
-          return;
+      const response = await fetch(
+        `${API_URL}/text/${paragraphId}?t=${Date.now()}`,
+        {
+          cache: "no-store",
+          headers: {
+            "Cache-Control": "no-cache",
+          },
         }
+      );
 
-        const data: ParagraphData = await response.json();
-        setTextState(data.text || "");
-      } catch (err) {
-        console.error(`Error fetching paragraph ${paragraphId}:`, err);
-        setError("Failed to load content");
-      } finally {
-        setIsLoading(false);
+      if (!response.ok) {
+        setTextState("");
+        return;
       }
-    };
 
+      const data: ParagraphData = await response.json();
+      setTextState(data.text || "");
+    } catch (err) {
+      console.error(`Error fetching paragraph ${paragraphId}:`, err);
+      setError("Failed to load content");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchParagraph();
   }, [paragraphId]);
 
@@ -51,6 +59,7 @@ export const useParagraph = (paragraphId: string) => {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
+        "Cache-Control": "no-cache",
       },
       body: JSON.stringify({ text: newText }),
     });
@@ -60,6 +69,7 @@ export const useParagraph = (paragraphId: string) => {
     }
 
     setTextState(newText);
+    await fetchParagraph();
   };
 
   return { text, isLoading, error, setText };
