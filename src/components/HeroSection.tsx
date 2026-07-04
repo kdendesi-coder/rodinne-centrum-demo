@@ -12,20 +12,20 @@ const HeroSection = () => {
   const titlePart2 = "Sirotár";
 
   const { isAuthenticated, role } = useAuth();
-
-  const { text: savedImage, setText: setSavedImage } =
-    useParagraph("hero_image");
+  const { text: savedImage, setText: setSavedImage } = useParagraph("hero_image");
 
   const backgroundImage =
-    savedImage && savedImage.startsWith("data:image")
+    typeof savedImage === "string" && savedImage.startsWith("data:image")
       ? savedImage
       : "/ContainerLargeEdit2.jpg";
 
-  const handleSaveImage = (files: string[]) => {
-    if (files && files[0]) {
-      setSavedImage(files[0]);
-      setIsEditingImage(false);
-    }
+  const handleSaveImage = async (value: string | string[]) => {
+    const newImage = Array.isArray(value) ? value[0] : value;
+
+    if (!newImage) return;
+
+    await setSavedImage(newImage);
+    setIsEditingImage(false);
   };
 
   return (
@@ -94,7 +94,7 @@ const HeroSection = () => {
         onClose={() => setIsEditingImage(false)}
         title="Edit Hero Background"
         type="image"
-        initialValue={[backgroundImage]}
+        initialValue={backgroundImage}
         onSave={handleSaveImage}
       />
     </div>
