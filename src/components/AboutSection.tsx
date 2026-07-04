@@ -79,12 +79,11 @@ const AboutSection = () => {
                 boxShadow: "10px 10px 0px #DBD4CE",
               }}
             >
-              <img
+             <img
                 src={image}
                 alt="About"
-                className="z-0 w-full h-full object-cover transition-transform duration-200 group-hover:scale-105 will-change-transform"
+                className="z-0 w-full h-full object-cover bg-white transition-transform duration-200 group-hover:scale-105 will-change-transform"
               />
-
               <div
                 className="absolute inset-0 rounded-[3rem] pointer-events-none opacity-10 transition-opacity duration-300 group-hover:opacity-0"
                 style={{ backgroundColor: "#B0C9D6" }}
