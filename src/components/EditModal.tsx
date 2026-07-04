@@ -17,32 +17,35 @@ interface EditModalProps {
   onSave: (files: string[]) => Promise<void>;
 }
 
-const fileToBase64 = (file: File): Promise<string> =>
+const imageToBase64Compressed = (file: File): Promise<string> =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
 
     reader.onload = () => {
-      if (!file.type.startsWith("image/")) {
-        resolve(reader.result as string);
-        return;
-      }
-
       const img = new Image();
 
       img.onload = () => {
         const canvas = document.createElement("canvas");
-        canvas.width = img.width;
-        canvas.height = img.height;
+        const maxWidth = 800;
+
+        let width = img.width;
+        let height = img.height;
+
+        if (width > maxWidth) {
+          height = Math.round((height * maxWidth) / width);
+          width = maxWidth;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
 
         const ctx = canvas.getContext("2d");
         if (!ctx) return reject("Canvas error");
 
-        ctx.fillStyle = "#ffffff";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, width, height);
 
-        ctx.drawImage(img, 0, 0);
-
-        resolve(canvas.toDataURL("image/jpeg", 0.85));
+        const compressed = canvas.toDataURL("image/jpeg", 0.7);
+        resolve(compressed);
       };
 
       img.onerror = reject;
