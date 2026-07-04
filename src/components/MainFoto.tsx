@@ -3,28 +3,24 @@ import { Button } from "@/components/ui/button";
 import { Edit2 } from "lucide-react";
 import EditModal from "./EditModal";
 import { useAuth } from "@/contexts/AuthContext";
-
-const GALLERY_HERO_KEY = "gallery_hero_image";
+import { useParagraph } from "@/hooks/useParagraph";
 
 const GalleryHero = () => {
   const { isAuthenticated, role } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
 
-  const [heroImage, setHeroImage] = useState<string>(() => {
-    if (typeof window !== "undefined") {
-      const savedImage = localStorage.getItem(GALLERY_HERO_KEY);
+  const { text: savedImage, setText: setSavedImage } =
+    useParagraph("gallery_hero_image");
 
-      if (savedImage && !savedImage.startsWith("blob:")) {
-        return savedImage;
-      }
-    }
-    return "/03_gallery.jpg"; 
-  });
+  const heroImage =
+    savedImage && savedImage.startsWith("data:image")
+      ? savedImage
+      : "/03_gallery.jpg";
 
-  const handleSaveImage = (files: string[]) => {
+  const handleSaveImage = async (files: string[]) => {
     if (files && files[0]) {
-      
-      setHeroImage(files[0]);
+      await setSavedImage(files[0]);
+      setIsEditing(false);
     }
   };
 
@@ -34,7 +30,7 @@ const GalleryHero = () => {
         <img
           src={heroImage}
           alt="Gallery large"
-          className="w-full h-full object-cover object-center"
+          className="w-full h-full object-cover object-center bg-white"
           loading="eager"
           decoding="async"
         />
@@ -52,13 +48,11 @@ const GalleryHero = () => {
         )}
       </div>
 
-      
       <EditModal
         isOpen={isEditing}
         onClose={() => setIsEditing(false)}
         title="Upraviť veľký obrázok"
         type="image"
-        localStorageKey={GALLERY_HERO_KEY}
         initialValue={[heroImage]}
         onSave={handleSaveImage}
       />
