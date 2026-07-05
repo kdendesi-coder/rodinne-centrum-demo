@@ -8,14 +8,33 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
-interface EditModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  title: string;
-  type: "image" | "file";
-  initialValue: string[];
-  onSave: (files: string[]) => Promise<void>;
-}
+type EditModalProps =
+  | {
+      isOpen: boolean;
+      onClose: () => void;
+      title: string;
+      type: "text";
+      initialValue: string;
+      onSave: (value: string) => Promise<void> | void;
+    }
+  | {
+      isOpen: boolean;
+      onClose: () => void;
+      title: string;
+      type: "image" | "file";
+      initialValue: string[];
+      onSave: (files: string[]) => Promise<void> | void;
+    };
+
+const fileToBase64 = (file: File): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = reject;
+
+    reader.readAsDataURL(file);
+  });
 
 const imageToBase64Compressed = (file: File): Promise<string> =>
   new Promise((resolve, reject) => {
@@ -55,16 +74,23 @@ const imageToBase64Compressed = (file: File): Promise<string> =>
     reader.onerror = reject;
     reader.readAsDataURL(file);
   });
-  
-const EditModal = ({ isOpen, onClose, title, type, initialValue, onSave }: EditModalProps) => {
-  const [file, setFile] = useState<string>(initialValue?.[0] || "");
+
+const EditModal = (props: EditModalProps) => {
+  const { isOpen, onClose, title, type, initialValue } = props;
+
+  const getInitialValue = () => {
+    if (type === "text") return initialValue || "";
+    return initialValue?.[0] || "";
+  };
+
+  const [value, setValue] = useState<string>(getInitialValue());
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (isOpen) {
-      setFile(initialValue?.[0] || "");
+      setValue(getInitialValue());
     }
-  }, [initialValue, isOpen]);
+  }, [isOpen, initialValue, type]);
 
   const handleFile = async (selectedFile?: File) => {
     if (!selectedFile) return;
@@ -74,7 +100,7 @@ const EditModal = ({ isOpen, onClose, title, type, initialValue, onSave }: EditM
         ? await imageToBase64Compressed(selectedFile)
         : await fileToBase64(selectedFile);
 
-    setFile(base64);
+    setValue(base64);
   };
 
   const handleDrop = (e: React.DragEvent) => {
@@ -82,55 +108,81 @@ const EditModal = ({ isOpen, onClose, title, type, initialValue, onSave }: EditM
     handleFile(e.dataTransfer.files[0]);
   };
 
+  const handleSave = async () => {
+    if (type === "text") {
+      await props.onSave(value);
+    } else {
+      await props.onSave(value ? [value] : []);
+    }
+
+    onClose();
+  };
+
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
       <DialogContent className="sm:max-w-[525px] animate-scale-in">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
 
-        <div
-          className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center cursor-pointer"
-          onDrop={handleDrop}
-          onDragOver={(e) => e.preventDefault()}
-          onClick={() => fileInputRef.current?.click()}
-        >
-          <input
-            type="file"
-            ref={fileInputRef}
-            className="hidden"
-            accept={type === "image" ? "image/*" : ".pdf,image/*"}
-            onChange={(e) => handleFile(e.target.files?.[0])}
+        {type === "text" ? (
+          <textarea
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            className="min-h-[220px] w-full rounded-md border border-gray-300 p-3 text-sm outline-none focus:ring-2 focus:ring-primary"
+            placeholder="Napíš text..."
           />
+        ) : (
+          <div
+            className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center cursor-pointer"
+            onDrop={handleDrop}
+            onDragOver={(e) => e.preventDefault()}
+            onClick={() => fileInputRef.current?.click()}
+          >
+            <input
+              type="file"
+              ref={fileInputRef}
+              className="hidden"
+              accept={type === "image" ? "image/*" : ".pdf,image/*"}
+              onChange={(e) => handleFile(e.target.files?.[0])}
+            />
 
-          <p className="text-sm text-gray-500 mt-2">
-            Presuň súbor sem alebo klikni pre výber
-          </p>
+            <p className="text-sm text-gray-500 mt-2">
+              Presuň súbor sem alebo klikni pre výber
+            </p>
 
-          {file && (
-            <div className="mt-4 w-48 h-48 mx-auto border rounded overflow-hidden">
-              {file.startsWith("data:application/pdf") ? (
-                <embed src={file} type="application/pdf" width="100%" height="100%" />
-              ) : (
-                <img src={file} alt="Preview" className="w-full h-full object-contain" />
-              )}
-            </div>
-          )}
-        </div>
+            {value && (
+              <div className="mt-4 w-48 h-48 mx-auto border rounded overflow-hidden">
+                {value.startsWith("data:application/pdf") ? (
+                  <embed
+                    src={value}
+                    type="application/pdf"
+                    width="100%"
+                    height="100%"
+                  />
+                ) : (
+                  <img
+                    src={value}
+                    alt="Preview"
+                    className="w-full h-full object-contain"
+                  />
+                )}
+              </div>
+            )}
+          </div>
+        )}
 
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>
             Cancel
           </Button>
-          <Button
-            onClick={async () => {
-              if (file) {
-                await onSave([file]);
-              }
-            }}
-          >
-            Save
-          </Button>
+
+          <Button onClick={handleSave}>Save</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

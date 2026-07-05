@@ -115,26 +115,6 @@ const image =
   
 const sectionRef = useRef(null);
 
-useEffect(() => {
-  const observer = new IntersectionObserver(
-    ([entry]) => {
-      if (entry.isIntersecting) {
-        setOpenItems(["herna", "atrium", "klubik"]);
-      }
-    },
-    {
-      threshold: 0.01, // bezpečný middle ground
-    }
-  );
-
-  const el = sectionRef.current;
-
-  if (el) observer.observe(el);
-
-  return () => {
-    if (el) observer.unobserve(el);
-  };
-}, []);
 
 useEffect(() => {
   const timeout = setTimeout(() => {
@@ -208,7 +188,7 @@ useEffect(() => {
         ...prev,
         [activityId]: [...(prev[activityId] || []), { title }]
       };
-      localStorage.setItem("childActivities", JSON.stringify(updated)); 
+     
       return updated;
       });
   };
@@ -220,7 +200,7 @@ useEffect(() => {
       const updated = [...prev[activityId]];
       updated[index] = { title: newTitle };
       const newState = { ...prev, [activityId]: updated };
-      localStorage.setItem("childActivities", JSON.stringify(newState)); 
+      
       return newState;
     });
   };
@@ -231,7 +211,7 @@ useEffect(() => {
         ...prev,
         [activityId]: prev[activityId].filter((_, i) => i !== index)
       };
-      localStorage.setItem("childActivities", JSON.stringify(newState)); 
+    
       return newState;
     });
   };
@@ -244,7 +224,7 @@ useEffect(() => {
         ...prev,
         [activityId]: [...(prev[activityId] || []), { title, items: [] }]
       };
-      localStorage.setItem("lectures", JSON.stringify(updated)); 
+
       return updated;
     });
   };
@@ -256,7 +236,7 @@ useEffect(() => {
       const updatedArray = [...prev[activityId]];
       updatedArray[index] = { ...lecture, title: newTitle };
       const updated = { ...prev, [activityId]: updatedArray };
-      localStorage.setItem("lectures", JSON.stringify(updated)); 
+
       return updated;
     });
   };
@@ -270,7 +250,7 @@ useEffect(() => {
       newItem
     ];
     const updated = { ...prev, [activityId]: updatedLectures };
-    localStorage.setItem("lectures", JSON.stringify(updated));
+  
     return updated;
   });
 };
@@ -285,7 +265,7 @@ useEffect(() => {
       updatedItems[itemIndex] = newItem;
       updatedLectures[lectureIndex].items = updatedItems;
       const updated = { ...prev, [activityId]: updatedLectures };
-      localStorage.setItem("lectures", JSON.stringify(updated));
+      
       return updated;
     });
   };
@@ -296,7 +276,7 @@ useEffect(() => {
         ...prev,
         [activityId]: prev[activityId].filter((_, i) => i !== index)
       };
-      localStorage.setItem("lectures", JSON.stringify(updated)); 
+    
       return updated;
     });
   };
@@ -312,7 +292,7 @@ useEffect(() => {
 
     setSchedule(prev => {
       const updated = { ...prev, [activityId]: { den, cas, zaciatok } };
-      localStorage.setItem("schedule", JSON.stringify(updated)); // pridať túto riadku
+     
       return updated;
     });
   };
