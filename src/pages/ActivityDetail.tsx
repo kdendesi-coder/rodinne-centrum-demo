@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Edit2, ArrowLeft } from "lucide-react";
 import EditModal from "@/components/EditModal";
 import { useAuth } from "@/contexts/AuthContext";
+import { useParagraph } from "@/hooks/useParagraph";
 
 interface ActivityData {
   id: string;
@@ -110,12 +111,21 @@ const defaultDetailContent: Record<string, ActivityData> = {
 const ActivityDetail = () => {
   const { activityId } = useParams<{ activityId: string }>();
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+
+  const { isAuthenticated, role } = useAuth();
+  const canEdit = isAuthenticated && role === "Admin";
+
+  const backendKey = activityId
+    ? `activity_detail_${activityId}`
+    : "activity_detail_unknown";
+
+  const { text: backendActivityData, setText: setBackendActivityData } =
+    useParagraph(backendKey);
 
   const [activity, setActivity] = useState<ActivityData | null>(null);
 
   
- const [isEditingPhoto, setIsEditingPhoto] = useState(false); 
+  const [isEditingPhoto, setIsEditingPhoto] = useState(false); 
   const [photoToEditIndex, setPhotoToEditIndex] = useState<number | null>(null); 
 
   const [isEditingContent, setIsEditingContent] = useState(false);
@@ -140,203 +150,193 @@ const ActivityDetail = () => {
 
   // Load data from localStorage or fallback to default
   useEffect(() => {
-    if (!activityId) return;
+  if (!activityId) {
+    setActivity(null);
+    return;
+  }
 
-    const storageKey = `activity_detail_${activityId}`;
-    const storedContent = localStorage.getItem(storageKey);
-
-    if (storedContent) {
-      try {
-        const parsed = JSON.parse(storedContent);
-        console.log('Nacitane udaje z localStorage: ', parsed);
-        setActivity(parsed);
-        return;
-      } catch {
-        console.log("Chyba pri načítaní zoznamu z localStorage");
-      }
+  if (backendActivityData && backendActivityData.trim() !== "") {
+    try {
+      const parsed = JSON.parse(backendActivityData);
+      setActivity(parsed);
+      return;
+    } catch {
+      console.log("Chyba pri načítaní dát z backendu");
     }
+  }
 
-    const defaultData = defaultDetailContent[activityId];
-    if (defaultData) {
-      console.log("Nacitane predvolene data: ", defaultData);
-      setActivity({
-        id: activityId,
-        title: defaultData.title,
-        content: defaultData.content,
-        list1Title: defaultData.list1Title,
-        list2Title: defaultData.list2Title,
-        list1: defaultData.list1 || [],
-        list2: defaultData.list2 || [],
+  const defaultData = defaultDetailContent[activityId];
 
-        photo: defaultData.photo || [],
-        googleFormLink: defaultData.googleFormLink || "",
-        textPrihlaska: defaultData.textPrihlaska,
-        textAtrium: defaultData.textAtrium,
-        fiancie: defaultData.fiancie,
+  if (defaultData) {
+    setActivity({
+      id: activityId,
+      title: defaultData.title,
+      content: defaultData.content,
+      list1Title: defaultData.list1Title,
+      list2Title: defaultData.list2Title,
+      list1: defaultData.list1 || [],
+      list2: defaultData.list2 || [],
+      photo: defaultData.photo || [],
+      googleFormLink: defaultData.googleFormLink || "",
+      textPrihlaska: defaultData.textPrihlaska || "",
+      textAtrium: defaultData.textAtrium || "",
+      fiancie: defaultData.fiancie || "",
+      text1: defaultData.text1 || "",
+      text2: defaultData.text2 || "",
+      text1Title: defaultData.text1Title || "",
+      text2Title: defaultData.text2Title || "",
+      text3: defaultData.text3 || "",
+      text4: defaultData.text4 || "",
+      text5: defaultData.text5 || "",
+    });
+  } else {
+    setActivity(null);
+  }
+}, [activityId, backendActivityData]);
 
-        text1: defaultData.text1,
-        text2: defaultData.text2,
-        text1Title: defaultData.text1Title,
-        text2Title: defaultData.text2Title,
-        text3: defaultData.text3,
-        text4: defaultData.text4,
-        text5: defaultData.text5
-
-      });
-    }
-  }, [activityId]);
-
-  const handleSaveContent = (newContent: string ) => {
-    if (!activity || !activityId) return;
-
-    const updatedActivity = { ...activity, content: newContent };
-    console.log('Aktualizovana aktivita pred ulozenim:', updatedActivity);
+  const saveActivity = async (updatedActivity: ActivityData) => {
     setActivity(updatedActivity);
-
-    const storageKey = `activity_detail_${activityId}`;
-    localStorage.setItem(storageKey, JSON.stringify(updatedActivity)); // Store to localStorage
+    await setBackendActivityData(JSON.stringify(updatedActivity));
   };
 
-  const handleSaveList1 = (newList1: string[]) => {
-    if (!activity || !activityId) return;
+  const handleSaveContent = async (newContent: string) => {
+  if (!activity) return;
 
-    const updatedActivity = { ...activity, list1: newList1 };
-    setActivity(updatedActivity);
+  await saveActivity({
+    ...activity,
+    content: newContent,
+  });
+};
 
-    const storageKey = `activity_detail_${activityId}`;
-    localStorage.setItem(storageKey, JSON.stringify(updatedActivity)); // Store to localStorage
+  const handleSaveList1 = async (newList1: string[]) => {
+    if (!activity) return;
+
+    await saveActivity({
+      ...activity,
+      list1: newList1,
+    });
   };
 
-  const handleSaveList2 = (newList2: string[]) => {
-    if (!activity || !activityId) return;
+  const handleSaveList2 = async (newList2: string[]) => {
+    if (!activity) return;
 
-    const updatedActivity = { ...activity, list2: newList2 };
-    setActivity(updatedActivity);
-
-    const storageKey = `activity_detail_${activityId}`;
-    localStorage.setItem(storageKey, JSON.stringify(updatedActivity)); // Store to localStorage
+    await saveActivity({
+      ...activity,
+      list2: newList2,
+    });
   };
 
-  const handleSaveText1 = (newText1: string) => {
-    if (!activity || !activityId) return;
+  const handleSaveText1 = async (newText1: string) => {
+    if (!activity) return;
 
-    const updatedActivity = { ...activity, text1: newText1 };
-    setActivity(updatedActivity);
-
-    const storageKey = `activity_detail_${activityId}`;
-    localStorage.setItem(storageKey, JSON.stringify(updatedActivity)); // Store to localStorage
-  };
- 
-   const handleSaveText2 = (newText2: string) => {
-    if (!activity || !activityId) return;
-
-    const updatedActivity = { ...activity, text2: newText2 };
-    setActivity(updatedActivity);
-
-    const storageKey = `activity_detail_${activityId}`;
-    localStorage.setItem(storageKey, JSON.stringify(updatedActivity)); // Store to localStorage
+    await saveActivity({
+      ...activity,
+      text1: newText1,
+    });
   };
 
-  const handleSaveText3 = (newText3: string) => {
-    if (!activity || !activityId) return;
+  const handleSaveText2 = async (newText2: string) => {
+    if (!activity) return;
 
-    const updatedActivity = { ...activity, text3: newText3 };
-    setActivity(updatedActivity);
-
-    const storageKey = `activity_detail_${activityId}`;
-    localStorage.setItem(storageKey, JSON.stringify(updatedActivity)); // Store to localStorage
+    await saveActivity({
+      ...activity,
+      text2: newText2,
+    });
   };
 
-  const handleSaveText4 = (newText4: string) => {
-    if (!activity || !activityId) return;
+  const handleSaveText3 = async (newText3: string) => {
+    if (!activity) return;
 
-    const updatedActivity = { ...activity, text4: newText4 };
-    setActivity(updatedActivity);
-
-    const storageKey = `activity_detail_${activityId}`;
-    localStorage.setItem(storageKey, JSON.stringify(updatedActivity)); // Store to localStorage
+    await saveActivity({
+      ...activity,
+      text3: newText3,
+    });
   };
 
-  const handleSaveText5 = (newText5: string) => {
-    if (!activity || !activityId) return;
+  const handleSaveText4 = async (newText4: string) => {
+    if (!activity) return;
 
-    const updatedActivity = { ...activity, text5: newText5 };
-    setActivity(updatedActivity);
-
-    const storageKey = `activity_detail_${activityId}`;
-    localStorage.setItem(storageKey, JSON.stringify(updatedActivity)); // Store to localStorage
+    await saveActivity({
+      ...activity,
+      text4: newText4,
+    });
   };
 
+  const handleSaveText5 = async (newText5: string) => {
+    if (!activity) return;
 
-  const handleSaveTitleText1 = (newTextTitle1: string) => {
-    if (!activity || !activityId) return;
-
-    const updatedActivity = { ...activity, text1Title: newTextTitle1 };
-    setActivity(updatedActivity);
-
-    const storageKey = `activity_detail_${activityId}`;
-    localStorage.setItem(storageKey, JSON.stringify(updatedActivity)); // Store to localStorage
+    await saveActivity({
+      ...activity,
+      text5: newText5,
+    });
   };
 
-  const handleSaveTitleText2 = (newTextTitle2: string) => {
-    if (!activity || !activityId) return;
+  const handleSaveTitleText1 = async (newTextTitle1: string) => {
+    if (!activity) return;
 
-    const updatedActivity = { ...activity, text2Title: newTextTitle2 };
-    setActivity(updatedActivity);
-
-    const storageKey = `activity_detail_${activityId}`;
-    localStorage.setItem(storageKey, JSON.stringify(updatedActivity)); // Store to localStorage
+    await saveActivity({
+      ...activity,
+      text1Title: newTextTitle1,
+    });
   };
 
-  const handleSaveTextPrihlaska = (newTextPrihlaska: string) => {
-    if (!activity || !activityId) return;
+  const handleSaveTitleText2 = async (newTextTitle2: string) => {
+    if (!activity) return;
 
-    const updatedActivity = { ...activity, textPrihlaska: newTextPrihlaska };
-    setActivity(updatedActivity);
-
-    const storageKey = `activity_detail_${activityId}`;
-    localStorage.setItem(storageKey, JSON.stringify(updatedActivity)); // Store to localStorage
+    await saveActivity({
+      ...activity,
+      text2Title: newTextTitle2,
+    });
   };
 
-  const handleSaveTextAtrium = (newTextAtrium: string) => {
-    if (!activity || !activityId) return;
+  const handleSaveTextPrihlaska = async (newTextPrihlaska: string) => {
+    if (!activity) return;
 
-    const updatedActivity = { ...activity, textAtrium: newTextAtrium };
-    setActivity(updatedActivity);
-
-    const storageKey = `activity_detail_${activityId}`;
-    localStorage.setItem(storageKey, JSON.stringify(updatedActivity)); // Store to localStorage
+    await saveActivity({
+      ...activity,
+      textPrihlaska: newTextPrihlaska,
+    });
   };
 
-  const handleSaveTextFinancie = (newTextFinancie: string) => {
-    if (!activity || !activityId) return;
+  const handleSaveTextAtrium = async (newTextAtrium: string) => {
+    if (!activity) return;
 
-    const updatedActivity = { ...activity, financie: newTextFinancie };
-    setActivity(updatedActivity);
-
-    const storageKey = `activity_detail_${activityId}`;
-    localStorage.setItem(storageKey, JSON.stringify(updatedActivity)); // Store to localStorage
+    await saveActivity({
+      ...activity,
+      textAtrium: newTextAtrium,
+    });
   };
 
-  
+  const handleSaveTextFinancie = async (newTextFinancie: string) => {
+    if (!activity) return;
 
-  const handleSavePhoto = (newPhoto: string, index: number) => {
-    if (!activity || !activityId) return;
+    await saveActivity({
+      ...activity,
+      fiancie: newTextFinancie,
+    });
+  };
 
-    const updatedPhotos = [...activity.photo];
-    updatedPhotos[index] = { ...updatedPhotos[index], src: newPhoto };
+  const handleSavePhoto = async (newPhoto: string, index: number) => {
+    if (!activity) return;
 
-    const updatedActivity = { ...activity, photo: updatedPhotos };
-    setActivity(updatedActivity);
+    const updatedPhotos = [...(activity.photo || [])];
 
-    const storageKey = `activity_detail_${activityId}`;
-    localStorage.setItem(storageKey, JSON.stringify(updatedActivity));
+    if (!updatedPhotos[index]) return;
+
+    updatedPhotos[index] = {
+      ...updatedPhotos[index],
+      src: newPhoto,
+    };
+
+    await saveActivity({
+      ...activity,
+      photo: updatedPhotos,
+    });
   };
 
   const openEditPhotoModal = (index: number) => {
     setIsEditingPhotoIndex(index);
   };
-  
 
   if (!activity) {
     return (
@@ -383,7 +383,7 @@ const ActivityDetail = () => {
               <p className="text-base sm:text-lg md:text-xl xl:text-2xl leading-[1.8] text-muted-foreground whitespace-pre-wrap flex-1">
                 {activity.content}
               </p>
-              {isAuthenticated && (
+              {canEdit && (
                 <Button
                   size="icon"
                   variant="secondary"
@@ -405,7 +405,7 @@ const ActivityDetail = () => {
                   <li key={`list1-item-${index}`}>{item}</li>
                 ))}
               </ul>
-              {isAuthenticated && (
+              {canEdit && (
                 <Button
                   size="icon"
                   variant="secondary"
@@ -428,7 +428,7 @@ const ActivityDetail = () => {
                   <li key={`list2-item-${index}`}>{item}</li>
                 ))}
               </ul>
-              {isAuthenticated && (
+              {canEdit && (
                 <Button
                   size="icon"
                   variant="secondary"
@@ -450,7 +450,7 @@ const ActivityDetail = () => {
                       alt={photo.alt}
                       className="w-full h-full object-cover"
                     />
-                    {isAuthenticated && (
+                    {canEdit && (
                       <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
                         <Button
                           size="icon"
@@ -484,7 +484,7 @@ const ActivityDetail = () => {
                     </>
                   ))}
                 </p>
-                {isAuthenticated && (
+                {canEdit && (
                   <Button size="icon" variant="secondary" onClick={() => setIsEditingTextPrihlaska(true)}>
                     <Edit2 className="h-4 w-4" />
                   </Button>
@@ -496,7 +496,7 @@ const ActivityDetail = () => {
             {activity.textAtrium && activity.textAtrium.trim() !== "" && (
               <div className="mb-6">
                 <p className="text-base md:text-lg xl:text-xl leading-[1.8] text-muted-foreground whitespace-pre-wrap">{activity.textAtrium}</p>
-                {isAuthenticated && (
+                {canEdit && (
                   <Button size="icon" variant="secondary" onClick={() => setIsEditingTextAtrium(true)}>
                     <Edit2 className="h-4 w-4" />
                   </Button>
@@ -509,7 +509,7 @@ const ActivityDetail = () => {
             {activity.fiancie && activity.fiancie.trim() !== "" && (
               <div className="mb-6">
                 <p className="text-base md:text-lg xl:text-xl leading-[1.8] text-muted-foreground whitespace-pre-wrap">{activity.fiancie}</p>
-                {isAuthenticated && (
+                {canEdit && (
                   <Button size="icon" variant="secondary" onClick={() => setIsEditingTextFinancie(true)}>
                     <Edit2 className="h-4 w-4" />
                   </Button>
@@ -523,7 +523,7 @@ const ActivityDetail = () => {
             {activity.text1 && activity.text1.trim() !== "" && (
               <div className="mb-6">
                 <p className="text-base md:text-lg xl:text-xl leading-[1.8] text-muted-foreground whitespace-pre-wrap">{activity.text1}</p>
-                {isAuthenticated && (
+                {canEdit && (
                   <Button size="icon" variant="secondary" onClick={() => setIsEditingText1(true)}>
                     <Edit2 className="h-4 w-4" />
                   </Button>
@@ -535,7 +535,7 @@ const ActivityDetail = () => {
             {activity.text2 && activity.text2.trim() !== "" && (
               <div className="mb-6">
                 <p className="text-base md:text-lg xl:text-xl leading-[1.8] text-muted-foreground whitespace-pre-wrap">{activity.text2}</p>
-                {isAuthenticated && (
+                {canEdit && (
                   <Button size="icon" variant="secondary" onClick={() => setIsEditingText2(true)}>
                     <Edit2 className="h-4 w-4" />
                   </Button>
@@ -547,13 +547,13 @@ const ActivityDetail = () => {
             {activity.text3 && activity.text3.trim() !== "" && (
               <div className="mb-6">
                 <h2 className="text-2xl md:text-3xl text-muted-foreground whitespace-pre-wrap">{activity.text1Title}</h2>
-                {isAuthenticated && (
+                {canEdit && (
                   <Button size="icon" variant="secondary" onClick={() => setIsEditingTitleText1(true)}>
                     <Edit2 className="h-4 w-4" />
                   </Button>
                 )}
                 <p className="text-base md:text-lg xl:text-xl leading-[1.8] text-muted-foreground whitespace-pre-wrap">{activity.text3}</p>
-                {isAuthenticated && (
+                {canEdit && (
                   <Button size="icon" variant="secondary" onClick={() => setIsEditingText3(true)}>
                     <Edit2 className="h-4 w-4" />
                   </Button>
@@ -564,13 +564,13 @@ const ActivityDetail = () => {
             {activity.text4 && activity.text4.trim() !== "" && (
               <div className="mb-6">
                 <h2 className="text-2xl md:text-3xl text-muted-foreground whitespace-pre-wrap">{activity.text2Title}</h2>
-                {isAuthenticated && (
+                {canEdit && (
                   <Button size="icon" variant="secondary" onClick={() => setIsEditingTitleText2(true)}>
                     <Edit2 className="h-4 w-4" />
                   </Button>
                 )}
                 <p className="text-base md:text-lg xl:text-xl leading-[1.8] text-muted-foreground whitespace-pre-wrap">{activity.text4}</p>
-                {isAuthenticated && (
+                {canEdit  && (
                   <Button size="icon" variant="secondary" onClick={() => setIsEditingText4(true)}>
                     <Edit2 className="h-4 w-4" />
                   </Button>
@@ -581,7 +581,7 @@ const ActivityDetail = () => {
             {activity.text5 && activity.text5.trim() !== "" && (
               <div className="mb-6">
                 <p className="text-base md:text-lg xl:text-xl leading-[1.8] text-muted-foreground whitespace-pre-wrap">{activity.text5}</p>
-                {isAuthenticated && (
+                {canEdit && (
                   <Button size="icon" variant="secondary" onClick={() => setIsEditingText5(true)}>
                     <Edit2 className="h-4 w-4" />
                   </Button>
@@ -651,13 +651,13 @@ const ActivityDetail = () => {
     />
 
     
-      <EditModal
-      isOpen={isEditingTextAtrium}
-      onClose={() => setIsEditingTextAtrium(false)}
-      title="Upraviť Text atrium"
+    <EditModal
+      isOpen={isEditingTextFinancie}
+      onClose={() => setIsEditingTextFinancie(false)}
+      title="Upraviť financie"
       type="text"
-      initialValue={activity.textAtrium}
-      onSave={handleSaveTextAtrium}
+      initialValue={activity.fiancie || ""}
+      onSave={handleSaveTextFinancie}
     />
 
     <EditModal
@@ -736,13 +736,16 @@ const ActivityDetail = () => {
     {isEditingPhotoIndex !== null && (
       <EditModal
         isOpen={true}
-        onClose={() => setIsEditingPhotoIndex(null)} 
+        onClose={() => setIsEditingPhotoIndex(null)}
         title="Upraviť obrázok"
         type="image"
-        initialValue={activity.photo[isEditingPhotoIndex]?.src || ""}
-        onSave={(newPhotoUrl: string) => {
-        handleSavePhoto(newPhotoUrl, isEditingPhotoIndex); 
-        setIsEditingPhotoIndex(null); 
+        initialValue={[activity.photo?.[isEditingPhotoIndex]?.src || ""]}
+        onSave={async (files) => {
+          if (files[0]) {
+            await handleSavePhoto(files[0], isEditingPhotoIndex);
+          }
+
+          setIsEditingPhotoIndex(null);
         }}
       />
     )}

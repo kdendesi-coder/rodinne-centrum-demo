@@ -21,6 +21,14 @@ type EditModalProps =
       isOpen: boolean;
       onClose: () => void;
       title: string;
+      type: "list";
+      initialValue?: string[];
+      onSave: (value: string[]) => Promise<void> | void;
+    }
+  | {
+      isOpen: boolean;
+      onClose: () => void;
+      title: string;
       type: "image" | "file";
       initialValue: string[];
       removeBackground?: boolean;
@@ -106,15 +114,17 @@ const EditModal = (props: EditModalProps) => {
   const [value, setValue] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    if (!isOpen) return;
+ useEffect(() => {
+  if (!isOpen) return;
 
-    if (type === "text") {
-      setValue(initialValue || "");
-    } else {
-      setValue(initialValue?.[0] || "");
-    }
-  }, [isOpen, type, initialValue]);
+  if (type === "text") {
+    setValue(initialValue || "");
+  } else if (type === "list") {
+    setValue((initialValue || []).join("\n"));
+  } else {
+    setValue(initialValue?.[0] || "");
+  }
+}, [isOpen, type, initialValue]);
 
   const handleFile = async (selectedFile?: File) => {
     if (!selectedFile || type === "text") return;
@@ -136,14 +146,21 @@ const EditModal = (props: EditModalProps) => {
   };
 
   const handleSave = async () => {
-    if (type === "text") {
-      await props.onSave(value);
-    } else {
-      await props.onSave(value ? [value] : []);
-    }
+  if (type === "text") {
+    await props.onSave(value);
+  } else if (type === "list") {
+    const list = value
+      .split("\n")
+      .map((item) => item.trim())
+      .filter((item) => item !== "");
 
-    onClose();
-  };
+    await props.onSave(list);
+  } else {
+    await props.onSave(value ? [value] : []);
+  }
+
+  onClose();
+};
 
   return (
     <Dialog
@@ -163,6 +180,13 @@ const EditModal = (props: EditModalProps) => {
             onChange={(e) => setValue(e.target.value)}
             className="min-h-[240px] w-full rounded-md border border-gray-300 p-3 text-sm outline-none focus:ring-2 focus:ring-primary"
             placeholder="Napíš text..."
+          />
+        ) : type === "list" ? (
+          <textarea
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            className="min-h-[240px] w-full rounded-md border border-gray-300 p-3 text-sm outline-none focus:ring-2 focus:ring-primary"
+            placeholder="Každú položku napíš na nový riadok"
           />
         ) : (
           <div
