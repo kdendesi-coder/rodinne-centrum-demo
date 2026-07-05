@@ -12,7 +12,7 @@ interface EditModalProps {
   isOpen: boolean;
   onClose: () => void;
   title: string;
-  type: "image" | "file";
+  type: "image" | "file" | "text";
   initialValue: string[];
   onSave: (files: string[]) => Promise<void>;
 }
