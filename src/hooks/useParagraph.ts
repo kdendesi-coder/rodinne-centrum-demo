@@ -22,9 +22,13 @@ export const useParagraph = (paragraphId: string) => {
 
         const response = await fetch(`${API_URL}/text/${paragraphId}`);
 
-        if (!response.ok) {
+        if (response.status === 404) {
           setTextState("");
           return;
+        }
+
+        if (!response.ok) {
+          throw new Error(`Failed to load text: ${response.status}`);
         }
 
         const data: ParagraphData = await response.json();
@@ -43,7 +47,7 @@ export const useParagraph = (paragraphId: string) => {
   const setText = async (newText: string) => {
     if (!token) {
       console.error("No token - user is not logged in");
-      return;
+      throw new Error("User is not logged in");
     }
 
     const response = await fetch(`${API_URL}/text/${paragraphId}`, {
@@ -52,7 +56,9 @@ export const useParagraph = (paragraphId: string) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ text: newText }),
+      body: JSON.stringify({
+        text: newText,
+      }),
     });
 
     if (!response.ok) {
@@ -62,5 +68,10 @@ export const useParagraph = (paragraphId: string) => {
     setTextState(newText);
   };
 
-  return { text, isLoading, error, setText };
+  return {
+    text,
+    isLoading,
+    error,
+    setText,
+  };
 };
