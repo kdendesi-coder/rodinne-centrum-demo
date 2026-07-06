@@ -15,28 +15,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState<string | null>(null);
   const [role, setRole] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false); //pridane ---------------------------
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  //pridane ---------------------------
+
  // Add this useEffect to keep isAuthenticated in sync
   useEffect(() => {
     console.log(" useEffect [token] - token changed:", token, "setting isAuthenticated to:", !!token);
     setIsAuthenticated(!!token);
   }, [token]);
-  //pridane ---------------------------
-
+ 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     const storedRole = localStorage.getItem("role");
     const storedUsername = localStorage.getItem("username");
     
 
-    // javascript :D -> tento if prejde na true ak je v premennej "undefined", lebo "undefined" je neprazdny string
-    // a ked nastavujes hodnotu npr. localStorage.setItem("token", data.Token); a data.Token je undefined (lebo v skutocnosti to mal byt data.token s malym pismenom), tak sa do localStorage ulozi string "undefined"
-    
-    //if (storedToken && storedRole && storedUsername) {
-
-    //preto zmeneny if na tento:
     if (storedToken && storedRole && storedUsername &&
                    storedToken !== "undefined" && 
                    storedToken !== "null" &&
@@ -46,9 +39,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setToken(storedToken);
       setRole(storedRole);
       setUsername(storedUsername);
-      //pridane ---------------------------
-      setIsAuthenticated(true); // Also set this directly 
-      //pridane ---------------------------
+      setIsAuthenticated(true); 
     }
   }, []);
 
@@ -71,20 +62,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     console.log(" Login successful, received data:", data);
     
     console.log(" Setting states after login:");
-    console.log("   - Setting token:", data.token); //zmenene na lowercase z data.Token ---------------------
-    console.log("   - Setting role:", data.role); //zmenene na lowercase ---------------------
+    console.log("   - Setting token:", data.token); 
+    console.log("   - Setting role:", data.role); 
     console.log("   - Setting username:", username);
     console.log("   - Setting isAuthenticated: true");
 
-    setToken(data.token); //zmenene na lowercase ---------------------
-    setRole(data.role); //zmenene na lowercase ---------------------
+    setToken(data.token); 
+    setRole(data.role); 
     setUsername(username);
-    //pridane ---------------------------
-    setIsAuthenticated(true); // Set this explicitly
-    //pridane ---------------------------
     
-    localStorage.setItem("token", data.token);  //zmenene na lowercase ---------------------
-    localStorage.setItem("role", data.role); //zmenene na lowercase ---------------------
+    setIsAuthenticated(true); 
+   
+    
+    localStorage.setItem("token", data.token);  
+    localStorage.setItem("role", data.role);
     localStorage.setItem("username", username);
 
     console.log(" Saved to localStorage");
@@ -119,7 +110,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         token,
         role,
         username,
-        isAuthenticated, //zmenene --------------------------- z isAuthenticated: !!token
+        isAuthenticated, 
         login,
         logout,
       }}
